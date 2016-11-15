@@ -1,0 +1,47 @@
+<html>
+    <meta http-equiv="content-type" content="text/html; charset=UTF8">
+    <head>
+        <link rel="stylesheet" type="text/css" href="../../../src/scripts/chosen/chosen.css">
+        <link rel="stylesheet" type="text/css" href="../../common/synergymesh.css">
+        <title>Demo App</title>
+    </head>
+    <body>
+        <div style="text-align: center; font-family: sans-serif">
+            <div id="synergymesh-app"></div>
+        </div>
+
+        <script src="../../../src/scripts/requirejs/requirejs-2.1.20.js"></script>
+
+        <script>
+
+            "use strict";
+
+            var APPS_PATH = './apps/demo/';
+
+            require.config({
+            	baseUrl: '../../../src',
+                shim: {
+                    D3LineDemo: {
+                        deps: ['jquery']
+                    }
+                },
+                paths: {
+                    'BootStrap': './bootstrap',
+                    'DemoApp': APPS_PATH + 'demo_app'
+                }
+            });
+
+            require(['BootStrap'], function (bootstrap) {
+                bootstrap.start(function(){
+                    require(['DemoApp'], function (demo_app) {
+                        $(document).ready(function run() {
+                            new demo_app.DemoApp();
+                        });
+                    });
+                });
+            });
+
+        </script>
+
+    </body>
+</html>
