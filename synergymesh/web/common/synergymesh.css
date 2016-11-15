@@ -1,0 +1,15 @@
+.vizbackground {
+    fill: #ffffff;
+}
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000000;
+    shape-rendering: crispEdges;
+    stroke-width: 1px;
+}
+.line {
+    fill: none;
+    stroke: #76cdff;
+    stroke-width: 1px;
+}
