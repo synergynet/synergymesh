@@ -1,3 +1,13 @@
-#viz-bg{
+#viz-bg {
 	fill: #000000; 
+}
+
+#circle-one {
+	r: 50;
+	fill: #FF0000;
+}
+
+#circle-two {
+	r: 50;
+	fill: #00FF00;
 }

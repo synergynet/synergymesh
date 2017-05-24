@@ -40,7 +40,9 @@ define(["require", "exports", 'common/src/constants/common_elements'], function 
             backgroundRectangle.attr('height', this.vizHeight);
             backgroundRectangle.attr('width', this.vizWidth);
             backgroundRectangle.attr('id', common_elements_1.CommonElements.APP_BG);
+            this.addContents();
         };
+        SynergyMeshApp.prototype.addContents = function () { };
         return SynergyMeshApp;
     }());
     exports.SynergyMeshApp = SynergyMeshApp;

@@ -6,18 +6,16 @@ import {CommonElements} from 'common/src/constants/common_elements';
  * Abstract class which defines what all SynergyMesh apps should do.
  * (e.g. load contents, connect to other instances, etc.)
  */
-export abstract class SynergyMeshApp {
-	
-	
+export abstract class SynergyMeshApp {	
 
 	/** The height of the SVG element. */
-	private vizHeight: number;
+	protected vizHeight: number;
 
 	/** The width of the SVG element. */
-	private vizWidth: number;
+	protected vizWidth: number;
 
 	/** The width of the SVG element. */
-	private svg: d3.Selection<any>;
+	protected svg: d3.Selection<any>;
 
 	/**
 	 * Initialise a SynergyMeshApp object.
@@ -57,6 +55,9 @@ export abstract class SynergyMeshApp {
 		}
 	}
 	
+	/**
+	 * Builds the initial environment.
+	 */
 	private startAppEnvironment() {		
 	
 		// Get viz height and width.
@@ -76,6 +77,14 @@ export abstract class SynergyMeshApp {
 		backgroundRectangle.attr('width', this.vizWidth);
 		backgroundRectangle.attr('id', CommonElements.APP_BG);
 		
+		// Call function which adds the app's specific contents.
+		this.addContents();
+		
 	}
+	
+	/**
+	 * Add the contents specific to this app to override.
+	 */
+	protected addContents() {}
 	
 }

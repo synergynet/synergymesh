@@ -57,7 +57,7 @@
 		</filter>
 		<filter>
 			<id>0</id>
-			<name>common/src/utils</name>
+			<name>common/src/listeners</name>
 			<type>22</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
