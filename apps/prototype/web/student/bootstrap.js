@@ -22,6 +22,13 @@ function loadApp(root){
 		bootstrap.start(function(){
 			require(['PrototypeStudentApp'], function (prototype_student_app) {
 				$(document).ready(function run() {
+					
+					// Disable Zoom Gesture.
+					d3.select("body")
+					    .on("touchstart", noZoom)
+					    .on("touchmove", noZoom);
+					
+					// Call app.
 					new prototype_student_app.PrototypeStudentApp();
 				});
 			});
@@ -29,3 +36,10 @@ function loadApp(root){
 	});
 
 }
+
+/**
+ * Prevents zoom gestures.
+ */
+function noZoom() {
+	  d3.event.preventDefault();
+	}
