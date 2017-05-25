@@ -31,8 +31,6 @@ export class TextItem {
 				
 		// Set up text with appropriate class.
 		let textItem = textItemHolder.append('xhtml:div').append('div');
-		textItem.attr('width', width);
-		textItem.attr('height', height);
 		textItem.classed(textClass, true);
 		textItem.html(text);
 		

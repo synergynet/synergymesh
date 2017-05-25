@@ -14,8 +14,6 @@ define(["require", "exports"], function (require, exports) {
             textItemHolder.attr('height', height);
             textItemHolder.attr('transform', 'translate(' + (-width / 2) + ', ' + (-height / 2) + ')');
             var textItem = textItemHolder.append('xhtml:div').append('div');
-            textItem.attr('width', width);
-            textItem.attr('height', height);
             textItem.classed(textClass, true);
             textItem.html(text);
         }
