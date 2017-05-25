@@ -1,4 +1,6 @@
-/**
+import {Transformations} from 'common/src/utils/transformations';
+ 
+ /**
  * Utility class which provides methods useful for 
  * adding a drag listener to items.
  */
@@ -18,17 +20,15 @@ export class DragListener {
 	 *
 	 * @param {d3.Selection<any>} ele The element to add the drag listener to.
 	 * @param {boolean} bringToFront flag to indicate whether the item should come to the front on press.
-	 * @param {number} xTranslation The x value of an existing translation on the item.
-	 * @param {number} yTranslation The x value of an existing translation on the item.
 	 */
-	constructor(ele: d3.Selection<any>, bringToFront: boolean = true, xTranslation: number = 0, yTranslation: number = 0) {
+	constructor(ele: d3.Selection<any>, bringToFront: boolean = true) {
 		
 		// Store the supplied element for movement later.
 		this.ele = ele;
 		
 		// Load in pre-existing translations.
-		this.xTranslation = xTranslation;		
-		this.yTranslation = yTranslation;
+		this.xTranslation = Transformations.getTranslationX(ele);		
+		this.yTranslation = Transformations.getTranslationY(ele);
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
@@ -79,7 +79,7 @@ export class DragListener {
 		this.yTranslation = y;
 	
 		// Move element.
-		this.ele.attr('transform', 'translate(' + this.xTranslation + ',' + this.yTranslation + ')');
+		Transformations.setTranslation(this.ele, this.xTranslation, this.yTranslation);
 		
 	}
 		

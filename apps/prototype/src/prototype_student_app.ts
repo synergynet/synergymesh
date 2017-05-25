@@ -2,6 +2,7 @@ import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {DragListener} from 'common/src/listeners/drag_listener';
 import {RotateTranslateScaleListener} from 'common/src/listeners/rotate_translate_scale_listener';
 import {TextItem} from 'common/src/items/text_item';
+import {Transformations} from 'common/src/utils/transformations';
   
  /**
  * Abstract class which defines what all SynergyMesh apps should do.
@@ -35,17 +36,17 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		
 		// Add circle one. 
 		let circleOne = this.svg.append('circle');   
-		circleOne.attr('r', PrototypeStudentApp.RADIUS);                    
-		circleOne.attr('cx', this.vizWidth/4);
-		circleOne.attr('cy', this.vizHeight/2);
+		circleOne.attr('r', PrototypeStudentApp.RADIUS);                   
+		Transformations.setTranslationX(circleOne, this.vizWidth/4);
+		Transformations.setTranslationY(circleOne, this.vizHeight/2);
 		circleOne.attr('id', 'circle-one');
 		new DragListener(circleOne);
 		
 		// Add circle two. 
 		let circleTwo = this.svg.append('circle');    
-		circleTwo.attr('r', PrototypeStudentApp.RADIUS);                          
-		circleTwo.attr('cx', (this.vizWidth/4) * 3);
-		circleTwo.attr('cy', this.vizHeight/2);
+		circleTwo.attr('r', PrototypeStudentApp.RADIUS);
+		Transformations.setTranslationX(circleTwo, (this.vizWidth/4) * 3);
+		Transformations.setTranslationY(circleTwo, this.vizHeight/2);
 		circleTwo.attr('id', 'circle-two');
 		new DragListener(circleTwo);		
 		
@@ -53,8 +54,8 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		let rectangleOne = this.svg.append('rect');
 		rectangleOne.attr('width', PrototypeStudentApp.RECTANGLE_WIDTH);    
 		rectangleOne.attr('height', PrototypeStudentApp.RECTANGLE_HEIGHT);                           
-		rectangleOne.attr('x', (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
-		rectangleOne.attr('y', (this.vizHeight/4) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
+		Transformations.setTranslationX(rectangleOne, (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
+		Transformations.setTranslationY(rectangleOne, (this.vizHeight/4) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
 		rectangleOne.attr('id', 'rectangle-one');
 		new RotateTranslateScaleListener(rectangleOne);
 		
@@ -62,16 +63,18 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		let rectangleTwo = this.svg.append('rect');		
 		rectangleTwo.attr('width', PrototypeStudentApp.RECTANGLE_WIDTH);    
 		rectangleTwo.attr('height', PrototypeStudentApp.RECTANGLE_HEIGHT);          
-		rectangleTwo.attr('x', (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
-		rectangleTwo.attr('y', ((this.vizHeight/4) * 3) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
+		Transformations.setTranslationX(rectangleTwo, (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
+		Transformations.setTranslationY(rectangleTwo, ((this.vizHeight/4) * 3) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
 		rectangleTwo.attr('id', 'rectangle-two');    
 		new RotateTranslateScaleListener(rectangleTwo);
 		
 		// Create text item.
 		let textItem =
 			new TextItem(this.svg, '<b>Hello World!</b> This is a really long string!', 100, 80, 'demo-text', 'demo-text-bg', 'demo-text-text');
-		textItem.setTranslation(this.vizWidth/2, this.vizHeight/2);
-		new DragListener(textItem.asItem(), true, this.vizWidth/2, this.vizHeight/2);		
+		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
+		Transformations.setScale(textItem.asItem(), 2);
+		Transformations.setRotation(textItem.asItem(), 45);
+		new DragListener(textItem.asItem(), true);		
 		
 	}
 	

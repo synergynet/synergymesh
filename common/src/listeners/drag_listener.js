@@ -1,15 +1,13 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", 'common/src/utils/transformations'], function (require, exports, transformations_1) {
     "use strict";
     var DragListener = (function () {
-        function DragListener(ele, bringToFront, xTranslation, yTranslation) {
+        function DragListener(ele, bringToFront) {
             if (bringToFront === void 0) { bringToFront = true; }
-            if (xTranslation === void 0) { xTranslation = 0; }
-            if (yTranslation === void 0) { yTranslation = 0; }
             this.xTranslation = 0;
             this.yTranslation = 0;
             this.ele = ele;
-            this.xTranslation = xTranslation;
-            this.yTranslation = yTranslation;
+            this.xTranslation = transformations_1.Transformations.getTranslationX(ele);
+            this.yTranslation = transformations_1.Transformations.getTranslationY(ele);
             var self = this;
             var drag = d3.behavior.drag();
             if (bringToFront) {
@@ -30,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
         DragListener.prototype.moveElement = function (x, y) {
             this.xTranslation = x;
             this.yTranslation = y;
-            this.ele.attr('transform', 'translate(' + this.xTranslation + ',' + this.yTranslation + ')');
+            transformations_1.Transformations.setTranslation(this.ele, this.xTranslation, this.yTranslation);
         };
         return DragListener;
     }());
