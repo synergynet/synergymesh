@@ -3,11 +3,17 @@
 }
 
 #circle-one {
-	r: 50;
 	fill: #FF0000;
 }
 
 #circle-two {
-	r: 50;
 	fill: #00FF00;
+}
+
+#rectangle-one {
+	fill: #0000FF;
+}
+
+#rectangle-two {
+	fill: #FFFF00;
 }
