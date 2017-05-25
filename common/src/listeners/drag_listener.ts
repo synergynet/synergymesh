@@ -4,36 +4,77 @@
  */
 export class DragListener {
 	
-	/** The element to add the drag listener to */
-	private ele: d3.Selection<any>;
+	/** The element to be moved. */
+	private ele;
+	
+	/** The current x translation of the element. */
+	private xTranslation = 0;
+	
+	/** The current y translation of the element. */
+	private yTranslation = 0;
 	
 	 /**
 	 * Add a drag listener to the supplied item.
 	 *
 	 * @param {d3.Selection<any>} ele The element to add the drag listener to.
+	 * @param {boolean} bringToFront flag to indicate whether the item should come to the front on press.
 	 */
-	constructor(ele: d3.Selection<any>) {
+	constructor(ele: d3.Selection<any>, bringToFront: boolean = true) {
+		
+		// Create self object for referencing elsewhere.
+		let self = this;
 		
 		// Create drag behaviour.
 		let drag = d3.behavior.drag();
-//		drag	.origin(function(d) {  // FIXME
-//			return {x: d[0], y: d[1]};
-//		});
-		drag.on('drag', this.dragged);
+		
+		// Add move to front listener if corresponding flag not made fault.
+		if (bringToFront) {
+			drag.on('dragstart', function(d) {
+				this.parentNode.appendChild(this);
+			});
+		}
+		
+		// Set drag movements' start location.
+		drag	.origin(function(d) { 
+			return {x: self.xTranslation, y: self.yTranslation};
+		});
+		
+		// Store the supplied element for movement later.
+		this.ele = ele;
+		
+		// Add drag listen event.
+		drag.on('drag', function(d) {
+			
+			// Get location of event.
+			let x = (<DragEvent>d3.event).x;
+			let y = (<DragEvent>d3.event).y;
+			
+			// Call movement of element.
+			self.moveElement(x, y);
+			
+		});
 		
 		// Add behaviour to supplied element.
 		ele.call(drag);
 		
 	}
 	
-	private dragged(d) {
+	
+	/**
+	 * Move the element after recording where its moving to.
+	 * 
+	 * @param {number} x The x translation to move the element by.
+	 * @param {number} y The y translation to move the element by.
+	 */
+	private moveElement(x: number, y: number){
 		
-		// Get movement details.
-//		d[0] = d3.event.x; // FIXME
-//		d[1] = d3.event.y;
+		// Update current translation values of the element.
+		this.xTranslation = x;
+		this.yTranslation = y;
 	
 		// Move element.
-//		this.ele.attr('transform', 'translate(' + d + ')'); // FIXME
+		this.ele.attr('transform', 'translate(' + this.xTranslation + ',' + this.yTranslation + ')');
+		
 	}
 		
 }
