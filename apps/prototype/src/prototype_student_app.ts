@@ -1,6 +1,7 @@
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {DragListener} from 'common/src/listeners/drag_listener';
 import {RotateTranslateScaleListener} from 'common/src/listeners/rotate_translate_scale_listener';
+import {TextItem} from 'common/src/items/text_item';
   
  /**
  * Abstract class which defines what all SynergyMesh apps should do.
@@ -65,6 +66,12 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		rectangleTwo.attr('y', ((this.vizHeight/4) * 3) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
 		rectangleTwo.attr('id', 'rectangle-two');    
 		new RotateTranslateScaleListener(rectangleTwo);
+		
+		// Create text item.
+		let textItem =
+			new TextItem(this.svg, '<b>Hello World!</b> This is a really long string!', 100, 80, 'demo-text', 'demo-text-bg', 'demo-text-text');
+		textItem.setTranslation(this.vizWidth/2, this.vizHeight/2);
+		new DragListener(textItem.asItem(), true, this.vizWidth/2, this.vizHeight/2);		
 		
 	}
 	

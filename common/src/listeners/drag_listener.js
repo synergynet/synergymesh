@@ -1,10 +1,15 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var DragListener = (function () {
-        function DragListener(ele, bringToFront) {
+        function DragListener(ele, bringToFront, xTranslation, yTranslation) {
             if (bringToFront === void 0) { bringToFront = true; }
+            if (xTranslation === void 0) { xTranslation = 0; }
+            if (yTranslation === void 0) { yTranslation = 0; }
             this.xTranslation = 0;
             this.yTranslation = 0;
+            this.ele = ele;
+            this.xTranslation = xTranslation;
+            this.yTranslation = yTranslation;
             var self = this;
             var drag = d3.behavior.drag();
             if (bringToFront) {
@@ -15,7 +20,6 @@ define(["require", "exports"], function (require, exports) {
             drag.origin(function (d) {
                 return { x: self.xTranslation, y: self.yTranslation };
             });
-            this.ele = ele;
             drag.on('drag', function (d) {
                 var x = d3.event.x;
                 var y = d3.event.y;

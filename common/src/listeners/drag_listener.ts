@@ -18,8 +18,17 @@ export class DragListener {
 	 *
 	 * @param {d3.Selection<any>} ele The element to add the drag listener to.
 	 * @param {boolean} bringToFront flag to indicate whether the item should come to the front on press.
+	 * @param {number} xTranslation The x value of an existing translation on the item.
+	 * @param {number} yTranslation The x value of an existing translation on the item.
 	 */
-	constructor(ele: d3.Selection<any>, bringToFront: boolean = true) {
+	constructor(ele: d3.Selection<any>, bringToFront: boolean = true, xTranslation: number = 0, yTranslation: number = 0) {
+		
+		// Store the supplied element for movement later.
+		this.ele = ele;
+		
+		// Load in pre-existing translations.
+		this.xTranslation = xTranslation;		
+		this.yTranslation = yTranslation;
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
@@ -38,9 +47,6 @@ export class DragListener {
 		drag	.origin(function(d) { 
 			return {x: self.xTranslation, y: self.yTranslation};
 		});
-		
-		// Store the supplied element for movement later.
-		this.ele = ele;
 		
 		// Add drag listen event.
 		drag.on('drag', function(d) {

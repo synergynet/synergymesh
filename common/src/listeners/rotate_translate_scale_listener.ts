@@ -48,6 +48,8 @@ export class RotateTranslateScaleListener {
 		// Store the supplied element for movement later.
 		this.ele = ele;
 		
+		// TODO On drag start record as new touch event.
+		
 		// Add drag listen event.
 		drag.on('drag', function(d) {
 			
@@ -59,6 +61,8 @@ export class RotateTranslateScaleListener {
 			self.updateElementTransformations(x, y);
 			
 		});
+		
+		// TODO On drag stop destroy closest touch event.
 		
 		// Add behaviour to supplied element.
 		ele.call(drag);
@@ -78,7 +82,16 @@ export class RotateTranslateScaleListener {
 		this.xTranslation = x;
 		this.yTranslation = y;
 	
-		// TODO Check here for other touch, get difference between touch locations and their previous locations to work out transformations.
+		// TODO Work out closest previous touch and update.
+		
+		// TODO If only one touch then just perform the typical drag action.
+		
+		// TODO Otherwise get first 2 touches and get vector between their current positions.
+		
+		// TODO Update translation, scale and rotation with different between old and new vector.
+		
+		// TODO Save new vector as old vector.
+
 		
 	}
 		

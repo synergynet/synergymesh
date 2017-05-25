@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listeners/drag_listener', 'common/src/listeners/rotate_translate_scale_listener'], function (require, exports, synergymesh_app_1, drag_listener_1, rotate_translate_scale_listener_1) {
+define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listeners/drag_listener', 'common/src/listeners/rotate_translate_scale_listener', 'common/src/items/text_item'], function (require, exports, synergymesh_app_1, drag_listener_1, rotate_translate_scale_listener_1, text_item_1) {
     "use strict";
     var PrototypeStudentApp = (function (_super) {
         __extends(PrototypeStudentApp, _super);
@@ -37,6 +37,9 @@ define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listener
             rectangleTwo.attr('y', ((this.vizHeight / 4) * 3) - (PrototypeStudentApp.RECTANGLE_HEIGHT / 2));
             rectangleTwo.attr('id', 'rectangle-two');
             new rotate_translate_scale_listener_1.RotateTranslateScaleListener(rectangleTwo);
+            var textItem = new text_item_1.TextItem(this.svg, '<b>Hello World!</b> This is a really long string!', 100, 80, 'demo-text', 'demo-text-bg', 'demo-text-text');
+            textItem.setTranslation(this.vizWidth / 2, this.vizHeight / 2);
+            new drag_listener_1.DragListener(textItem.asItem(), true, this.vizWidth / 2, this.vizHeight / 2);
         };
         PrototypeStudentApp.RADIUS = 50;
         PrototypeStudentApp.RECTANGLE_WIDTH = 100;

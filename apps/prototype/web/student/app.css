@@ -17,3 +17,15 @@
 #rectangle-two {
 	fill: #FFFF00;
 }
+
+.demo-text-bg {
+	fill: #FFFFFF;
+	stroke: #AEAEAE;
+	stroke-width: 2;
+}
+
+.demo-text-text {
+	color: #000000;
+	font-family: sans-serif;
+	text-align: center;
+}
