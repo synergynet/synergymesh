@@ -5,8 +5,7 @@ import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
   
  /**
- * Abstract class which defines what all SynergyMesh apps should do.
- * (e.g. load content, connect to other instances, etc.)
+ * App for testing out new SynergyMesh features.
  */
 export class PrototypeStudentApp extends SynergyMeshApp {
 		
