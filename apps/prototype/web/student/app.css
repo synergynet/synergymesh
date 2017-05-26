@@ -1,0 +1,31 @@
+#viz-bg {
+	fill: #000000; 
+}
+
+#circle-one {
+	fill: #FF0000;
+}
+
+#circle-two {
+	fill: #00FF00;
+}
+
+#rectangle-one {
+	fill: #0000FF;
+}
+
+#rectangle-two {
+	fill: #FFFF00;
+}
+
+.demo-text-bg {
+	fill: #FFFFFF;
+	stroke: #AEAEAE;
+	stroke-width: 2;
+}
+
+.demo-text-text {
+	color: #000000;
+	font-family: sans-serif;
+	text-align: center;
+}
