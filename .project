@@ -38,6 +38,15 @@
 			</matcher>
 		</filter>
 		<filter>
+			<id>0</id>
+			<name>apps/protomysteries/src</name>
+			<type>22</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-*.js*</arguments>
+			</matcher>
+		</filter>
+		<filter>
 			<id>1495628039784</id>
 			<name>apps/prototype/src</name>
 			<type>22</type>
