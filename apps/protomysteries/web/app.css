@@ -1,0 +1,15 @@
+#viz-bg {
+	fill: #000000; 
+}
+
+.clue-bg {
+	fill: #FFFFFF;
+	stroke: #AEAEAE;
+	stroke-width: 2;
+}
+
+.clue-text {
+	color: #000000;
+	font-family: sans-serif;
+	text-align: center;
+}
