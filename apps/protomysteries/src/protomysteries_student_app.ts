@@ -3,11 +3,15 @@ import {DragListener} from 'common/src/listeners/drag_listener';
 import {Random} from 'common/src/utils/random';
 import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
+import {Networking} from 'common/src/utils/networking';
   
  /**
  * Protomysteries student app.
  */
 export class ProtomysteriesStudentApp extends SynergyMeshApp {
+	
+	/** Used to ignore duplicates of the same message. */
+	private lastMessageId: number = 0; 
 
 	/**
 	 * Initialise a ProtomysteriesStudentApp object.
@@ -27,8 +31,6 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		// Add title.
 		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, 300);
-
-		// TODO Hard coded text clues and images + header.
 		
 		// Text for clues.
 		let clueOneText = 'The new cook at school, Mrs Baker, has mixed up the trays with the children’s school dinners on.';
@@ -48,17 +50,20 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		this.addClue('clue6', 'clue', clueSixText, 250, 125);
 
 		// Add images. 
-		this.addImage('image1', '../burger.png');
-		this.addImage('image2', '../fries.png');
-		this.addImage('image3', '../grace.png');
-		this.addImage('image4', '../jack.png');
-		this.addImage('image5', '../mike.png');
-		this.addImage('image6', '../pizza.png');
-		this.addImage('image7', '../ruby.png');
-		this.addImage('image8', '../salad.png');
-		this.addImage('image9', '../tanya.png');
-		this.addImage('image10', '../yogurt.png');
-				
+		this.addImage('image1', '../burger.png', 313, 201);
+		this.addImage('image2', '../fries.png', 242, 247);
+		this.addImage('image3', '../grace.png', 176, 180);
+		this.addImage('image4', '../jack.png', 158, 190);
+		this.addImage('image5', '../mike.png', 181, 210);
+		this.addImage('image6', '../pizza.png', 232, 204);
+		this.addImage('image7', '../ruby.png', 180, 200);
+		this.addImage('image8', '../salad.png', 319, 207);
+		this.addImage('image9', '../tanya.png', 180, 208);
+		this.addImage('image10', '../yogurt.png', 260, 278);
+		
+		// Add freeze and unfreeze listeners.
+		this.addNetworkingListeners();
+						
 	}
 	
 	/**
@@ -83,16 +88,80 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	 * 
 	 * @param {string} id The id to give the element.
 	 * @param {string} imageURL The location of the image file.
+	 * @param {number} width The width of the image.
+	 * @param {number} height The height of the image.
 	 */
-	private addImage(id: string, imageUrl: string): void {
+	private addImage(id: string, imageUrl: string, width: number, height: number): void {
 		let imageEle = this.svg.append('image');   
 		imageEle.attr('xlink:href', imageUrl);
+		imageEle.attr('width', width);
+		imageEle.attr('height', height);
 		Transformations.setTranslationX(imageEle, this.vizWidth/2);
 		Transformations.setTranslationY(imageEle, this.vizHeight/2);
 		Transformations.setScale(imageEle, Random.getRandomArbitrary(0.5, 1));
 		Transformations.setRotation(imageEle, Random.getRandomInt(-45, 45));
 		imageEle.attr('id', id);
 		new DragListener(imageEle);
+	}
+	
+	/**
+	 * Add listeners for messages from the server.
+	 */
+	private addNetworkingListeners(): void {
+		
+		// Create self object for referencing elsewhere.
+		let self = this;
+		
+		// Build hidden freeze block. 
+		let freezeBlock = this.svg.append('rect');
+		freezeBlock.attr('id', 'freeze-block');
+		freezeBlock.attr('width', this.vizWidth);
+		freezeBlock.attr('height', this.vizWidth);
+		freezeBlock.style('visibility', 'hidden');
+		
+		// Check this browser can support Server-Sent Events.
+		if (!!(<any>window).EventSource) {
+			
+			// Establish listener to server.
+			let source = new EventSource('../server/output.php'); 
+			source.addEventListener('message', function(e) {
+				
+				// Check message came from the same server this is hosted on.
+				let host = Networking.getFullHost();
+				if (e.origin == host ) {
+					
+					// Parse the JSON in the message.
+					let data = JSON.parse(e.data); 
+					
+					// Check that this message hasn't been processed before.
+					if (+data['id'] > self.lastMessageId) {	
+					
+						// Check the contents of the message.
+						if (data['msg'] == 'freeze') {				
+						
+							// Show freeze block and bring it to the front.
+							freezeBlock.each(function(){
+								this.parentNode.appendChild(this);
+							});
+							freezeBlock.style('visibility', 'visible');
+							
+						} else if (data['msg']== 'unfreeze') {		
+						
+							// Hide the freeze block.	
+							freezeBlock.style('visibility', 'hidden');
+											
+						}
+						
+						// Update the record of which message was last processed.
+						self.lastMessageId = +data['id'];
+					}
+				}
+			});
+			
+		} else {
+		  	alert('Your browser does not support SynergyMesh\'s networking features.');
+		}
+		
 	}
 	
 }
