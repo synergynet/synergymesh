@@ -1,4 +1,6 @@
 /// <reference path='../../lib/typings/d3-3.5.17.d.ts' />
+/// <reference path='../../lib/typings/server-side-events.d.ts' />
+/// <reference path='../../lib/typings/jquery-2.2.0.d.ts' />
 
 import {CommonElements} from 'common/src/constants/common_elements'; 
   
