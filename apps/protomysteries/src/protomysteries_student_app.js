@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listeners/drag_listener', 'common/src/utils/random', 'common/src/items/text_item', 'common/src/utils/transformations', 'common/src/utils/networking'], function (require, exports, synergymesh_app_1, drag_listener_1, random_1, text_item_1, transformations_1, networking_1) {
+define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listeners/drag_listener', 'common/src/utils/random', 'common/src/items/text_item', 'common/src/utils/transformations', 'common/src/utils/networking', 'apps/protomysteries/src/protomysteries_shared'], function (require, exports, synergymesh_app_1, drag_listener_1, random_1, text_item_1, transformations_1, networking_1, protomysteries_shared_1) {
     "use strict";
     var ProtomysteriesStudentApp = (function (_super) {
         __extends(ProtomysteriesStudentApp, _super);
@@ -12,8 +12,9 @@ define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listener
             this.lastMessageId = 0;
         }
         ProtomysteriesStudentApp.prototype.addContents = function () {
+            protomysteries_shared_1.ProtomysteriesShared.sendMessage('announce');
             var textItem = new text_item_1.TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
-            transformations_1.Transformations.setTranslation(textItem.asItem(), this.vizWidth / 2, 300);
+            transformations_1.Transformations.setTranslation(textItem.asItem(), this.vizWidth / 2, 75);
             var clueOneText = 'The new cook at school, Mrs Baker, has mixed up the trays with the children’s school dinners on.';
             var clueTwoText = '"YUCK!" cried Ruby, making a face at the slice of pizza in front of her. "I can\'t stand pepperoni!"';
             var clueThreeText = '"Don\'t look at me," moaned Jack. "I hate any food with cheese on it." At that, he pushed away his cheeseburger.';
@@ -63,7 +64,7 @@ define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listener
             var freezeBlock = this.svg.append('rect');
             freezeBlock.attr('id', 'freeze-block');
             freezeBlock.attr('width', this.vizWidth);
-            freezeBlock.attr('height', this.vizWidth);
+            freezeBlock.attr('height', this.vizHeight);
             freezeBlock.style('visibility', 'hidden');
             if (!!window.EventSource) {
                 var source = new EventSource('../server/output.php');

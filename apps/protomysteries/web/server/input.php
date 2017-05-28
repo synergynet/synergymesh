@@ -14,6 +14,8 @@
 			storeMessage('freeze');
 		}elseif ($command == 'unfreeze') {
 			storeMessage('unfreeze');
+		}elseif ($command == 'announce') {
+			storeMessage('announce');
 		}
 	}
 

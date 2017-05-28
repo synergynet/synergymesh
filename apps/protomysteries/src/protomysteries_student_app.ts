@@ -4,6 +4,7 @@ import {Random} from 'common/src/utils/random';
 import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
 import {Networking} from 'common/src/utils/networking';
+import {ProtomysteriesShared} from 'apps/protomysteries/src/protomysteries_shared';
   
  /**
  * Protomysteries student app.
@@ -28,9 +29,12 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	 */
 	protected addContents() {
 		
+		// Announce presence to server.
+		ProtomysteriesShared.sendMessage('announce');
+		
 		// Add title.
 		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
-		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, 300);
+		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, 75);
 		
 		// Text for clues.
 		let clueOneText = 'The new cook at school, Mrs Baker, has mixed up the trays with the children’s school dinners on.';
@@ -116,7 +120,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		let freezeBlock = this.svg.append('rect');
 		freezeBlock.attr('id', 'freeze-block');
 		freezeBlock.attr('width', this.vizWidth);
-		freezeBlock.attr('height', this.vizWidth);
+		freezeBlock.attr('height', this.vizHeight);
 		freezeBlock.style('visibility', 'hidden');
 		
 		// Check this browser can support Server-Sent Events.
@@ -135,6 +139,8 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 					
 					// Check that this message hasn't been processed before.
 					if (+data['id'] > self.lastMessageId) {	
+					
+						// TODO Tidy so this block below is a callback function in a shared createListener function.
 					
 						// Check the contents of the message.
 						if (data['msg'] == 'freeze') {				
