@@ -3,13 +3,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listeners/drag_listener', 'common/src/utils/random', 'common/src/items/text_item', 'common/src/utils/transformations', 'common/src/utils/networking', 'apps/protomysteries/src/protomysteries_shared'], function (require, exports, synergymesh_app_1, drag_listener_1, random_1, text_item_1, transformations_1, networking_1, protomysteries_shared_1) {
+define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listeners/drag_listener', 'common/src/utils/random', 'common/src/items/text_item', 'common/src/utils/transformations', 'apps/protomysteries/src/protomysteries_shared'], function (require, exports, synergymesh_app_1, drag_listener_1, random_1, text_item_1, transformations_1, protomysteries_shared_1) {
     "use strict";
     var ProtomysteriesStudentApp = (function (_super) {
         __extends(ProtomysteriesStudentApp, _super);
         function ProtomysteriesStudentApp() {
             _super.call(this);
-            this.lastMessageId = 0;
         }
         ProtomysteriesStudentApp.prototype.addContents = function () {
             protomysteries_shared_1.ProtomysteriesShared.sendMessage('announce');
@@ -66,30 +65,18 @@ define(["require", "exports", 'common/src/synergymesh_app', 'common/src/listener
             freezeBlock.attr('width', this.vizWidth);
             freezeBlock.attr('height', this.vizHeight);
             freezeBlock.style('visibility', 'hidden');
-            if (!!window.EventSource) {
-                var source = new EventSource('../server/output.php');
-                source.addEventListener('message', function (e) {
-                    var host = networking_1.Networking.getFullHost();
-                    if (e.origin == host) {
-                        var data = JSON.parse(e.data);
-                        if (+data['id'] > self.lastMessageId) {
-                            if (data['msg'] == 'freeze') {
-                                freezeBlock.each(function () {
-                                    this.parentNode.appendChild(this);
-                                });
-                                freezeBlock.style('visibility', 'visible');
-                            }
-                            else if (data['msg'] == 'unfreeze') {
-                                freezeBlock.style('visibility', 'hidden');
-                            }
-                            self.lastMessageId = +data['id'];
-                        }
-                    }
-                });
-            }
-            else {
-                alert('Your browser does not support SynergyMesh\'s networking features.');
-            }
+            var messageResponse = function (data) {
+                if (data['msg'] == 'freeze') {
+                    freezeBlock.each(function () {
+                        this.parentNode.appendChild(this);
+                    });
+                    freezeBlock.style('visibility', 'visible');
+                }
+                else if (data['msg'] == 'unfreeze') {
+                    freezeBlock.style('visibility', 'hidden');
+                }
+            };
+            protomysteries_shared_1.ProtomysteriesShared.listenForMessage(messageResponse);
         };
         return ProtomysteriesStudentApp;
     }(synergymesh_app_1.SynergyMeshApp));

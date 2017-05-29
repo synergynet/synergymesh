@@ -3,16 +3,12 @@ import {DragListener} from 'common/src/listeners/drag_listener';
 import {Random} from 'common/src/utils/random';
 import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
-import {Networking} from 'common/src/utils/networking';
 import {ProtomysteriesShared} from 'apps/protomysteries/src/protomysteries_shared';
   
  /**
  * Protomysteries student app.
  */
 export class ProtomysteriesStudentApp extends SynergyMeshApp {
-	
-	/** Used to ignore duplicates of the same message. */
-	private lastMessageId: number = 0; 
 
 	/**
 	 * Initialise a ProtomysteriesStudentApp object.
@@ -122,52 +118,29 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		freezeBlock.attr('width', this.vizWidth);
 		freezeBlock.attr('height', this.vizHeight);
 		freezeBlock.style('visibility', 'hidden');
-		
-		// Check this browser can support Server-Sent Events.
-		if (!!(<any>window).EventSource) {
+					
+		// Create function for handling response to messages received.
+		let messageResponse = function(data: JSON){
 			
-			// Establish listener to server.
-			let source = new EventSource('../server/output.php'); 
-			source.addEventListener('message', function(e) {
+			// Check the contents of the message.
+			if (data['msg'] == 'freeze') {				
+			
+				// Show freeze block and bring it to the front.
+				freezeBlock.each(function(){
+					this.parentNode.appendChild(this);
+				});
+				freezeBlock.style('visibility', 'visible');
 				
-				// Check message came from the same server this is hosted on.
-				let host = Networking.getFullHost();
-				if (e.origin == host ) {
-					
-					// Parse the JSON in the message.
-					let data = JSON.parse(e.data); 
-					
-					// Check that this message hasn't been processed before.
-					if (+data['id'] > self.lastMessageId) {	
-					
-						// TODO Tidy so this block below is a callback function in a shared createListener function.
-					
-						// Check the contents of the message.
-						if (data['msg'] == 'freeze') {				
-						
-							// Show freeze block and bring it to the front.
-							freezeBlock.each(function(){
-								this.parentNode.appendChild(this);
-							});
-							freezeBlock.style('visibility', 'visible');
-							
-						} else if (data['msg']== 'unfreeze') {		
-						
-							// Hide the freeze block.	
-							freezeBlock.style('visibility', 'hidden');
-											
-						}
-						
-						// Update the record of which message was last processed.
-						self.lastMessageId = +data['id'];
-					}
-				}
-			});
+			} else if (data['msg']== 'unfreeze') {		
 			
-		} else {
-		  	alert('Your browser does not support SynergyMesh\'s networking features.');
+				// Hide the freeze block.	
+				freezeBlock.style('visibility', 'hidden');
+								
+			}			
 		}
 		
+		// Set up listener.
+		ProtomysteriesShared.listenForMessage(messageResponse);
+			
 	}
-	
 }
