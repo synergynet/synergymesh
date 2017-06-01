@@ -4,6 +4,12 @@ define(["require", "exports", 'common/src/utils/networking'], function (require,
         function ProtomysteriesShared() {
         }
         ProtomysteriesShared.listenForMessage = function (callback) {
+            var socket = networking_1.Networking.io.connect('http://localhost:3000');
+            socket.on('connection', function (socket) {
+                socket.on('chat message', function (msg) {
+                    console.log('message: ' + msg);
+                });
+            });
             if (!!window.EventSource) {
                 var source = new EventSource('../server/output.php');
                 source.addEventListener('message', function (e) {

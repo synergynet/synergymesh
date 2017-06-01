@@ -4,6 +4,11 @@
 export class Networking {
 	
 	/**
+	 * The static API for accessing Socket.io features set in the bootstrap.
+	 */
+	public static io: SocketIOClientStatic;
+	
+	/**
 	 * Returns the current host and its protocol.
 	 * 
 	 * @param {string} The host and its protocol.
@@ -11,5 +16,4 @@ export class Networking {
 	public static getFullHost(): string {
 		return  (<any>window).location.protocol + '//' + (<any>window).location.host;
 	}
-	
 }
