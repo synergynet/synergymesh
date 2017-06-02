@@ -1,4 +1,6 @@
-/**
+/// <reference path='../../../lib/typings/socket.io-client-1.4.4.d.ts' />
+  
+ /**
  * Class with static methods for supporting networking.
  */
 export class Networking {
