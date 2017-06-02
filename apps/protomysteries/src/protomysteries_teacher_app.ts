@@ -24,7 +24,7 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 	protected addContents() {
 		
 		// Announce presence to server.
-		ProtomysteriesShared.sendMessage('announce');
+		//ProtomysteriesShared.sendMessage('announce');
 		
 		// Add Freeze button.
 		let freezeButton = new TextItem(this.svg, 'Freeze All Student Devices', 225, 25, 'freeze-button', 'freeze-bg', 'freeze-text');

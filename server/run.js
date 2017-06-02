@@ -4,31 +4,34 @@
 // Then run the server with:
  // node ...../SynergyMesh/server/start.js
 
-// TODO On connect store client in student or teacher list as appropriate.
-
-// TODO Announce both lists to all clients on connect and disconnect.
-
-// TODO Provide method of passing a message to all teacher or to all clients (except self).
-
-// TODO Provide method of passing a message to a specific client.
-
-
 // TODO Refactor into TypeScript if the require/dependency collision can be solved.
 
+// Define constant port.
+var PORT = 3000;
 
 // Setup basic express server
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
 
-server.listen(port, function () {
-  console.log('Server listening at port %d', port);
+// Set up Socket.
+var io = require('socket.io')(server);
+
+// Start server running on port.
+server.listen(PORT, function () {
+  console.log('Server listening at port %d', PORT);
 });
 
-// Routing
+// Establish routing.
 app.use(express.static(__dirname + '/public'));
+
+//TODO On connect store client in student or teacher list as appropriate.
+
+//TODO Announce both lists to all clients on connect and disconnect.
+
+//TODO Provide method of passing a message to all teacher or to all clients (except self).
+
+//TODO Provide method of passing a message to a specific client.
 
 // Chatroom
 
@@ -54,6 +57,8 @@ io.on('connection', function (socket) {
     socket.username = username;
     ++numUsers;
     addedUser = true;
+    
+    console.log('adding user: ' + username);
     socket.emit('login', {
       numUsers: numUsers
     });
