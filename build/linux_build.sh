@@ -1,4 +1,3 @@
-@echo off
 cd output
 
 echo Deleting old build.
@@ -22,12 +21,12 @@ cp -R "../../server" "SynergyMesh/"
 cd SynergyMesh
 
 echo Deleting all .ts files.
-rm **/*.ts
+find . -name "*.ts" -type f -delete
 
 echo Deleting all .js.map files.
-rm **/*.js.map
+find . -name "*.js.map" -type f -delete
 
 echo Deleting all .gitignore files.
-rm **/.gitignore
+find . -name ".gitignore" -type f -delete
 
 cd ../..
