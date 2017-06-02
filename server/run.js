@@ -9,7 +9,7 @@
 // Define constant port.
 var PORT = 3000;
 
-// Setup basic server
+// Setup basic server.
 var server = require('http').createServer();
 
 // Set up Socket.
@@ -20,6 +20,10 @@ server.listen(PORT, function () {
   console.log('Server listening at port %d', PORT);
 });
 
+// Establish client lists.
+var students = {};
+var teachers = {};
+
 //TODO On connect store client in student or teacher list as appropriate.
 
 //TODO Announce both lists to all clients on connect and disconnect.
@@ -28,66 +32,58 @@ server.listen(PORT, function () {
 
 //TODO Provide method of passing a message to a specific client.
 
-// Chatroom
-
-var numUsers = 0;
 
 io.on('connection', function (socket) {
-  var addedUser = false;
+	
+	// Flag to check the client has been registered.
+	var addedUser = false;
 
-  // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
-    // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
-    });
-  });
-
-  // when the client emits 'add user', this listens and executes
-  socket.on('add user', function (username) {
-    if (addedUser) return;
-
-    // we store the username in the socket session for this client
-    socket.username = username;
-    ++numUsers;
-    addedUser = true;
-    
-    console.log('adding user: ' + username);
-    socket.emit('login', {
-      numUsers: numUsers
-    });
-    // echo globally (all clients) that a person has connected
-    socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
-    });
-  });
-
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.emit('typing', {
-      username: socket.username
-    });
-  });
-
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
-    });
-  });
-
+	// Listen for a student joining.
+	socket.on('join_students', function (data) {
+		
+		// Don't continue if this user has already been added.
+		if (addedUser){
+			return;
+		}
+	  
+		// Add client id to students list.
+		students.push(socket.id);
+	  
+		// Establish data to send (i.e. student list).
+		var studentsJson = {
+				students: students
+		};
+	  
+		// Broadcast updated student list to all clients (including self).
+		socket.emit('update_students', studentsJson);
+		
+		// Record that this user is now added to the client lists.
+		addedUser = true;
+	  
+	});
+	
+	// Listen for a message to all students.
+	socket.on('to_students', function (data) {
+		
+		// Loop through students.
+		for (var i = 0; i < students.length; i++) {
+		
+			// Check client isn't the source of the message.
+			if (socket.id != students[i]) {
+				
+				// Send message to client.
+				socket.to(socket.id).emit('update_students', studentsJson);
+				
+			}		
+		}	  
+	});
+	
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {
     if (addedUser) {
-      --numUsers;
 
-      // echo globally that this client has left
-      socket.broadcast.emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
-      });
+    	// TODO Remove from relevant list and announce that list to all.
+    	
     }
   });
 });
