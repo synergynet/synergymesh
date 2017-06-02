@@ -1,4 +1,4 @@
-// TODO Update wiki with instructions to first install:
+// TODO Update wiki with instructions to first run the setup batch file for their OS or run the following to install:
  // npm install socket.io
  // npm install express
 // Then run the server with:
