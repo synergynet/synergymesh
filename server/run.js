@@ -9,10 +9,8 @@
 // Define constant port.
 var PORT = 3000;
 
-// Setup basic express server
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
+// Setup basic server
+var server = require('http').createServer();
 
 // Set up Socket.
 var io = require('socket.io')(server);
@@ -21,9 +19,6 @@ var io = require('socket.io')(server);
 server.listen(PORT, function () {
   console.log('Server listening at port %d', PORT);
 });
-
-// Establish routing.
-app.use(express.static(__dirname + '/public'));
 
 //TODO On connect store client in student or teacher list as appropriate.
 
