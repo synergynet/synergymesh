@@ -1,8 +1,4 @@
-// TODO Update wiki with instructions to first run the setup batch file for their OS or run the following to install:
- // npm install socket.io
- // npm install express
-// Then run the server with:
- // node ...../SynergyMesh/server/start.js
+// TODO Update wiki with instructions to first run the setup batch file to install.
 
 // TODO Refactor into TypeScript if the require/dependency collision can be solved.
 
@@ -24,25 +20,18 @@ server.listen(PORT, function () {
 var students = {};
 var teachers = {};
 
-//TODO On connect store client in student or teacher list as appropriate.
-
-//TODO Announce both lists to all clients on connect and disconnect.
-
-//TODO Provide method of passing a message to all teacher or to all clients (except self).
-
-//TODO Provide method of passing a message to a specific client.
-
 
 io.on('connection', function (socket) {
 	
 	// Flag to check the client has been registered.
-	var addedUser = false;
+	var addedClient = false;
 
+	
 	// Listen for a student joining.
 	socket.on('join_students', function (data) {
 		
 		// Don't continue if this user has already been added.
-		if (addedUser){
+		if (addedClient){
 			return;
 		}
 	  
@@ -58,9 +47,10 @@ io.on('connection', function (socket) {
 		socket.emit('update_students', studentsJson);
 		
 		// Record that this user is now added to the client lists.
-		addedUser = true;
+		addedClient = true;
 	  
 	});
+	
 	
 	// Listen for a message to all students.
 	socket.on('to_students', function (data) {
@@ -72,18 +62,92 @@ io.on('connection', function (socket) {
 			if (socket.id != students[i]) {
 				
 				// Send message to client.
-				socket.to(socket.id).emit('update_students', studentsJson);
+				socket.to(socket.id).emit('message', data);
 				
 			}		
 		}	  
+	});	
+	
+	
+	// Listen for a teacher joining.
+	socket.on('join_teachers', function (data) {
+		
+		// Don't continue if this user has already been added.
+		if (addedClient){
+			return;
+		}
+	  
+		// Add client id to teachers list.
+		teachers.push(teacher.id);
+	  
+		// Establish data to send (i.e. student list).
+		var teachersJson = {
+				teachers: teachers
+		};
+	  
+		// Broadcast updated teacher list to all clients (including self).
+		socket.emit('update_teachers', studentsJson);
+		
+		// Record that this user is now added to the client lists.
+		addedClient = true;
+	  
 	});
 	
-  // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-    if (addedUser) {
-
-    	// TODO Remove from relevant list and announce that list to all.
-    	
-    }
-  });
+	
+	// Listen for a message to all teachers.
+	socket.on('to_teachers', function (data) {
+		
+		// Loop through teachers.
+		for (var i = 0; i < teachers.length; i++) {
+		
+			// Check client isn't the source of the message.
+			if (socket.id != teachers[i]) {
+				
+				// Send message to client.
+				socket.to(socket.id).emit('message', data);
+				
+			}		
+		}	  
+	});	
+	
+	
+	// Listen for a message to a specific client.
+	socket.on('to_client', function (data) {
+		
+		// Get target client from data.
+		var clientTarget = data.target;
+		
+		// Send message to client.
+		socket.to(clientTarget).emit('message', data.message);
+		
+	});
+	
+	
+	// When the use is disconnected remove them from their corresponding list.
+	socket.on('disconnect', function () {
+		
+		// Check the client has been added.
+		if (addedClient) {
+			
+			// Check if the user is in the teachers list.
+			if (teachers.indexOf(socket.id) > -1) {
+				
+				// Remove user from teachers list.
+				teachers.splice(teachers.indexOf(socket.id), 1);
+				
+			// Check if the user is in the students list.	
+			} else if (students.indexOf(socket.id) > -1) {
+				
+				// Remove user from students list.
+				students.splice(students.indexOf(socket.id), 1);
+				
+			}
+		
+			// Record that this user is no longer added to a client list.
+			addedClient = false;
+			
+		}
+	});
+	
+	
 });
