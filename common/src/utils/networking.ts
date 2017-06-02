@@ -5,9 +5,10 @@
  */
 export class Networking {
 	
-	/**
-	 * The static API for accessing Socket.io features set in the bootstrap.
-	 */
+	/** The port number of the server. */
+	public static PORT = 3000;
+	
+	/** The static API for accessing Socket.io features set in the bootstrap. */
 	public static io: SocketIOClientStatic;
 	
 	/**

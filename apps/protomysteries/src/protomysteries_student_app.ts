@@ -26,7 +26,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	protected addContents() {
 		
 		// Announce presence to server.
-		ProtomysteriesShared.sendMessage('announce');
+		ProtomysteriesShared.establishConnection();
 		
 		// Add title.
 		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
@@ -120,10 +120,10 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		freezeBlock.style('visibility', 'hidden');
 					
 		// Create function for handling response to messages received.
-		let messageResponse = function(data: JSON){
+		let messageResponse = function(command: string){
 			
 			// Check the contents of the message.
-			if (data['msg'] == 'freeze') {				
+			if (command== 'freeze') {				
 			
 				// Show freeze block and bring it to the front.
 				freezeBlock.each(function(){
@@ -131,7 +131,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 				});
 				freezeBlock.style('visibility', 'visible');
 				
-			} else if (data['msg']== 'unfreeze') {		
+			} else if (command== 'unfreeze') {		
 			
 				// Hide the freeze block.	
 				freezeBlock.style('visibility', 'hidden');

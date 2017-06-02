@@ -24,7 +24,7 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 	protected addContents() {
 		
 		// Announce presence to server.
-		//ProtomysteriesShared.sendMessage('announce');
+		ProtomysteriesShared.establishConnection(true);
 		
 		// Add Freeze button.
 		let freezeButton = new TextItem(this.svg, 'Freeze All Student Devices', 225, 25, 'freeze-button', 'freeze-bg', 'freeze-text');
@@ -32,7 +32,7 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 		freezeButton.asItem().on('mousedown', function() {
 			
 			// Send Ajax to server asking for the freeze broadcast to be sent.
-			ProtomysteriesShared.sendMessage('freeze');
+			ProtomysteriesShared.sendMessageToStudents('freeze');
 				
 		});
 		
@@ -42,7 +42,7 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 		unfreezeButton.asItem().on('mousedown', function() {
 			
 			// Send Ajax to server asking for the unfreeze broadcast to be sent.
-			ProtomysteriesShared.sendMessage('unfreeze');
+			ProtomysteriesShared.sendMessageToStudents('unfreeze');
 			
 		});
 		
