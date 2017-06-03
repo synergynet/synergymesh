@@ -1,2 +1,2 @@
 cd ..
-node run.js
+node bootstrap.js
