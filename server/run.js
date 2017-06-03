@@ -1,5 +1,3 @@
-// TODO Update wiki with instructions to first run the setup batch file to install.
-
 // TODO Refactor into TypeScript if the require/dependency collision can be solved.
 
 // Define constant port.
