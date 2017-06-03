@@ -1,17 +1,14 @@
-import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {DragListener} from 'common/src/listeners/drag_listener';
+import {Networking} from 'common/src/utils/networking';
 import {Random} from 'common/src/utils/random';
+import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
-import {Networking} from 'common/src/utils/networking';
   
  /**
  * Protomysteries student app.
  */
 export class ProtomysteriesStudentApp extends SynergyMeshApp {
-	
-	/** Used to ignore duplicates of the same message. */
-	private lastMessageId: number = 0; 
 
 	/**
 	 * Initialise a ProtomysteriesStudentApp object.
@@ -28,9 +25,12 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	 */
 	protected addContents() {
 		
+		// Announce presence to server.
+		Networking.establishConnection();
+		
 		// Add title.
 		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
-		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, 300);
+		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, 75);
 		
 		// Text for clues.
 		let clueOneText = 'The new cook at school, Mrs Baker, has mixed up the trays with the children’s school dinners on.';
@@ -116,52 +116,35 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		let freezeBlock = this.svg.append('rect');
 		freezeBlock.attr('id', 'freeze-block');
 		freezeBlock.attr('width', this.vizWidth);
-		freezeBlock.attr('height', this.vizWidth);
+		freezeBlock.attr('height', this.vizHeight);
 		freezeBlock.style('visibility', 'hidden');
-		
-		// Check this browser can support Server-Sent Events.
-		if (!!(<any>window).EventSource) {
+					
+		// Create function for handling response to messages received.
+		let messageResponse = function(message: JSON){
 			
-			// Establish listener to server.
-			let source = new EventSource('../server/output.php'); 
-			source.addEventListener('message', function(e) {
+			// Check message came from the same app.
+			if (message['app'] == 'protomysteries') {
+			
+				// Check the contents of the message.
+				if (message['command']== 'freeze') {				
 				
-				// Check message came from the same server this is hosted on.
-				let host = Networking.getFullHost();
-				if (e.origin == host ) {
+					// Show freeze block and bring it to the front.
+					freezeBlock.each(function(){
+						this.parentNode.appendChild(this);
+					});
+					freezeBlock.style('visibility', 'visible');
 					
-					// Parse the JSON in the message.
-					let data = JSON.parse(e.data); 
-					
-					// Check that this message hasn't been processed before.
-					if (+data['id'] > self.lastMessageId) {	
-					
-						// Check the contents of the message.
-						if (data['msg'] == 'freeze') {				
-						
-							// Show freeze block and bring it to the front.
-							freezeBlock.each(function(){
-								this.parentNode.appendChild(this);
-							});
-							freezeBlock.style('visibility', 'visible');
-							
-						} else if (data['msg']== 'unfreeze') {		
-						
-							// Hide the freeze block.	
-							freezeBlock.style('visibility', 'hidden');
-											
-						}
-						
-						// Update the record of which message was last processed.
-						self.lastMessageId = +data['id'];
-					}
-				}
-			});
-			
-		} else {
-		  	alert('Your browser does not support SynergyMesh\'s networking features.');
+				} else if (message['command'] == 'unfreeze') {		
+				
+					// Hide the freeze block.	
+					freezeBlock.style('visibility', 'hidden');
+									
+				}			
+			}
 		}
 		
+		// Set up listener.
+		Networking.listenForMessage(messageResponse);
+			
 	}
-	
 }
