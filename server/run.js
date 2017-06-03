@@ -17,15 +17,14 @@ server.listen(PORT, function () {
 });
 
 // Establish client lists.
-var students = {};
-var teachers = {};
+var students = [];
+var teachers = [];
 
 
 io.on('connection', function (socket) {
 	
 	// Flag to check the client has been registered.
 	var addedClient = false;
-
 	
 	// Listen for a student joining.
 	socket.on('join_students', function (data) {
@@ -37,6 +36,7 @@ io.on('connection', function (socket) {
 	  
 		// Add client id to students list.
 		students.push(socket.id);
+		console.log(socket.id + ' joined students.');
 	  
 		// Establish data to send (i.e. student list).
 		var studentsJson = {
@@ -45,6 +45,7 @@ io.on('connection', function (socket) {
 	  
 		// Broadcast updated student list to all clients (including self).
 		socket.emit('update_students', studentsJson);
+		console.log('Announced students list to all.');
 		
 		// Record that this user is now added to the client lists.
 		addedClient = true;
@@ -62,10 +63,12 @@ io.on('connection', function (socket) {
 			if (socket.id != students[i]) {
 				
 				// Send message to client.
-				socket.to(socket.id).emit('message', data);
+				socket.to(students[i]).emit('message', data);
 				
 			}		
-		}	  
+		}
+		console.log('Sent this message to students: ' + JSON.stringify(data));	
+		
 	});	
 	
 	
@@ -78,7 +81,8 @@ io.on('connection', function (socket) {
 		}
 	  
 		// Add client id to teachers list.
-		teachers.push(teacher.id);
+		teachers.push(socket.id);
+		console.log(socket.id + ' joined teachers.');
 	  
 		// Establish data to send (i.e. student list).
 		var teachersJson = {
@@ -86,7 +90,8 @@ io.on('connection', function (socket) {
 		};
 	  
 		// Broadcast updated teacher list to all clients (including self).
-		socket.emit('update_teachers', studentsJson);
+		socket.emit('update_teachers', teachersJson);
+		console.log('Announced teachers list to all.');
 		
 		// Record that this user is now added to the client lists.
 		addedClient = true;
@@ -104,10 +109,12 @@ io.on('connection', function (socket) {
 			if (socket.id != teachers[i]) {
 				
 				// Send message to client.
-				socket.to(socket.id).emit('message', data);
+				socket.to(teachers[i]).emit('message', data);
 				
 			}		
-		}	  
+		}
+		console.log('Sent this message to teachers: ' + JSON.stringify(data));	
+		
 	});	
 	
 	
@@ -119,6 +126,7 @@ io.on('connection', function (socket) {
 		
 		// Send message to client.
 		socket.to(clientTarget).emit('message', data.message);
+		console.log('Sent this message to ' + clientTarget + ': ' + JSON.stringify(data.message));	
 		
 	});
 	
@@ -129,17 +137,37 @@ io.on('connection', function (socket) {
 		// Check the client has been added.
 		if (addedClient) {
 			
-			// Check if the user is in the teachers list.
-			if (teachers.indexOf(socket.id) > -1) {
-				
-				// Remove user from teachers list.
-				teachers.splice(teachers.indexOf(socket.id), 1);
-				
-			// Check if the user is in the students list.	
-			} else if (students.indexOf(socket.id) > -1) {
+			// Check if the user is in the students list.
+			if (students.indexOf(socket.id) > -1) {
 				
 				// Remove user from students list.
 				students.splice(students.indexOf(socket.id), 1);
+				console.log(socket.id + ' left students.');
+				
+				// Establish data to send (i.e. student list).
+				var studentsJson = {
+						students: students
+				};
+				
+				// Broadcast updated student list to all clients (including self).
+				socket.emit('update_students', studentsJson);
+				console.log('Announced students list to all.');
+				
+			// Check if the user is in the teachers list.	
+			} else if (teachers.indexOf(socket.id) > -1) {
+				
+				// Remove user from teachers list.
+				teachers.splice(teachers.indexOf(socket.id), 1);
+				console.log(socket.id + ' left teachers.');
+				
+				// Establish data to send (i.e. student list).
+				var teachersJson = {
+						teachers: teachers
+				};
+			  
+				// Broadcast updated teacher list to all clients (including self).
+				socket.emit('update_teachers', teachersJson);
+				console.log('Announced teachers list to all.');
 				
 			}
 		

@@ -1,4 +1,7 @@
-import {SynergyMeshApp} from 'common/src/synergymesh_app';
+// TODO Maybe this could all be in the networking class 
+
+// TODO Also need sendMessageToStudents, sendMessageToClient and to keep track of student/teacher lists.
+
 import {Networking} from 'common/src/utils/networking';
    
   /**
@@ -18,17 +21,20 @@ export class ProtomysteriesShared {
 		
 		// Establish socket.
 		ProtomysteriesShared.socket = Networking.io.connect(Networking.getFullHost() + ':' + Networking.PORT);
+		console.log('Connected to server.');
 		
 		// Check if teacher or student.
 		if (isTeacher) {
 			
 			// Establish self as teacher.
 			ProtomysteriesShared.socket.emit('join_teachers', {});	
+			console.log('Joined teachers on server,');
 				
 		} else {
 			
 			// Establish self as student.
-			ProtomysteriesShared.socket.emit('join_teachers', {});	
+			ProtomysteriesShared.socket.emit('join_students', {});	
+			console.log('Joined students on server,');
 			
 		}
 		
@@ -45,6 +51,7 @@ export class ProtomysteriesShared {
 		ProtomysteriesShared.socket.on('message', function(message){
 			
 				// Call the callback.
+				console.log('Received a message: ' + JSON.stringify(message));
 				callback(message['command']);
 			
 		});		
@@ -63,7 +70,8 @@ export class ProtomysteriesShared {
 		
 		
 		// Send message.
-		ProtomysteriesShared.socket.emit('to_students', messageToSend);			
+		ProtomysteriesShared.socket.emit('to_students', messageToSend);		
+		console.log('Sent this message to students: ' + JSON.stringify(messageToSend));	
 			
 	}
 	
