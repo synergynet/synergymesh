@@ -6,7 +6,38 @@
 export class Networking {
 	
 	/** The port number of the server. */
-	public static PORT = 3000;
+	public static PORT: number = 3000;
+	
+	/** Identifier for student joining server event. */
+	public static EVENTS_STUDENTS_JOIN = 'join_students';
+	
+	/** Identifier for student joining server event. */
+	public static EVENTS_STUDENTS_TO = 'to_students';
+	
+	/** Identifier for student joining server event. */
+	public static EVENTS_STUDENTS_UPDATE = 'update_students';
+	
+	/** Identifier for student joining server event. */
+	public static EVENTS_TEACHERS_JOIN = 'join_teachers';
+	
+	/** Identifier for student joining server event. */
+	public static EVENTS_TEACHERS_TO = 'to_teachers';
+	
+	/** Identifier for student joining server event. */
+	public static EVENTS_TEACHERS_UPDATE= 'update_teachers';
+	
+	/** Identifier for student joining server event. */
+	public static EVENTS_CLIENT_TO= 'to_client';
+	
+	/** Identifier for student joining server event. */
+	public static EVENTS_MESSAGE = 'message';
+	
+	/** The target field for messages sent to specific client. */
+	public static TO_TARGET: string = 'target';
+	
+	/** The message field for messages sent to specific client. */
+	public static TO_MESSAGE: string = 'message';
+	
 	
 	/** The static API for accessing Socket.io features set in the bootstrap. */
 	public static io: SocketIOClientStatic;
@@ -20,6 +51,7 @@ export class Networking {
 	/** Socket io instance. */
 	private static socket;
 	
+	
 	/**
 	 * Initialise the socket io instance connected to the server on the same host.
 	 * 
@@ -31,29 +63,29 @@ export class Networking {
 		Networking.socket = Networking.io.connect(Networking.getFullHost() + ':' + Networking.PORT);
 		console.log('Connected to server.');
 		
-		// Check if teacher or student.
-		if (isTeacher) {
+		// Check if student or teacher.
+		if (!isTeacher) {
 			
-			// Establish self as teacher.
-			Networking.socket.emit('join_teachers', {});	
-			console.log('Joined teachers on server.');
+			// Establish self as student.
+			Networking.socket.emit(Networking.EVENTS_STUDENTS_JOIN, {});	
+			console.log('Joined students on server,');
 				
 		} else {
 			
-			// Establish self as student.
-			Networking.socket.emit('join_students', {});	
-			console.log('Joined students on server,');
+			// Establish self as teacher.
+			Networking.socket.emit(Networking.EVENTS_TEACHERS_JOIN, {});	
+			console.log('Joined teachers on server.');
 			
 		}
 		
 		// Listen for the students list being updated.
-		Networking.socket.on('update_students', function(message){
+		Networking.socket.on(Networking.EVENTS_STUDENTS_UPDATE, function(message){
 			Networking.students = message['students'];
 			console.log('Student list updated.');
 		});
 		
 		// Listen for the teachers list being updated.
-		Networking.socket.on('update_teachers', function(message){
+		Networking.socket.on(Networking.EVENTS_TEACHERS_UPDATE, function(message){
 			Networking.teachers = message['teachers'];
 			console.log('Teachers list updated.');
 		});
@@ -77,7 +109,7 @@ export class Networking {
 	public static listenForMessage(callback: (message: JSON) => void) {
 		
 		// Establish listener for any messages that calls the passed function.
-		Networking.socket.on('message', function(message){
+		Networking.socket.on(Networking.EVENTS_MESSAGE, function(message){
 			
 				// Call the callback.
 				console.log('Received a message: ' + JSON.stringify(message));
@@ -94,7 +126,7 @@ export class Networking {
 	public static sendMessageToStudents(messageToSend: JSON) {		
 		
 		// Send message.
-		Networking.socket.emit('to_students', messageToSend);		
+		Networking.socket.emit(Networking.EVENTS_STUDENTS_TO, messageToSend);		
 		console.log('Sent this message to students: ' + JSON.stringify(messageToSend));	
 			
 	}
@@ -107,7 +139,7 @@ export class Networking {
 	public static sendMessageToTeachers(messageToSend: JSON) {		
 		
 		// Send message.
-		Networking.socket.emit('to_teachers', messageToSend);		
+		Networking.socket.emit(Networking.EVENTS_TEACHERS_TO, messageToSend);		
 		console.log('Sent this message to teachers: ' + JSON.stringify(messageToSend));	
 			
 	}
@@ -122,11 +154,11 @@ export class Networking {
 	
 		// Create JSON wrapper for sending message.
 		let wrappedMessageToSend = {};
-		wrappedMessageToSend['target'] = targetClient;
-		wrappedMessageToSend['message'] = messageToSend;
+		wrappedMessageToSend[Networking.TO_TARGET] = targetClient;
+		wrappedMessageToSend[Networking.TO_MESSAGE] = messageToSend;
 		
 		// Send message.
-		Networking.socket.emit('to_client', wrappedMessageToSend);		
+		Networking.socket.emit(Networking.EVENTS_CLIENT_TO, wrappedMessageToSend);		
 		console.log('Sent this message to ' + targetClient + ': ' + JSON.stringify(messageToSend));	
 			
 	}

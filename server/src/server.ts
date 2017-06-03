@@ -1,31 +1,30 @@
-// TODO Refactor into TypeScript if the require/dependency collision can be solved.
+/// <reference path='../../lib/typings/socket.io-1.4.4.d.ts' />
 
-// Define constant port.
-var PORT = 3000;
+import {Networking} from '../../common/src/utils/networking';
 
 // Setup basic server.
-var server = require('http').createServer();
+let server = require('http').createServer();
 
 // Set up Socket.
-var io = require('socket.io')(server);
+let io: SocketIO.Server = require('socket.io')(server);
 
 // Start server running on port.
-server.listen(PORT, function () {
-  console.log('Server listening at port %d', PORT);
+server.listen(Networking.PORT, function () {
+  console.log('Server listening at port ' + Networking.PORT);
 });
 
 // Establish client lists.
-var students = [];
-var teachers = [];
+let students: string[] = [];
+let teachers: string[] = [];
 
-
-io.on('connection', function (socket) {
+// Set up connection environment.
+io.on('connection', function (socket: SocketIO.Socket) {
 	
 	// Flag to check the client has been registered.
-	var addedClient = false;
+	let addedClient = false;
 	
 	// Listen for a student joining.
-	socket.on('join_students', function (data) {
+	socket.on(Networking.EVENTS_STUDENTS_JOIN, function (data: JSON) {
 		
 		// Don't continue if this user has already been added.
 		if (addedClient){
@@ -37,41 +36,22 @@ io.on('connection', function (socket) {
 		console.log(socket.id + ' joined students.');
 	  
 		// Establish data to send (i.e. student list).
-		var studentsJson = {
+		let studentsJson = {
 				students: students
 		};
 	  
 		// Broadcast updated student list to all clients (including self).
-		socket.emit('update_students', studentsJson);
+		socket.emit(Networking.EVENTS_STUDENTS_UPDATE, studentsJson);
 		console.log('Announced students list to all.');
 		
 		// Record that this user is now added to the client lists.
 		addedClient = true;
 	  
-	});
-	
-	
-	// Listen for a message to all students.
-	socket.on('to_students', function (data) {
-		
-		// Loop through students.
-		for (var i = 0; i < students.length; i++) {
-		
-			// Check client isn't the source of the message.
-			if (socket.id != students[i]) {
-				
-				// Send message to client.
-				socket.to(students[i]).emit('message', data);
-				
-			}		
-		}
-		console.log('Sent this message to students: ' + JSON.stringify(data));	
-		
 	});	
 	
 	
 	// Listen for a teacher joining.
-	socket.on('join_teachers', function (data) {
+	socket.on(Networking.EVENTS_STUDENTS_JOIN, function (data: JSON) {
 		
 		// Don't continue if this user has already been added.
 		if (addedClient){
@@ -83,12 +63,12 @@ io.on('connection', function (socket) {
 		console.log(socket.id + ' joined teachers.');
 	  
 		// Establish data to send (i.e. student list).
-		var teachersJson = {
+		let teachersJson = {
 				teachers: teachers
 		};
 	  
 		// Broadcast updated teacher list to all clients (including self).
-		socket.emit('update_teachers', teachersJson);
+		socket.emit(Networking.EVENTS_TEACHERS_UPDATE, teachersJson);
 		console.log('Announced teachers list to all.');
 		
 		// Record that this user is now added to the client lists.
@@ -97,17 +77,36 @@ io.on('connection', function (socket) {
 	});
 	
 	
+	// Listen for a message to all students.
+	socket.on(Networking.EVENTS_STUDENTS_TO, function (data: JSON) {
+		
+		// Loop through students.
+		for (let i = 0; i < students.length; i++) {
+		
+			// Check client isn't the source of the message.
+			if (socket.id != students[i]) {
+				
+				// Send message to client.
+				socket.to(students[i]).emit(Networking.EVENTS_MESSAGE, data);
+				
+			}		
+		}
+		console.log('Sent this message to students: ' + JSON.stringify(data));	
+		
+	});
+	
+	
 	// Listen for a message to all teachers.
-	socket.on('to_teachers', function (data) {
+	socket.on(Networking.EVENTS_TEACHERS_TO, function (data: JSON) {
 		
 		// Loop through teachers.
-		for (var i = 0; i < teachers.length; i++) {
+		for (let i = 0; i < teachers.length; i++) {
 		
 			// Check client isn't the source of the message.
 			if (socket.id != teachers[i]) {
 				
 				// Send message to client.
-				socket.to(teachers[i]).emit('message', data);
+				socket.to(teachers[i]).emit(Networking.EVENTS_MESSAGE, data);
 				
 			}		
 		}
@@ -117,14 +116,14 @@ io.on('connection', function (socket) {
 	
 	
 	// Listen for a message to a specific client.
-	socket.on('to_client', function (data) {
+	socket.on(Networking.EVENTS_CLIENT_TO, function (data: JSON) {
 		
 		// Get target client from data.
-		var clientTarget = data.target;
+		let clientTarget = data[Networking.TO_TARGET];
 		
 		// Send message to client.
-		socket.to(clientTarget).emit('message', data.message);
-		console.log('Sent this message to ' + clientTarget + ': ' + JSON.stringify(data.message));	
+		socket.to(clientTarget).emit(Networking.EVENTS_MESSAGE, data[Networking.TO_MESSAGE]);
+		console.log('Sent this message to ' + clientTarget + ': ' + JSON.stringify(data[Networking.TO_MESSAGE]));	
 		
 	});
 	
@@ -143,12 +142,12 @@ io.on('connection', function (socket) {
 				console.log(socket.id + ' left students.');
 				
 				// Establish data to send (i.e. student list).
-				var studentsJson = {
+				let studentsJson = {
 						students: students
 				};
 				
 				// Broadcast updated student list to all clients (including self).
-				socket.emit('update_students', studentsJson);
+				socket.emit(Networking.EVENTS_STUDENTS_UPDATE, studentsJson);
 				console.log('Announced students list to all.');
 				
 			// Check if the user is in the teachers list.	
@@ -159,12 +158,12 @@ io.on('connection', function (socket) {
 				console.log(socket.id + ' left teachers.');
 				
 				// Establish data to send (i.e. student list).
-				var teachersJson = {
+				let teachersJson = {
 						teachers: teachers
 				};
 			  
 				// Broadcast updated teacher list to all clients (including self).
-				socket.emit('update_teachers', teachersJson);
+				socket.emit(Networking.EVENTS_TEACHERS_UPDATE, teachersJson);
 				console.log('Announced teachers list to all.');
 				
 			}
