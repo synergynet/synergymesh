@@ -1,9 +1,9 @@
-import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {DragListener} from 'common/src/listeners/drag_listener';
+import {Networking} from 'common/src/utils/networking';
 import {Random} from 'common/src/utils/random';
+import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
-import {ProtomysteriesShared} from 'apps/protomysteries/src/protomysteries_shared';
   
  /**
  * Protomysteries student app.
@@ -26,7 +26,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	protected addContents() {
 		
 		// Announce presence to server.
-		ProtomysteriesShared.sendMessage('announce');
+		Networking.establishConnection();
 		
 		// Add title.
 		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
@@ -120,27 +120,31 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		freezeBlock.style('visibility', 'hidden');
 					
 		// Create function for handling response to messages received.
-		let messageResponse = function(data: JSON){
+		let messageResponse = function(message: JSON){
 			
-			// Check the contents of the message.
-			if (data['msg'] == 'freeze') {				
+			// Check message came from the same app.
+			if (message['app'] == 'protomysteries') {
 			
-				// Show freeze block and bring it to the front.
-				freezeBlock.each(function(){
-					this.parentNode.appendChild(this);
-				});
-				freezeBlock.style('visibility', 'visible');
+				// Check the contents of the message.
+				if (message['command']== 'freeze') {				
 				
-			} else if (data['msg']== 'unfreeze') {		
-			
-				// Hide the freeze block.	
-				freezeBlock.style('visibility', 'hidden');
-								
-			}			
+					// Show freeze block and bring it to the front.
+					freezeBlock.each(function(){
+						this.parentNode.appendChild(this);
+					});
+					freezeBlock.style('visibility', 'visible');
+					
+				} else if (message['command'] == 'unfreeze') {		
+				
+					// Hide the freeze block.	
+					freezeBlock.style('visibility', 'hidden');
+									
+				}			
+			}
 		}
 		
 		// Set up listener.
-		ProtomysteriesShared.listenForMessage(messageResponse);
+		Networking.listenForMessage(messageResponse);
 			
 	}
 }
