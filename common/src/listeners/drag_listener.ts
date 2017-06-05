@@ -23,6 +23,8 @@ export class DragListener {
 	 */
 	constructor(ele: d3.Selection<any>, bringToFront: boolean = true) {
 		
+		// TODO Use interact instead.
+		
 		// Store the supplied element for movement later.
 		this.ele = ele;
 		

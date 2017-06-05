@@ -1,97 +1,90 @@
-/**
+import {Transformations} from 'common/src/utils/transformations'; 
+
+ /**
  * Utility class which provides methods useful for adding a two-finger gesture listener 
  * to items that allows for rotating, translating and scaling.
  */
 export class RotateTranslateScaleListener {
 	
+	// TODO Get flick behaviour (e.g. friction) from app.
+	
 	/** The element to be moved. */
-	private ele;
-	
-	/** The current rotation of the element. */
-	private rotation = 0;
-	
-	/** The current scale of the element. */
-	private scale = 0;
-	
-	/** The current x translation of the element. */
-	private xTranslation = 0;
-	
-	/** The current y translation of the element. */
-	private yTranslation = 0;
+	private ele: d3.Selection<any>;
 	
 	 /**
 	 * Add a rotate/translate/scale listener to the supplied item.
 	 *
-	 * @param {d3.Selection<any>} ele The element to add the drag listener to.
+	 * @param {d3.Selection<any>} ele The d3 selection to add the listener to (requires id to be set).
 	 * @param {boolean} bringToFront flag to indicate whether the item should come to the front on press.
 	 */
-	constructor(ele: d3.Selection<any>, bringToFront: boolean = true) {
+	constructor(ele: d3.Selection<any>, bringToFront: boolean = true) { // TODO Flick Enable/Disable Flick.
+		
+		// Store the d3 selection for later.
+		this.ele = ele;
+		
+		// Get the HTML Element representation.
+		let id = ele.attr('id');
+		let element = document.getElementById(id);
+		
+		// Add interact listener.
+		this.addInteract(element, bringToFront);
+		
+	}
+	
+	/**
+	 * Add interact listener to the supplied HTML item.
+	 *
+	 * @param {HTMLElement} element The element to add the listener to.
+	 * @param {boolean} bringToFront flag to indicate whether the item should come to the front on press.
+	 */
+	private addInteract(element: HTMLElement, bringToFront: boolean = true) {
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
 		
-		// Create drag behaviour.
-		let drag = d3.behavior.drag();
-		
-		// Add move to front listener if corresponding flag not made fault.
+		// Add move to front listener as a basic drag listener if corresponding flag not made false.
 		if (bringToFront) {
+			let drag = d3.behavior.drag();
 			drag.on('dragstart', function(d) {
 				this.parentNode.appendChild(this);
 			});
+			this.ele.call(drag);
 		}
 		
-		// Set drag movements' start location.
-		drag	.origin(function(d) { 
-			return {x: self.xTranslation, y: self.yTranslation};
-		});
-		
-		// Store the supplied element for movement later.
-		this.ele = ele;
-		
-		// TODO On drag start record as new touch event.
-		
-		// Add drag listen event.
-		drag.on('drag', function(d) {
+		// Apply interact listener to element.
+		let interactListener = interact(element);
 			
-			// Get location of event.
-			let x = (<DragEvent>d3.event).x;
-			let y = (<DragEvent>d3.event).y;
+		// Apply drag listener.
+		interactListener.draggable({
+		  
+		    // Enable inertial throwing.
+		    inertia: true,
+			  
+		    // Keep the element within the area of it's parent.
+		    restrict: {
+		      restriction: 'parent',
+		      endOnly: true,
+		      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+		    },
 			
-			// Call movement of element.
-			self.updateElementTransformations(x, y);
-			
-		});
+		    // Enable autoscroll.
+		    autoScroll: true,
 		
-		// TODO On drag stop destroy closest touch event.
-		
-		// Add behaviour to supplied element.
-		ele.call(drag);
-		
-	}
-	
-	
-	/**
-	 * Update the scaling, rotation and translation of the element.
-	 * 
-	 * @param {number} x The x translation to move the element by.
-	 * @param {number} y The y translation to move the element by.
-	 */
-	private updateElementTransformations(x: number, y: number){
-		
-		// Update current translation values of the element.
-		this.xTranslation = x;
-		this.yTranslation = y;
-	
-		// TODO Work out closest previous touch and update.
-		
-		// TODO If only one touch then just perform the typical drag action.
-		
-		// TODO Otherwise get first 2 touches and get vector between their current positions.
-		
-		// TODO Update translation, scale and rotation with different between old and new vector.
-		
-		// TODO Save new vector as old vector.
+		    // Call this function on every dragmove event.
+		    onmove: function (event) {
 
+				// Get the modified location.
+	        	let x = Transformations.getTranslationX(self.ele) + event.dx;
+	        	let y = Transformations.getTranslationY(self.ele) + event.dy;
+				
+				// Translate the element.
+				Transformations.setTranslation(self.ele, x, y);
+				
+			}
+		});
+		
+		// TODO Add multi-touch gestures.
+		// interactListener.gesturable({
 		
 	}
 		
