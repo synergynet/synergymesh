@@ -1,6 +1,6 @@
-import {DragListener} from 'common/src/listeners/drag_listener';
 import {Networking} from 'common/src/utils/networking';
 import {Random} from 'common/src/utils/random';
+import {RotateTranslateScaleListener} from 'common/src/listeners/rotate_translate_scale_listener';
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
@@ -76,11 +76,19 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	 * @param {number} height The height of the clue.
 	 */
 	private addClue(id: string, className: string, text: string, width: number, height: number): void {
+		
+		// Create item.
 		let textItem = new TextItem(this.svg, text, width, height, id, className + '-bg', className + 'text');
+		
+		// Randomly place.
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
 		Transformations.setScale(textItem.asItem(), Random.getRandomArbitrary(1.25, 1.75));
 		Transformations.setRotation(textItem.asItem(), Random.getRandomInt(-45, 45));
-		new DragListener(textItem.asItem(), true);		
+				
+		// Add behaviour.
+		let rts = new RotateTranslateScaleListener(textItem.asItem(), true);		
+		rts.applyScaleLimits(0.75, 2.5);
+		
 	}
 	
 	/**
@@ -92,16 +100,28 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	 * @param {number} height The height of the image.
 	 */
 	private addImage(id: string, imageUrl: string, width: number, height: number): void {
-		let imageEle = this.svg.append('image');   
+		
+		// Create root node.
+		let rootNode = this.svg.append('g');
+		rootNode.attr('id', id);
+		
+		// Add Image
+		let imageEle = rootNode.append('image');   
 		imageEle.attr('xlink:href', imageUrl);
 		imageEle.attr('width', width);
 		imageEle.attr('height', height);
-		Transformations.setTranslationX(imageEle, this.vizWidth/2);
-		Transformations.setTranslationY(imageEle, this.vizHeight/2);
-		Transformations.setScale(imageEle, Random.getRandomArbitrary(0.5, 1));
-		Transformations.setRotation(imageEle, Random.getRandomInt(-45, 45));
-		imageEle.attr('id', id);
-		new DragListener(imageEle);
+		Transformations.setTranslation(imageEle, -width/2, -height/2);;
+		
+		// Randomly place.
+		Transformations.setTranslationX(rootNode, this.vizWidth/2);
+		Transformations.setTranslationY(rootNode, this.vizHeight/2);
+		Transformations.setScale(rootNode, Random.getRandomArbitrary(0.5, 1));
+		Transformations.setRotation(rootNode, Random.getRandomInt(-45, 45))
+				
+		// Add behaviour.
+		let rts = new RotateTranslateScaleListener(rootNode);;
+		rts.applyScaleLimits(0.5, 2);
+		
 	}
 	
 	/**

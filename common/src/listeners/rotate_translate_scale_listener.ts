@@ -10,6 +10,21 @@ export class RotateTranslateScaleListener {
 	/** The element to be moved. */
 	private ele: d3.Selection<any>;
 	
+	/** Flag to show whether to allow rotation. */
+	private enabledRotation: boolean = true;
+	
+	/** Flag to show whether to allow scaling. */
+	private enabledScaling: boolean = true;
+	
+	/** Flag to show whether to adhear to scale limits. */
+	private scaleLimits: boolean = false;
+	
+	/** Flag to set the min value to scale an item to. */
+	private scaleMin: number = 0.5;
+	
+	/** Flag to set the max value to scale an item to. */
+	private scaleMax: number = 2;
+	
 	 /**
 	 * Add a rotate/translate/scale listener to the supplied item.
 	 *
@@ -92,9 +107,76 @@ export class RotateTranslateScaleListener {
 			}
 		});
 		
-		// TODO Add multi-touch gestures.
-		// interactListener.gesturable({
+		// Add multi-touch gestures.
+		interactListener.gesturable({
+			
+			// Call this function on every gesture move event.
+			onmove: function (event) {
+				
+				// Check scaling enabled.
+				if (self.enabledScaling) {
+			
+					// Get the modified scale.
+		        	let scale = Transformations.getScale(self.ele) + event.ds;
+				
+					// Add scale limits if required.
+					if (self.scaleLimits) {
+						if (scale > self.scaleMax) {
+							scale = self.scaleMax;
+						} else if  (scale < self.scaleMin) {
+							scale = self.scaleMin;							
+						}
+					}
+					
+					// Scale the element.
+					Transformations.setScale(self.ele, scale);
+					
+				}
+				
+				// Check rotation enabled.
+				if (self.enabledRotation) {
+				
+					// Get the modified rotation.
+		        	let angle = Transformations.getRotation(self.ele) + event.da;
+					
+					// Rotate the element.
+					Transformations.setRotation(self.ele, angle);
+					
+				}
+			}
+			
+		});
 		
+	}
+	
+	/**
+	 * Set the scale limits.
+	 * 
+	 * @param {number} min The minimum scale to be applied to the element.
+	 * @param {number} max The maximum scale to be applied to the element.
+	 */
+	public applyScaleLimits(min: number, max: number): void {
+		this.scaleLimits = true;
+		this.scaleMin = min;
+		this.scaleMax = max;
+	}
+	
+	/**
+	 * Set whether rotation should be enabled or disabled.
+	 * 
+	 * @param {boolean} rotationEnabled The flag to set rotation's enabled or disabled status.
+	 */
+	public setRotationEnabled(rotationEnabled: boolean): void {
+		this.enabledRotation = rotationEnabled;
+	}
+	
+	/**
+	 * Set whether scaling should be enabled or disabled.
+	 * 
+	 * @param {boolean} scalingEnabled The flag to set scaling's enabled or disabled status.
+	 */
+	public setScalingEnabled(scalingEnabled: boolean): void {
+		this.enabledScaling = scalingEnabled;
 	}
 		
 }
