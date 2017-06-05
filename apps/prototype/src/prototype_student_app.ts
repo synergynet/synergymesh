@@ -56,7 +56,7 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		Transformations.setTranslationX(rectangleOne, (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
 		Transformations.setTranslationY(rectangleOne, (this.vizHeight/4) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
 		rectangleOne.attr('id', 'rectangle-one');
-		new RotateTranslateScaleListener(rectangleOne);
+		new DragListener(rectangleOne);
 		
 		// Add rectangle one. 
 		let rectangleTwo = this.svg.append('rect');		
@@ -65,7 +65,7 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		Transformations.setTranslationX(rectangleTwo, (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
 		Transformations.setTranslationY(rectangleTwo, ((this.vizHeight/4) * 3) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
 		rectangleTwo.attr('id', 'rectangle-two');    
-		new RotateTranslateScaleListener(rectangleTwo);
+		new DragListener(rectangleTwo);
 		
 		// Create text item.
 		let textItem =
@@ -73,7 +73,8 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
 		Transformations.setScale(textItem.asItem(), 2);
 		Transformations.setRotation(textItem.asItem(), 45);
-		new DragListener(textItem.asItem(), true);		
+		let rts = new RotateTranslateScaleListener(textItem.asItem(), true);	
+		rts.applyScaleLimits(0.5, 2);
 		
 	}
 	
