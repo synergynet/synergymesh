@@ -1,3 +1,4 @@
+import {FlickBehaviour} from 'common/src/listeners/flick_behaviour'; 
 import {Transformations} from 'common/src/utils/transformations'; 
 
  /**
@@ -6,8 +7,6 @@ import {Transformations} from 'common/src/utils/transformations';
  */
 export class RotateTranslateScaleListener {
 	
-	// TODO Get flick behaviour (e.g. friction) from app.
-	
 	/** The element to be moved. */
 	private ele: d3.Selection<any>;
 	
@@ -15,9 +14,10 @@ export class RotateTranslateScaleListener {
 	 * Add a rotate/translate/scale listener to the supplied item.
 	 *
 	 * @param {d3.Selection<any>} ele The d3 selection to add the listener to (requires id to be set).
+	 * @param {boolean} enableFlick flag to indicate whether the item should exhibit flick behaviour.
 	 * @param {boolean} bringToFront flag to indicate whether the item should come to the front on press.
 	 */
-	constructor(ele: d3.Selection<any>, bringToFront: boolean = true) { // TODO Flick Enable/Disable Flick.
+	constructor(ele: d3.Selection<any>, enableFlick: boolean = true, bringToFront: boolean = true) {
 		
 		// Store the d3 selection for later.
 		this.ele = ele;
@@ -27,7 +27,7 @@ export class RotateTranslateScaleListener {
 		let element = document.getElementById(id);
 		
 		// Add interact listener.
-		this.addInteract(element, bringToFront);
+		this.addInteract(element, enableFlick, bringToFront);
 		
 	}
 	
@@ -35,9 +35,10 @@ export class RotateTranslateScaleListener {
 	 * Add interact listener to the supplied HTML item.
 	 *
 	 * @param {HTMLElement} element The element to add the listener to.
+	 * @param {boolean} enableFlick flag to indicate whether the item should exhibit flick behaviour.
 	 * @param {boolean} bringToFront flag to indicate whether the item should come to the front on press.
 	 */
-	private addInteract(element: HTMLElement, bringToFront: boolean = true) {
+	private addInteract(element: HTMLElement, enableFlick: boolean, bringToFront: boolean) {
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
@@ -51,6 +52,14 @@ export class RotateTranslateScaleListener {
 			this.ele.call(drag);
 		}
 		
+		// Establish inertia
+		let inertia: any = false;
+		if (enableFlick) {
+			inertia = {
+				resistance: FlickBehaviour.resistance
+			}
+		}
+		
 		// Apply interact listener to element.
 		let interactListener = interact(element);
 			
@@ -58,7 +67,7 @@ export class RotateTranslateScaleListener {
 		interactListener.draggable({
 		  
 		    // Enable inertial throwing.
-		    inertia: true,
+			inertia: inertia,
 			  
 		    // Keep the element within the area of it's parent.
 		    restrict: {
