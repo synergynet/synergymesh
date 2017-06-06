@@ -43,7 +43,16 @@ export abstract class SynergyMeshApp {
 		startButton.addEventListener(action, function(e) {
 			e.preventDefault();
 			startButton.hidden = true;
-			self.requestFullscreen(document.body);
+			
+			// Determine display setup by platform.
+			if (ios) {
+				self.vizHeight = Math.max(document.documentElement.clientHeight, window.outerHeight|| 0);
+				self.vizWidth = Math.max(document.documentElement.clientWidth, window.outerWidth || 0);
+			} else {
+				self.requestFullscreen(document.body);
+				self.vizHeight = screen.height;
+				self.vizWidth = screen.width;				
+			}
 			self.startAppEnvironment();
 		});
 		
@@ -72,10 +81,6 @@ export abstract class SynergyMeshApp {
 	 * Builds the initial environment.
 	 */
 	private startAppEnvironment() {		
-	
-		// Get viz height and width.		
-		this.vizHeight = Math.max(document.documentElement.clientHeight, window.outerHeight, screen.height || 0);
-		this.vizWidth = Math.max(document.documentElement.clientWidth, window.outerWidth, screen.width || 0);
 		
 		// Create SVG that fits window size.
 		this.svg = d3.select('#' + CommonElements.APP_SVG_DIV).append('svg');
