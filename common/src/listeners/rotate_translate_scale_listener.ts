@@ -111,7 +111,14 @@ export class RotateTranslateScaleListener {
 		interactListener.gesturable({
 			
 			// Call this function on every gesture move event.
-			onmove: function (event) {
+			onmove: function (event) {				
+				
+				// Get the modified location.
+	        	let x = Transformations.getTranslationX(self.ele) + event.dx;
+	        	let y = Transformations.getTranslationY(self.ele) + event.dy;
+				
+				// Translate the element.
+				Transformations.setTranslation(self.ele, x, y);
 				
 				// Check scaling enabled.
 				if (self.enabledScaling) {
