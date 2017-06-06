@@ -31,9 +31,16 @@ export abstract class SynergyMeshApp {
 		// Ensure interact allows multi-user multi-touch.
 		interact.maxInteractions(Infinity); 
 		
+		// Detect if IOS.
+		let ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(<any>window).MSStream;
+		
 		// Make full screen.
+		let action = 'click';
+		if (ios) {
+			action = 'touchstart';
+		}
 		let startButton = document.getElementById(CommonElements.START_BUTTON);
-		startButton.addEventListener('click', function(e) {
+		startButton.addEventListener(action, function(e) {
 			e.preventDefault();
 			startButton.hidden = true;
 			self.requestFullscreen(document.body);
@@ -66,9 +73,9 @@ export abstract class SynergyMeshApp {
 	 */
 	private startAppEnvironment() {		
 	
-		// Get viz height and width.
-		this.vizHeight = screen.height;
-		this.vizWidth = screen.width;
+		// Get viz height and width.		
+		this.vizHeight = Math.max(document.documentElement.clientHeight, window.outerHeight, screen.height || 0);
+		this.vizWidth = Math.max(document.documentElement.clientWidth, window.outerWidth, screen.width || 0);
 		
 		// Create SVG that fits window size.
 		this.svg = d3.select('#' + CommonElements.APP_SVG_DIV).append('svg');
