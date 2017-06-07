@@ -1,24 +1,24 @@
 cd output
 
 echo Deleting old build.
-rm -rf SynergyMesh
+rm -rf synergymesh
 
-echo Creating new output/SynergyMesh folder.
-mkdir SynergyMesh
+echo Creating new output/synergymesh folder.
+mkdir synergymesh
 
 echo Copying in apps.
-cp -R "../../apps" "SynergyMesh/"
+cp -R "../../apps" "synergymesh/"
 
 echo Copying in common.
-cp -R "../../common" "SynergyMesh/"
+cp -R "../../common" "synergymesh/"
 
 echo Copying in lib.
-cp -R "../../lib" "SynergyMesh/"
+cp -R "../../lib" "synergymesh/"
 
 echo Copying in server.
-cp -R "../../server" "SynergyMesh/"
+cp -R "../../server" "synergymesh/"
 
-cd SynergyMesh
+cd synergymesh
 
 echo Deleting all .ts files.
 find . -name "*.ts" -type f -delete
