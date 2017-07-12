@@ -7,16 +7,6 @@ import {Transformations} from 'common/src/utils/transformations';
  * Protomysteries teacher app.
  */
 export class ProtomysteriesTeacherApp extends SynergyMeshApp {
-
-	/**
-	 * Initialise a ProtomysteriesTeacherApp object.
-	 */
-	public constructor() {
-		
-		// Establish the environment.
-		super();
-		
-	}
 	
 	/**
 	 * Add the contents specific to this app.
@@ -54,7 +44,10 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 			// Send message to server.
 			Networking.sendMessageToStudents(<JSON>messageToSend);
 			
-		});
+		});		
+		
+		// Signal app is ready.
+		this.ready();
 		
 	}
 	

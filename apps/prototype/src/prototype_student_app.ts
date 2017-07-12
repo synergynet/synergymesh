@@ -19,16 +19,6 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 	private static RECTANGLE_HEIGHT: number = 50;
 
 	/**
-	 * Initialise a PrototypeStudentApp object.
-	 */
-	public constructor() {
-		
-		// Establish the environment.
-		super();
-		
-	}
-	
-	/**
 	 * Add the contents specific to this app.
 	 */
 	protected addContents() {
@@ -74,7 +64,10 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		Transformations.setScale(textItem.asItem(), 2);
 		Transformations.setRotation(textItem.asItem(), 45);
 		let rts = new RotateTranslateScaleListener(textItem.asItem(), true);	
-		rts.applyScaleLimits(0.5, 2);
+		rts.applyScaleLimits(0.5, 2);		
+		
+		// Signal app is ready.
+		this.ready();
 		
 	}
 	
