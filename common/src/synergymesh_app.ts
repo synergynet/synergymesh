@@ -16,14 +16,25 @@ export abstract class SynergyMeshApp {
 
 	/** The width of the SVG element. */
 	protected vizWidth: number;
+	
+	/** The URL root of the page. */
+	protected rootPath;
 
 	/** The width of the SVG element. */
 	protected svg: d3.Selection<any>;
+	
+	/** Flag to indicate whether the app is ready yet. */
+	public isReady = false;
 
 	/**
 	 * Initialise a SynergyMeshApp object.
+	 * 
+	 * @param {string} root The URL root of the page.
 	 */
-	public constructor() {
+	public constructor(rootPath: string = '') {
+		
+		// Store root.
+		this.rootPath = rootPath;
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
@@ -98,5 +109,12 @@ export abstract class SynergyMeshApp {
 	 * Add the contents specific to this app to override.
 	 */
 	protected addContents() {}
+	
+	/**
+	 * Function to be called after initial setup to indicate that the app is ready.
+	 */
+	protected ready() {
+		this.isReady = true;
+	}
 	
 }

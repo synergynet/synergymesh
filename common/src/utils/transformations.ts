@@ -118,10 +118,19 @@ export class Transformations {
 	 * @param {number} y The y value to set the element's translation to. 
 	 */
 	public static setTransformation(ele: d3.Selection<HTMLElement>, rotation: number, scale: number, x: number, y: number): void {
+		
+		// Check valid numbers supplied.
+		if (isNaN(rotation) || isNaN(scale) || isNaN(x) || isNaN(y)) {
+			return;
+		}
+		
+		// Build transform string representing the transformations.
 		let transformationString = '';
 		transformationString += 'translate(' + x + ',' + y +')';
 		transformationString += 'rotate(' + rotation +')';
 		transformationString += 'scale(' + scale + ',' + scale +')';
+		
+		// Apply the transformation string to the  
 		ele.attr('transform', transformationString);
 	}
 	

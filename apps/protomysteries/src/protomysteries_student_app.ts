@@ -11,16 +11,6 @@ import {Transformations} from 'common/src/utils/transformations';
 export class ProtomysteriesStudentApp extends SynergyMeshApp {
 
 	/**
-	 * Initialise a ProtomysteriesStudentApp object.
-	 */
-	public constructor() {
-		
-		// Establish the environment.
-		super();
-		
-	}
-	
-	/**
 	 * Add the contents specific to this app.
 	 */
 	protected addContents() {
@@ -62,7 +52,10 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		this.addImage('image10', '../yogurt.png', 260, 278);
 		
 		// Add freeze and unfreeze listeners.
-		this.addNetworkingListeners();
+		this.addNetworkingListeners();		
+		
+		// Signal app is ready.
+		this.ready();
 						
 	}
 	
@@ -107,7 +100,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		
 		// Add Image
 		let imageEle = rootNode.append('image');   
-		imageEle.attr('xlink:href', imageUrl);
+		imageEle.attr('xlink:href', this.rootPath + imageUrl);
 		imageEle.attr('width', width);
 		imageEle.attr('height', height);
 		Transformations.setTranslation(imageEle, -width/2, -height/2);;

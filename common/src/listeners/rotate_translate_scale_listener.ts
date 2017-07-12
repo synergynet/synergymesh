@@ -55,6 +55,9 @@ export class RotateTranslateScaleListener {
 	 */
 	private addInteract(element: HTMLElement, enableFlick: boolean, bringToFront: boolean) {
 		
+		// FIXME Need to allow transition between single touch (drag) and multi-touch (gesturable) events
+		// without the user having to release the item.
+		
 		// Create self object for referencing elsewhere.
 		let self = this;
 		
@@ -81,7 +84,7 @@ export class RotateTranslateScaleListener {
 		// Apply drag listener.
 		interactListener.draggable({
 		  
-		    // Enable inertial throwing.
+		    // Enable inertia throwing.
 			inertia: inertia,
 			  
 		    // Keep the element within the area of it's parent.
