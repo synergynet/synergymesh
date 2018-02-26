@@ -3,6 +3,7 @@ import {Random} from 'common/src/utils/random';
 import {RotateTranslateScaleListener} from 'common/src/listeners/rotate_translate_scale_listener';
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
+import {TouchManager} from 'common/src/listeners/touch_manager';
 import {Transformations} from 'common/src/utils/transformations';
   
  /**
@@ -79,8 +80,9 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		Transformations.setRotation(textItem.asItem(), Random.getRandomInt(-45, 45));
 				
 		// Add behaviour.
-		let rts = new RotateTranslateScaleListener(textItem.asItem(), true);		
-		rts.applyScaleLimits(0.75, 2.5);
+		new TouchManager(textItem.asItem(), this);
+//		let rts = new RotateTranslateScaleListener(textItem.asItem(), true);		
+//		rts.applyScaleLimits(0.75, 2.5);
 		
 	}
 	
@@ -112,8 +114,9 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		Transformations.setRotation(rootNode, Random.getRandomInt(-45, 45))
 				
 		// Add behaviour.
-		let rts = new RotateTranslateScaleListener(rootNode);;
-		rts.applyScaleLimits(0.5, 2);
+		new TouchManager(rootNode, this);
+//		let rts = new RotateTranslateScaleListener(rootNode);;
+//		rts.applyScaleLimits(0.5, 2);
 		
 	}
 	

@@ -1,6 +1,8 @@
 /// <reference path="../../lib/typings/require-2.1.20.d.ts" />
 
 import {Networking} from 'common/src/utils/networking';
+		
+// TODO Add touch emulator by default.
 
 requirejs.config({
 	paths: {

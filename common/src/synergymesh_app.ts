@@ -42,15 +42,9 @@ export abstract class SynergyMeshApp {
 		// Ensure interact allows multi-user multi-touch.
 		interact.maxInteractions(Infinity); 
 		
-		// Detect if touchscreen.
-		let action = 'click';
-		if ('ontouchstart' in window) {
-			//action = 'touchend'; //TODO Causes slow down on mobiles?
-		}
-		
 		// Create button to start the app.
 		let startButton = document.getElementById(CommonElements.START_BUTTON);
-		startButton.addEventListener(action, function(e) {
+		startButton.addEventListener('touchend', function(e) {
 			e.preventDefault();
 			startButton.hidden = true;
 			self.startAppEnvironment();	
