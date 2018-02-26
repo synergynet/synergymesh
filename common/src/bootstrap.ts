@@ -1,16 +1,14 @@
 /// <reference path="../../lib/typings/require-2.1.20.d.ts" />
 
 import {Networking} from 'common/src/utils/networking';
-		
-// TODO Add touch emulator by default.
 
 requirejs.config({
 	paths: {
 		'chosen': 'lib/scripts/chosen.jquery/chosen.jquery-1.6.2',
 		'd3': 'lib/scripts/d3/d3-3.5.17',
-		'interact': 'lib/scripts/interactjs/interact-1.2.8',
 		'jquery': 'lib/scripts/jquery/jquery-2.2.0',
-		'socketioclient': 'lib/scripts/socket.io-client/socket.io-client-1.4.4'
+		'socketioclient': 'lib/scripts/socket.io-client/socket.io-client-1.4.4',
+		'touchemulator': 'lib/scripts/touchemulator/touchemulator-0.0.2'
 	},
 	shim: {
 		jquery: {
@@ -26,7 +24,7 @@ requirejs.config({
  */
 export function start(callback) {
 	require(['socketioclient'], (io) => {
-		require(['jquery', 'd3', 'interact'], () => {
+		require(['jquery', 'd3', 'touchemulator'], () => {
 			require(['chosen'], () => {
 				Networking.io = io;
 				callback();

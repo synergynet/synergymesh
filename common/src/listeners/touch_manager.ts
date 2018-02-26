@@ -6,9 +6,6 @@ import {Transformations} from 'common/src/utils/transformations';
  */
 export class TouchManager{
 	
-	/** The element to be moved. */
-	private ele: d3.Selection<any>;
-	
 	/** Flag to show whether to allow rotation. */
 	private enabledRotation: boolean = true;
 	
@@ -22,11 +19,9 @@ export class TouchManager{
 	private scaleMin: number = 0.5;
 	
 	/** Flag to set the max value to scale an item to. */
-	private scaleMax: number = 2;
+	private scaleMax: number = 2; 
 		
 	// TODO Refactor functions into class.
-	
-	// TODO Remove interactjs.
 	
 	/**
 	 * Add a touch manager to the supplied element.

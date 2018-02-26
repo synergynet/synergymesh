@@ -1,8 +1,3 @@
-/// <reference path='../../lib/typings/d3-3.5.17.d.ts' />
-/// <reference path="../../lib/typings/interactjs-1.2.8.d.ts" />
-/// <reference path='../../lib/typings/jquery-2.2.0.d.ts' />
-/// <reference path='../../lib/typings/server-side-events.d.ts' />
-
 import {CommonElements} from 'common/src/constants/common_elements'; 
   
  /**
@@ -33,14 +28,14 @@ export abstract class SynergyMeshApp {
 	 */
 	public constructor(rootPath: string = '') {
 		
+		// Enable touch emulator.
+		TouchEmulator();
+		
 		// Store root.
 		this.rootPath = rootPath;
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
-		
-		// Ensure interact allows multi-user multi-touch.
-		interact.maxInteractions(Infinity); 
 		
 		// Create button to start the app.
 		let startButton = document.getElementById(CommonElements.START_BUTTON);
