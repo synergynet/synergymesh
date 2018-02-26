@@ -71,7 +71,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	private addClue(id: string, className: string, text: string, width: number, height: number): void {
 		
 		// Create item.
-		let textItem = new TextItem(this.svg, text, width, height, id, className + '-bg', className + 'text');
+		let textItem = new TextItem(this.svg, text, width, height, id, className + '-bg', className + '-text');
 		
 		// Randomly place.
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);

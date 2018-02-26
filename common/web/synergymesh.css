@@ -4,13 +4,15 @@ body {
 }
 
 #start_app_button{
+	margin-left: auto;
     position: absolute;
     top: 50%;
+    left: 40%;
     border-radius:6px;
 	border:2px solid #FFFFFF;
 	background: #000000;	
 	color: #FFFFFF;
-	width: 200px;
+	width: 20%;
 	height: 50px;
 	font-family: sans-serif;
 	font-size: 20pt;
