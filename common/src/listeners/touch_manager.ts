@@ -6,8 +6,14 @@ import {Transformations} from 'common/src/utils/transformations';
  */
 export class TouchManager{
 	
+	
+	//// Private Global Variables. ////
+	
 	/** Flag to show whether to allow rotation. */
 	private enabledRotation: boolean = true;
+	
+	/** The d3 selection to track and move. */
+	private ele: d3.Selection<any>;
 	
 	/** Flag to show whether to allow scaling. */
 	private enabledScaling: boolean = true;
@@ -20,8 +26,15 @@ export class TouchManager{
 	
 	/** Flag to set the max value to scale an item to. */
 	private scaleMax: number = 2; 
-		
-	// TODO Refactor functions into class.
+	
+	/** Flag to set whether an animation has been requested for the next frame. */
+	private ticking: boolean = false;
+	
+	/** Object for tracking transformations. */
+	private transformations: {} = {};
+	
+	
+	//// Constructors. ////
 	
 	/**
 	 * Add a touch manager to the supplied element.
@@ -32,84 +45,91 @@ export class TouchManager{
 	 */
 	constructor(ele: d3.Selection<any>, app: SynergyMeshApp, bringToFront: boolean = true) {
 		
-		// Get the HTML Element representation.
-		let id = ele.attr('id');
-		let element = document.getElementById(id);		
+		// Get self.
+		let self = this;
 		
-		// Flag to indicate if animation is already scheduled.
-		let ticking = false;
+		// Store element.
+		this.ele = ele;
 		
 		// Establish object for tracking tranformations to element.
-		let transform = [];
-		transform['translate'] = [];
-		transform['translate']['x'] = Transformations.getTranslationX(ele);
-		transform['translate']['y'] = Transformations.getTranslationY(ele);
-		transform['scale'] = Transformations.getScale(ele);
-		transform['rotate'] = Transformations.getRotation(ele);		
+		this.establishTransformation();	
 		
-		// Add move to front listener as a basic drag listener if corresponding flag not made false.
-		if (bringToFront) {
-			let drag = d3.behavior.drag();
-			drag.on('dragstart', function(d) {
-				this.parentNode.appendChild(this);
-			});
-			ele.call(drag);
-		}
+		// Get the HTML Element representation.
+		let id = ele.attr('id');
+		let element = document.getElementById(id);
 		
-		// Function for updating the element.
-		function updateElementTransform() {
-			Transformations.setTransformation(ele, 
-				transform['rotate'], transform['scale'], transform['translate']['x'], transform['translate']['y']);
-			ticking = false;
-		}
-		
-		// Function for scheduling an update.
-		function requestElementUpdate() {
-		    if(!ticking) {
-				ticking = true;
-		        window.requestAnimationFrame(updateElementTransform);
-		    }
-		}				
+		// Establish array to store touch info.
+		let prevTouches = [];
 		
 		// Get touches.
-		let xInitial = 0;
-		let yInitial = 0;
-		let panStartX = 0;
-		let panStartY = 0;
 		element.addEventListener('touchstart', function(e) {
 			
+			// Bring to front if needed.
+			if (bringToFront) {
+				ele.node().parentNode.appendChild(ele.node());				
+			}
+			
+			// Establish initial touch locations.
 			let touches = e['targetTouches'];
-			if (touches.length == 1){
-				panStartX = Transformations.getTranslationX(ele);
-				panStartY = Transformations.getTranslationY(ele);
-				xInitial = touches[0]['clientX'];
-				yInitial = touches[0]['clientY'];
-			} else {
-				
+			if (touches.length > 0) {
+				prevTouches[0] = [];
+				prevTouches[0]['x'] = touches[0]['clientX'];
+				prevTouches[0]['y'] = touches[0]['clientY'];
+			} 
+			if (touches.length > 1) {
+				prevTouches[1] = [];
+				prevTouches[1]['x'] = touches[1]['clientX'];
+				prevTouches[1]['y'] = touches[1]['clientY'];		
 			}
 			
 		});
 		
 		// Calculations to perform on moving a touch.
-		element.addEventListener('touchmove', function(e){
+		element.addEventListener('touchmove', function(e) {
 			
+			// Establish array for storing differences.
+			let diffs = [];
+			
+			// Get changes in pointer locations.
 			let touches = e['targetTouches'];
-			if (touches.length == 1){
-				let xDiff = touches[0]['clientX'] - xInitial;
-				let yDiff = touches[0]['clientY'] - yInitial;
-				transform['translate']['x'] = panStartX + xDiff;
-				transform['translate']['y'] = panStartY + yDiff
-				requestElementUpdate();
-			} else {
-		
-				// TODO Rotation, translation and scaling with 2 touches.
-				
+			if (touches.length > 0){
+				diffs[0] = [];
+				diffs[0]['x'] = touches[0]['clientX'] - prevTouches[0]['x'];
+				diffs[0]['y'] = touches[0]['clientY'] - prevTouches[0]['y'];
+			} 
+			if (touches.length > 1) {
+				diffs[1] = [];
+				diffs[1]['x'] = touches[1]['clientX'] - prevTouches[1]['x'];
+				diffs[1]['y'] = touches[1]['clientY'] - prevTouches[1]['y'];						
+			}
+			
+			// Update transformations accordingly.
+			if (touches.length == 1) {
+				self.drag(+diffs[0]['x'], +diffs[0]['y']);
+			}else if (touches.length > 1) {
+				self.gesture(+diffs[0]['x'], +diffs[0]['y'], +diffs[1]['x'], +diffs[1]['y']);
+			}
+			
+			// Store last touch locations.
+			if (touches.length > 0) {
+				prevTouches[0] = [];
+				prevTouches[0]['x'] = touches[0]['clientX'];
+				prevTouches[0]['y'] = touches[0]['clientY'];
+			} 
+			if (touches.length > 1) {
+				prevTouches[1] = [];
+				prevTouches[1]['x'] = touches[1]['clientX'];
+				prevTouches[1]['y'] = touches[1]['clientY'];		
 			}
 			
 		});
 
 		
 	}
+	
+	
+	
+	//// Public Methods. ////
 	
 	/**
 	 * Set the scale limits.
@@ -121,6 +141,17 @@ export class TouchManager{
 		this.scaleLimits = true;
 		this.scaleMin = min;
 		this.scaleMax = max;
+	}
+	
+	/**
+	 * Re-establish the initional element locations.
+	 */
+	public establishTransformation(): void {
+		this.transformations['translate'] = [];
+		this.transformations['translate']['x'] = Transformations.getTranslationX(this.ele);
+		this.transformations['translate']['y'] = Transformations.getTranslationY(this.ele);
+		this.transformations['scale'] = Transformations.getScale(this.ele);
+		this.transformations['rotate'] = Transformations.getRotation(this.ele);	
 	}
 	
 	/**
@@ -140,5 +171,63 @@ export class TouchManager{
 	public setScalingEnabled(scalingEnabled: boolean): void {
 		this.enabledScaling = scalingEnabled;
 	}
+	
+	
+	//// Private Methods. ////
+	
+	/**
+	 * Function to be called when moving the element with a single touch.
+	 * 
+	 * @param {number} xDiff Change in the first touch's x.
+	 * @param {number} yDiff Change in the first touch's y.
+	 */
+	private drag(xDiff: number, yDiff: number): void {
+		this.transformations['translate']['x'] += xDiff;
+		this.transformations['translate']['y'] += yDiff;
+		this.requestElementUpdate();
+	}
+	
+	/**
+	 * Function to be called when moving the element with more than one touch.
+	 * 
+	 * @param {number} xDiffOne Change in the first touch's x.
+	 * @param {number} yDiffOne Change in the first touch's y.
+	 * @param {number} xDiffTwo Change in the second touch's x.
+	 * @param {number} yDiffTwo Change in the second touch's y.
+	 */
+	private gesture(xDiffOne: number, yDiffOne: number, xDiffTwo: number, yDiffTwo: number): void {
+		
+		// TODO Apply translation with two touches.
+		
+		// TODO Apply Rotation.
+		
+		// TODO Apply Scale.
+		
+		this.transformations['translate']['x'] += xDiffTwo;
+		this.transformations['translate']['y'] += yDiffTwo;
+		this.requestElementUpdate();
+	}
+	
+	/**
+	 * Function for scheduling an update.
+	 */
+	private requestElementUpdate(): void{
+	    if(!this.ticking) {
+			this.ticking = true;
+	        window.requestAnimationFrame(this.updateElementTransform.bind(this));
+	    }
+	}	
+	
+		
+	/**
+	* Function for updating the element.
+	*/
+	private updateElementTransform(): void {
+		Transformations.setTransformation(this.ele, this.transformations['rotate'], this.transformations['scale'], 
+			this.transformations['translate']['x'], this.transformations['translate']['y']);
+		this.ticking = false;
+	}
+	
+	
 	
 }
