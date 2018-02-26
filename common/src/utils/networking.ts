@@ -98,7 +98,9 @@ export class Networking {
 	 * @param {string} The host and its protocol.
 	 */
 	private static getFullHost(): string {
-		return  (<any>window).location.protocol + '//' + (<any>window).location.host;
+		let host = (<any>window).location.host;
+		host = host.split(':')[0];
+		return  (<any>window).location.protocol + '//' + host;
 	}
 	
 	/**
