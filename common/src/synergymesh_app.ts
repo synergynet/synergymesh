@@ -44,8 +44,8 @@ export abstract class SynergyMeshApp {
 		
 		// Detect if touchscreen.
 		let action = 'click';
-		if ('ontouchstart' in document.documentElement) {
-			action = 'touchstart';
+		if ('ontouchstart' in window) {
+			//action = 'touchend'; //TODO Causes slow down on mobiles?
 		}
 		
 		// Create button to start the app.
