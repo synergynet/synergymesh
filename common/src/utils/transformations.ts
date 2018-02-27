@@ -127,7 +127,7 @@ export class Transformations {
 		// Build transform string representing the transformations.
 		let transformationString = '';
 		transformationString += 'translate(' + x + ',' + y +')';
-		transformationString += 'rotate(' + rotation +')';
+		transformationString += 'rotate(' + rotation +')'; // TODO update to allow rotation around a point: rotate(delta x y)
 		transformationString += 'scale(' + scale + ',' + scale +')';
 		
 		// Apply the transformation string to the  

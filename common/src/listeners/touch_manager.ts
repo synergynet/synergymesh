@@ -200,22 +200,39 @@ export class TouchManager{
 		
 		// Get info for transform.
 		this.getGestureInfo();
-		
-		// TODO Break down into sub methods.
 				
-		// Get changes in halfway point location.
-		let xDiff = this.halfwayPointCurrent['x'] - this.halfwayPointPrevious['x'];
-		let yDiff = this.halfwayPointCurrent['y'] - this.halfwayPointPrevious['y'];
+		// Apply transformations.
+		this.gestureTranslate();
+		this.gestureRotate();
+		this.gestureScale();
 		
-		// Apply transformation based on change in halfway point location. 
-		this.transformations['translate']['x'] += xDiff;
-		this.transformations['translate']['y'] += yDiff;
+		// Store the gesture info.
+		this.updateGestureInfo();
 		
-		// TODO Apply Rotation.
+		// Request update.
+		this.requestElementUpdate();
+		
+	}
+	
+	/**
+	 * Apply rotation in response to a two-finger gesture.
+	 */
+	private gestureRotate(): void {
+		
+		// TODO Apply Rotation.	
+		
+	}
+	
+	/**
+	 * Apply scaling in response to a two-finger gesture.
+	 */
+	private gestureScale(): void {
 		
 		// Get change in distance.
 		let distanceChange = this.distanceCurrent / this.distancePrevious;
 		let newScale = Math.abs(this.transformations['scale'] * distanceChange);
+		
+		// Apply limits if required.
 		if (this.scaleLimits) {
 			if (newScale > this.scaleMax) {
 				newScale = this.scaleMax;
@@ -227,11 +244,20 @@ export class TouchManager{
 		// Apply Scale.
 		this.transformations['scale'] = newScale;
 		
-		// Store the gesture info.
-		this.updateGestureInfo();
+	}
+	
+	/**
+	 * Apply translation in response to a two-finger gesture.
+	 */
+	private gestureTranslate(): void {
 		
-		// Request update.
-		this.requestElementUpdate();
+		// Get changes in halfway point location.
+		let xDiff = this.halfwayPointCurrent['x'] - this.halfwayPointPrevious['x'];
+		let yDiff = this.halfwayPointCurrent['y'] - this.halfwayPointPrevious['y'];
+		
+		// Apply transformation based on change in halfway point location. 
+		this.transformations['translate']['x'] += xDiff;
+		this.transformations['translate']['y'] += yDiff;
 		
 	}
 	
