@@ -9,6 +9,12 @@ export class TouchManager{
 	
 	//// Private Global Variables. ////
 	
+	/** Current distance between multiple touches. */
+	private distanceCurrent: number = 0;
+	
+	/** Previous distance between multiple touches. */
+	private distancePrevious: number = 0;
+	
 	/** Count of the current number of touches. */
 	private currentTouchesCount: number = 0;
 	
@@ -21,8 +27,11 @@ export class TouchManager{
 	/** Flag to show whether to allow scaling. */
 	private enabledScaling: boolean = true;
 	
+	/** Current halfway point between multiple touches. */
+	private halfwayPointCurrent: number[] = [];
+	
 	/** Previous halfway point between multiple touches. */
-	private previousHalfwayPoint: number[] = [];
+	private halfwayPointPrevious: number[] = [];
 	
 	/** Flag to show whether to adhear to scale limits. */
 	private scaleLimits: boolean = false;
@@ -83,7 +92,8 @@ export class TouchManager{
 			
 			// Get info for transform if needed..
 			if (self.currentTouchesCount  > 1) {
-				self.previousHalfwayPoint = self.getHalfwayPoint();
+				self.getGestureInfo();	
+				self.updateGestureInfo();
 			}
 			
 			// Store current touches as previous touches.
@@ -188,23 +198,37 @@ export class TouchManager{
 	 */
 	private gesture(): void {
 		
-		// Get Previous halfway point.
-		let currentHalfwayPoint = this.getHalfwayPoint();
+		// Get info for transform.
+		this.getGestureInfo();
+		
+		// TODO Break down into sub methods.
 				
 		// Get changes in halfway point location.
-		let xDiff = currentHalfwayPoint['x'] - this.previousHalfwayPoint['x'];
-		let yDiff = currentHalfwayPoint['y'] - this.previousHalfwayPoint['y'];
+		let xDiff = this.halfwayPointCurrent['x'] - this.halfwayPointPrevious['x'];
+		let yDiff = this.halfwayPointCurrent['y'] - this.halfwayPointPrevious['y'];
 		
 		// Apply transformation based on change in halfway point location. 
 		this.transformations['translate']['x'] += xDiff;
 		this.transformations['translate']['y'] += yDiff;
 		
-		// Store halfway point
-		this.previousHalfwayPoint = currentHalfwayPoint;
-		
 		// TODO Apply Rotation.
 		
-		// TODO Apply Scale.
+		// Get change in distance.
+		let distanceChange = this.distanceCurrent / this.distancePrevious;
+		let newScale = Math.abs(this.transformations['scale'] * distanceChange);
+		if (this.scaleLimits) {
+			if (newScale > this.scaleMax) {
+				newScale = this.scaleMax;
+			} else if (newScale < this.scaleMin) {
+				newScale = this.scaleMin;
+			}
+		}
+
+		// Apply Scale.
+		this.transformations['scale'] = newScale;
+		
+		// Store the gesture info.
+		this.updateGestureInfo();
 		
 		// Request update.
 		this.requestElementUpdate();
@@ -212,14 +236,10 @@ export class TouchManager{
 	}
 	
 	/**
-	 * Get the halfway point between the first two current touches.
-	 * 
-	 * @returns number[] Array containing the x and y values of the halfway point.
+	 * Get the current information relating to the relation
+	 *  between the first two current touches.
 	 */
-	private getHalfwayPoint(): number[] {
-		
-		// Establish empty array to represent the halfway point.		
-		let toReturn = [];
+	private getGestureInfo(): void {
 		
 		// Get first two touch ids.
 		let idOne = Object.keys(this.touchesCurrent)[0];
@@ -229,12 +249,16 @@ export class TouchManager{
 		let xDiff = this.touchesCurrent[idOne]['x'] - this.touchesCurrent[idTwo]['x'] 
 		let yDiff = this.touchesCurrent[idOne]['y'] - this.touchesCurrent[idTwo]['y'] 
 		
-		// Calculate halfway point
-		toReturn['x'] = this.touchesCurrent[idOne]['x'] - (xDiff/2);
-		toReturn['y'] = this.touchesCurrent[idOne]['y'] - (yDiff/2);
+		// Store distance.
+		this.distanceCurrent = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
 		
-		// Return the calculated value.
-		return toReturn;
+		// Calculate halfway point.
+		let halfWayPoint = [];
+		halfWayPoint['x'] = this.touchesCurrent[idOne]['x'] - (xDiff/2);
+		halfWayPoint['y'] = this.touchesCurrent[idOne]['y'] - (yDiff/2);
+		
+		// Store halfway point.
+		this.halfwayPointCurrent = halfWayPoint;
 		
 	}
 	
@@ -276,6 +300,12 @@ export class TouchManager{
 		this.ticking = false;
 	}
 	
-	
+	/**
+	 * Ensure all current gesture info becomes previous gesture info.
+	 */
+	private updateGestureInfo(): void {
+		this.halfwayPointPrevious = this.halfwayPointCurrent;
+		this.distancePrevious = this.distanceCurrent;
+	}	
 	
 }

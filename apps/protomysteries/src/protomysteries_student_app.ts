@@ -79,7 +79,8 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		Transformations.setRotation(textItem.asItem(), Random.getRandomInt(-45, 45));
 				
 		// Add behaviour.
-		new TouchManager(textItem.asItem(), this);
+		let tm = new TouchManager(textItem.asItem(), this);
+		tm.applyScaleLimits(0.5, 2);
 		
 	}
 	
@@ -111,7 +112,8 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		Transformations.setRotation(rootNode, Random.getRandomInt(-45, 45))
 				
 		// Add behaviour.
-		new TouchManager(rootNode, this);
+		let tm = new TouchManager(rootNode, this);
+		tm.applyScaleLimits(0.3, 1.5);
 		
 	}
 	
