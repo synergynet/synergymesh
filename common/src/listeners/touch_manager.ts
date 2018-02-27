@@ -10,7 +10,7 @@ export class TouchManager{
 	//// Private Global Variables. ////
 	
 	/** Count of the current number of touches. */
-	private currentTouches: number = 0;
+	private currentTouchesCount: number = 0;
 	
 	/** Flag to show whether to allow rotation. */
 	private enabledRotation: boolean = true;
@@ -20,6 +20,9 @@ export class TouchManager{
 	
 	/** Flag to show whether to allow scaling. */
 	private enabledScaling: boolean = true;
+	
+	/** Previous halfway point between multiple touches. */
+	private previousHalfwayPoint: number[] = [];
 	
 	/** Flag to show whether to adhear to scale limits. */
 	private scaleLimits: boolean = false;
@@ -78,6 +81,11 @@ export class TouchManager{
 			// Establish initial touch locations.
 			self.getTouchesCurrent(e);
 			
+			// Get info for transform if needed..
+			if (self.currentTouchesCount  > 1) {
+				self.previousHalfwayPoint = self.getHalfwayPoint();
+			}
+			
 			// Store current touches as previous touches.
 			self.touchesPrevious = self.touchesCurrent;
 			
@@ -90,9 +98,9 @@ export class TouchManager{
 			self.getTouchesCurrent(e);
 			
 			// Update transformations accordingly.
-			if (self.currentTouches  == 1) {
+			if (self.currentTouchesCount  == 1) {
 				self.drag();
-			}else if (self.currentTouches  > 1) {
+			}else if (self.currentTouchesCount  > 1) {
 				self.gesture();
 			}
 			
@@ -180,19 +188,19 @@ export class TouchManager{
 	 */
 	private gesture(): void {
 		
-		// Get first two touch ids.
-		let idOne = Object.keys(this.touchesCurrent)[0];
-		let idTwo = Object.keys(this.touchesCurrent)[1];
+		// Get Previous halfway point.
+		let currentHalfwayPoint = this.getHalfwayPoint();
+				
+		// Get changes in halfway point location.
+		let xDiff = currentHalfwayPoint['x'] - this.previousHalfwayPoint['x'];
+		let yDiff = currentHalfwayPoint['y'] - this.previousHalfwayPoint['y'];
 		
-		// Get changes in touch locations.
-		let xDiffOne = this.touchesCurrent[idOne]['x'] - this.touchesPrevious[idOne]['x'];
-		let yDiffOne = this.touchesCurrent[idOne]['y'] - this.touchesPrevious[idOne]['y'];
-		let xDiffTwo = this.touchesCurrent[idTwo]['x'] - this.touchesPrevious[idTwo]['x'];
-		let yDiffTwo = this.touchesCurrent[idTwo]['y'] - this.touchesPrevious[idTwo]['y'];
+		// Apply transformation based on change in halfway point location. 
+		this.transformations['translate']['x'] += xDiff;
+		this.transformations['translate']['y'] += yDiff;
 		
-		// TODO Apply translation with two touches.
-		this.transformations['translate']['x'] += xDiffTwo;
-		this.transformations['translate']['y'] += yDiffTwo;
+		// Store halfway point
+		this.previousHalfwayPoint = currentHalfwayPoint;
 		
 		// TODO Apply Rotation.
 		
@@ -200,6 +208,33 @@ export class TouchManager{
 		
 		// Request update.
 		this.requestElementUpdate();
+		
+	}
+	
+	/**
+	 * Get the halfway point between the first two current touches.
+	 * 
+	 * @returns number[] Array containing the x and y values of the halfway point.
+	 */
+	private getHalfwayPoint(): number[] {
+		
+		// Establish empty array to represent the halfway point.		
+		let toReturn = [];
+		
+		// Get first two touch ids.
+		let idOne = Object.keys(this.touchesCurrent)[0];
+		let idTwo = Object.keys(this.touchesCurrent)[1];
+		
+		// Calculate difference.
+		let xDiff = this.touchesCurrent[idOne]['x'] - this.touchesCurrent[idTwo]['x'] 
+		let yDiff = this.touchesCurrent[idOne]['y'] - this.touchesCurrent[idTwo]['y'] 
+		
+		// Calculate halfway point
+		toReturn['x'] = this.touchesCurrent[idOne]['x'] - (xDiff/2);
+		toReturn['y'] = this.touchesCurrent[idOne]['y'] - (yDiff/2);
+		
+		// Return the calculated value.
+		return toReturn;
 		
 	}
 	
@@ -217,7 +252,7 @@ export class TouchManager{
 			this.touchesCurrent[id]['id'] = id;
 			this.touchesCurrent[id]['x'] = touches[i]['clientX'];
 			this.touchesCurrent[id]['y'] = touches[i]['clientY'];
-			this.currentTouches = i + 1;
+			this.currentTouchesCount = i + 1;
 		}		
 	}
 	
