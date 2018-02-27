@@ -58,7 +58,7 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		
 		// Create text item.
 		let textItem =
-			new TextItem(this.svg, '<b>Hello World!</b> This is a really long string!', 100, 80, 'demo-text', 'demo-text-bg', 'demo-text-text');
+			new TextItem(this.svg, 'Hello World! This is a really long string!', 100, 80, 'demo-text', 'demo-text-bg', 'demo-text-text');
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
 		Transformations.setScale(textItem.asItem(), 2);
 		Transformations.setRotation(textItem.asItem(), 45);

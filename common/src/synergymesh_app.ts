@@ -39,7 +39,7 @@ export abstract class SynergyMeshApp {
 		
 		// Create button to start the app.
 		let startButton = document.getElementById(CommonElements.START_BUTTON);
-		startButton.addEventListener('touchend', function(e) {
+		startButton.addEventListener('touchstart', function(e) {
 			e.preventDefault();
 			startButton.hidden = true;
 			self.startAppEnvironment();	
@@ -94,6 +94,13 @@ export abstract class SynergyMeshApp {
 		// Call function which adds the app's specific contents.
 		this.addContents();
 		
+	}
+	
+	/**
+	 * Circumvent the need to press a button when testing.
+	 */
+	public test(): void {
+		this.startAppEnvironment();	
 	}
 	
 	/**

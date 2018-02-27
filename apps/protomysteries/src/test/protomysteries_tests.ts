@@ -30,10 +30,7 @@ describe('Protomysteries', function() {
 			// Attempt to start the app.
 			try{
 				app = new ProtomysteriesStudentApp('../apps/protomysteries/web/student/');
-				
-				// Press the start button.
-				$('#start_app_button').click();
-				
+				app.test();				
 			}catch(e){
 				fail = true;
 				console.log(e);
@@ -77,10 +74,7 @@ describe('Protomysteries', function() {
 			// Attempt to start the app.
 			try{
 				app = new ProtomysteriesTeacherApp('../apps/protomysteries/web/teacher/');
-				
-				// Press the start button.
-				$('#start_app_button').click();
-				
+				app.test();					
 			}catch(e){
 				fail = true;
 				console.log(e);
