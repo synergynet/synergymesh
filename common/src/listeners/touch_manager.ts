@@ -9,6 +9,9 @@ export class TouchManager{
 	
 	//// Private Global Variables. ////
 	
+	/** Count of the current number of touches. */
+	private currentTouches: number = 0;
+	
 	/** Flag to show whether to allow rotation. */
 	private enabledRotation: boolean = true;
 	
@@ -29,6 +32,12 @@ export class TouchManager{
 	
 	/** Flag to set whether an animation has been requested for the next frame. */
 	private ticking: boolean = false;
+	
+	/** An array of the item's current touches. */
+	private touchesCurrent: number[][] = [];
+	
+	/** An array of the item's previous touches. */
+	private touchesPrevious: number[][] = [];
 	
 	/** Object for tracking transformations. */
 	private transformations: {} = {};
@@ -58,9 +67,6 @@ export class TouchManager{
 		let id = ele.attr('id');
 		let element = document.getElementById(id);
 		
-		// Establish array to store touch info.
-		let prevTouches = [];
-		
 		// Get touches.
 		element.addEventListener('touchstart', function(e) {
 			
@@ -70,60 +76,30 @@ export class TouchManager{
 			}
 			
 			// Establish initial touch locations.
-			let touches = e['targetTouches'];
-			if (touches.length > 0) {
-				prevTouches[0] = [];
-				prevTouches[0]['x'] = touches[0]['clientX'];
-				prevTouches[0]['y'] = touches[0]['clientY'];
-			} 
-			if (touches.length > 1) {
-				prevTouches[1] = [];
-				prevTouches[1]['x'] = touches[1]['clientX'];
-				prevTouches[1]['y'] = touches[1]['clientY'];		
-			}
+			self.getTouchesCurrent(e);
+			
+			// Store current touches as previous touches.
+			self.touchesPrevious = self.touchesCurrent;
 			
 		});
 		
 		// Calculations to perform on moving a touch.
 		element.addEventListener('touchmove', function(e) {
 			
-			// Establish array for storing differences.
-			let diffs = [];
-			
-			// Get changes in pointer locations.
-			let touches = e['targetTouches'];
-			if (touches.length > 0){
-				diffs[0] = [];
-				diffs[0]['x'] = touches[0]['clientX'] - prevTouches[0]['x'];
-				diffs[0]['y'] = touches[0]['clientY'] - prevTouches[0]['y'];
-			} 
-			if (touches.length > 1) {
-				diffs[1] = [];
-				diffs[1]['x'] = touches[1]['clientX'] - prevTouches[1]['x'];
-				diffs[1]['y'] = touches[1]['clientY'] - prevTouches[1]['y'];						
-			}
+			// Get current touches.
+			self.getTouchesCurrent(e);
 			
 			// Update transformations accordingly.
-			if (touches.length == 1) {
-				self.drag(+diffs[0]['x'], +diffs[0]['y']);
-			}else if (touches.length > 1) {
-				self.gesture(+diffs[0]['x'], +diffs[0]['y'], +diffs[1]['x'], +diffs[1]['y']);
+			if (self.currentTouches  == 1) {
+				self.drag();
+			}else if (self.currentTouches  > 1) {
+				self.gesture();
 			}
 			
-			// Store last touch locations.
-			if (touches.length > 0) {
-				prevTouches[0] = [];
-				prevTouches[0]['x'] = touches[0]['clientX'];
-				prevTouches[0]['y'] = touches[0]['clientY'];
-			} 
-			if (touches.length > 1) {
-				prevTouches[1] = [];
-				prevTouches[1]['x'] = touches[1]['clientX'];
-				prevTouches[1]['y'] = touches[1]['clientY'];		
-			}
+			// Store current touches as previous touches.
+			self.touchesPrevious = self.touchesCurrent;
 			
 		});
-
 		
 	}
 	
@@ -178,34 +154,71 @@ export class TouchManager{
 	/**
 	 * Function to be called when moving the element with a single touch.
 	 * 
-	 * @param {number} xDiff Change in the first touch's x.
-	 * @param {number} yDiff Change in the first touch's y.
+	 * @param {number} xLoc The new x Location of the first touch.
+	 * @param {number} yLoc The new y Location of the first touch.
 	 */
-	private drag(xDiff: number, yDiff: number): void {
+	private drag(): void {
+		
+		// Get first touch id.
+		let id = Object.keys(this.touchesCurrent)[0];
+		
+		// Get changes in touch location.
+		let xDiff = this.touchesCurrent[id]['x'] - this.touchesPrevious[id]['x'];
+		let yDiff = this.touchesCurrent[id]['y'] - this.touchesPrevious[id]['y'];
+		
+		// Use differences in touch to translate element.
 		this.transformations['translate']['x'] += xDiff;
 		this.transformations['translate']['y'] += yDiff;
+		
+		// Request update.
 		this.requestElementUpdate();
+		
 	}
 	
 	/**
 	 * Function to be called when moving the element with more than one touch.
-	 * 
-	 * @param {number} xDiffOne Change in the first touch's x.
-	 * @param {number} yDiffOne Change in the first touch's y.
-	 * @param {number} xDiffTwo Change in the second touch's x.
-	 * @param {number} yDiffTwo Change in the second touch's y.
 	 */
-	private gesture(xDiffOne: number, yDiffOne: number, xDiffTwo: number, yDiffTwo: number): void {
+	private gesture(): void {
+		
+		// Get first two touch ids.
+		let idOne = Object.keys(this.touchesCurrent)[0];
+		let idTwo = Object.keys(this.touchesCurrent)[1];
+		
+		// Get changes in touch locations.
+		let xDiffOne = this.touchesCurrent[idOne]['x'] - this.touchesPrevious[idOne]['x'];
+		let yDiffOne = this.touchesCurrent[idOne]['y'] - this.touchesPrevious[idOne]['y'];
+		let xDiffTwo = this.touchesCurrent[idTwo]['x'] - this.touchesPrevious[idTwo]['x'];
+		let yDiffTwo = this.touchesCurrent[idTwo]['y'] - this.touchesPrevious[idTwo]['y'];
 		
 		// TODO Apply translation with two touches.
+		this.transformations['translate']['x'] += xDiffTwo;
+		this.transformations['translate']['y'] += yDiffTwo;
 		
 		// TODO Apply Rotation.
 		
 		// TODO Apply Scale.
 		
-		this.transformations['translate']['x'] += xDiffTwo;
-		this.transformations['translate']['y'] += yDiffTwo;
+		// Request update.
 		this.requestElementUpdate();
+		
+	}
+	
+	/**
+	 * Get and index all the current touches.
+	 * 
+	 * @param {TouchEvent} e The touch event to get the touches from.
+	 */
+	private getTouchesCurrent (e: TouchEvent) {
+		this.touchesCurrent = [];
+		let touches= e['targetTouches']; 
+		for (let i = 0; i < touches.length; i++) {
+			let id = 'touch-' + touches[i]['identifier'];
+			this.touchesCurrent[id] = [];
+			this.touchesCurrent[id]['id'] = id;
+			this.touchesCurrent[id]['x'] = touches[i]['clientX'];
+			this.touchesCurrent[id]['y'] = touches[i]['clientY'];
+			this.currentTouches = i + 1;
+		}		
 	}
 	
 	/**

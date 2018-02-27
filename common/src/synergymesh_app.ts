@@ -43,7 +43,9 @@ export abstract class SynergyMeshApp {
 			e.preventDefault();
 			startButton.hidden = true;
 			self.startAppEnvironment();	
-			self.requestFullscreen(document.getElementById(CommonElements.APP_SVG));
+			if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent))){
+				self.requestFullscreen(document.getElementById(CommonElements.APP_SVG));
+			}
 		});
 		
 	}
