@@ -1,8 +1,3 @@
-/// <reference path='../../lib/typings/d3-3.5.17.d.ts' />
-/// <reference path="../../lib/typings/interactjs-1.2.8.d.ts" />
-/// <reference path='../../lib/typings/jquery-2.2.0.d.ts' />
-/// <reference path='../../lib/typings/server-side-events.d.ts' />
-
 import {CommonElements} from 'common/src/constants/common_elements'; 
   
  /**
@@ -33,28 +28,24 @@ export abstract class SynergyMeshApp {
 	 */
 	public constructor(rootPath: string = '') {
 		
+		// Enable touch emulator.
+		TouchEmulator();
+		
 		// Store root.
 		this.rootPath = rootPath;
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
 		
-		// Ensure interact allows multi-user multi-touch.
-		interact.maxInteractions(Infinity); 
-		
-		// Detect if touchscreen.
-		let action = 'click';
-		if ('ontouchstart' in window) {
-			//action = 'touchend'; //TODO Causes slow down on mobiles?
-		}
-		
 		// Create button to start the app.
 		let startButton = document.getElementById(CommonElements.START_BUTTON);
-		startButton.addEventListener(action, function(e) {
+		startButton.addEventListener('touchstart', function(e) {
 			e.preventDefault();
 			startButton.hidden = true;
 			self.startAppEnvironment();	
-			self.requestFullscreen(document.getElementById(CommonElements.APP_SVG));
+			if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent))){
+				self.requestFullscreen(document.getElementById(CommonElements.APP_SVG));
+			}
 		});
 		
 	}
@@ -103,6 +94,13 @@ export abstract class SynergyMeshApp {
 		// Call function which adds the app's specific contents.
 		this.addContents();
 		
+	}
+	
+	/**
+	 * Circumvent the need to press a button when testing.
+	 */
+	public test(): void {
+		this.startAppEnvironment();	
 	}
 	
 	/**

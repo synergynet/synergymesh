@@ -1,8 +1,8 @@
 import {Networking} from 'common/src/utils/networking';
 import {Random} from 'common/src/utils/random';
-import {RotateTranslateScaleListener} from 'common/src/listeners/rotate_translate_scale_listener';
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
+import {TouchManager} from 'common/src/listeners/touch_manager';
 import {Transformations} from 'common/src/utils/transformations';
   
  /**
@@ -71,7 +71,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	private addClue(id: string, className: string, text: string, width: number, height: number): void {
 		
 		// Create item.
-		let textItem = new TextItem(this.svg, text, width, height, id, className + '-bg', className + 'text');
+		let textItem = new TextItem(this.svg, text, width, height, id, className + '-bg', className + '-text');
 		
 		// Randomly place.
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
@@ -79,8 +79,8 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		Transformations.setRotation(textItem.asItem(), Random.getRandomInt(-45, 45));
 				
 		// Add behaviour.
-		let rts = new RotateTranslateScaleListener(textItem.asItem(), true);		
-		rts.applyScaleLimits(0.75, 2.5);
+		let tm = new TouchManager(textItem.asItem(), this);
+		tm.applyScaleLimits(0.5, 2);
 		
 	}
 	
@@ -112,8 +112,8 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		Transformations.setRotation(rootNode, Random.getRandomInt(-45, 45))
 				
 		// Add behaviour.
-		let rts = new RotateTranslateScaleListener(rootNode);;
-		rts.applyScaleLimits(0.5, 2);
+		let tm = new TouchManager(rootNode, this);
+		tm.applyScaleLimits(0.3, 1.5);
 		
 	}
 	

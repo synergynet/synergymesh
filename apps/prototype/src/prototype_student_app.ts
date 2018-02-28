@@ -1,6 +1,5 @@
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
-import {DragListener} from 'common/src/listeners/drag_listener';
-import {RotateTranslateScaleListener} from 'common/src/listeners/rotate_translate_scale_listener';
+import {TouchManager} from 'common/src/listeners/touch_manager';
 import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
   
@@ -29,7 +28,7 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		Transformations.setTranslationX(circleOne, this.vizWidth/4);
 		Transformations.setTranslationY(circleOne, this.vizHeight/2);
 		circleOne.attr('id', 'circle-one');
-		new DragListener(circleOne);
+		new TouchManager(circleOne, this);
 		
 		// Add circle two. 
 		let circleTwo = this.svg.append('circle');    
@@ -37,7 +36,7 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		Transformations.setTranslationX(circleTwo, (this.vizWidth/4) * 3);
 		Transformations.setTranslationY(circleTwo, this.vizHeight/2);
 		circleTwo.attr('id', 'circle-two');
-		new DragListener(circleTwo);		
+		new TouchManager(circleTwo, this);		
 		
 		// Add rectangle one. 
 		let rectangleOne = this.svg.append('rect');
@@ -46,7 +45,7 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		Transformations.setTranslationX(rectangleOne, (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
 		Transformations.setTranslationY(rectangleOne, (this.vizHeight/4) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
 		rectangleOne.attr('id', 'rectangle-one');
-		new DragListener(rectangleOne);
+		new TouchManager(rectangleOne, this);
 		
 		// Add rectangle one. 
 		let rectangleTwo = this.svg.append('rect');		
@@ -55,15 +54,15 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		Transformations.setTranslationX(rectangleTwo, (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
 		Transformations.setTranslationY(rectangleTwo, ((this.vizHeight/4) * 3) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
 		rectangleTwo.attr('id', 'rectangle-two');    
-		new DragListener(rectangleTwo);
+		new TouchManager(rectangleTwo, this);
 		
 		// Create text item.
 		let textItem =
-			new TextItem(this.svg, '<b>Hello World!</b> This is a really long string!', 100, 80, 'demo-text', 'demo-text-bg', 'demo-text-text');
+			new TextItem(this.svg, 'Hello World! This is a really long string!', 100, 80, 'demo-text', 'demo-text-bg', 'demo-text-text');
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
 		Transformations.setScale(textItem.asItem(), 2);
 		Transformations.setRotation(textItem.asItem(), 45);
-		let rts = new RotateTranslateScaleListener(textItem.asItem(), true);	
+		let rts = new TouchManager(textItem.asItem(), this);	
 		rts.applyScaleLimits(0.5, 2);		
 		
 		// Signal app is ready.

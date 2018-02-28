@@ -30,10 +30,7 @@ describe('Template', function() {
 			// Attempt to start the app.
 			try{
 				app = new TemplateStudentApp('../apps/template/web/student/');
-				
-				// Press the start button.
-				$('#start_app_button').click();
-				
+				app.test();					
 			}catch(e){
 				fail = true;
 				console.log(e);
@@ -77,10 +74,7 @@ describe('Template', function() {
 			// Attempt to start the app.
 			try{
 				app = new TemplateTeacherApp('../apps/template/web/teacher/');
-				
-				// Press the start button.
-				$('#start_app_button').click();
-				
+				app.test();					
 			}catch(e){
 				fail = true;
 				console.log(e);

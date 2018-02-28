@@ -29,10 +29,7 @@ describe('Prototype', function() {
 			// Attempt to start the app.
 			try{
 				app = new PrototypeStudentApp('../apps/prototype/web/student/');
-				
-				// Press the start button.
-				$('#start_app_button').click();
-				
+				app.test();					
 			}catch(e){
 				fail = true;
 				console.log(e);
