@@ -41,11 +41,14 @@ export class FlickManager{
 		});
 		
 		// Create listeners for release.
-		element.addEventListener('touchend', function(e) {
+		element.addEventListener('mouseup', function(e) {
 			self.onRelease();
 		});
-		element.addEventListener('mouseup', function(e) {
-			self.onRelease();			
+		element.addEventListener('touchend', function(e) {
+			let touches= e['targetTouches']; 
+			if (touches.length == 0) {
+				self.onRelease();
+			}			
 		});
 		
 	}
