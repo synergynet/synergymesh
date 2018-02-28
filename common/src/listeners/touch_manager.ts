@@ -9,6 +9,12 @@ export class TouchManager{
 	
 	//// Private Global Variables. ////
 	
+	/** Current angle between multiple touches. */
+	private angleCurrent: number = 0;
+	
+	/** Previous angle between multiple touches. */
+	private anglePrevious: number = 0;
+	
 	/** Current distance between multiple touches. */
 	private distanceCurrent: number = 0;
 	
@@ -219,7 +225,11 @@ export class TouchManager{
 	 */
 	private gestureRotate(): void {
 		
-		// TODO Apply Rotation.	
+		// Get change of angle.
+		let angleDiff = this.angleCurrent - this.anglePrevious;
+
+		// Apply rotation.
+		this.transformations['rotate'] += angleDiff;
 		
 	}
 	
@@ -278,6 +288,9 @@ export class TouchManager{
 		// Store distance.
 		this.distanceCurrent = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
 		
+		// Store angle.
+		this.angleCurrent = Math.atan2(yDiff, xDiff) * 180 / Math.PI;
+		
 		// Calculate halfway point.
 		let halfWayPoint = [];
 		halfWayPoint['x'] = this.touchesCurrent[idOne]['x'] - (xDiff/2);
@@ -331,6 +344,7 @@ export class TouchManager{
 	 */
 	private updateGestureInfo(): void {
 		this.halfwayPointPrevious = this.halfwayPointCurrent;
+		this.anglePrevious = this.angleCurrent;
 		this.distancePrevious = this.distanceCurrent;
 	}	
 	
