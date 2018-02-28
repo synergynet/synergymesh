@@ -1,4 +1,3 @@
-import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {Transformations} from 'common/src/utils/transformations'; 
 
 /**
@@ -67,10 +66,9 @@ export class TouchManager{
 	 * Add a touch manager to the supplied element.
 	 * 
 	 * @param {d3.Selection<any>} ele The d3 selection to add the listener to (requires id to be set).
-	 * @param {SynergyMeshApp} app The SynergyMesh app that the element is part of.
 	 * @param {boolean} bringToFront flag to indicate whether the item should come to the front on press.
 	 */
-	constructor(ele: d3.Selection<any>, app: SynergyMeshApp, bringToFront: boolean = true) {
+	constructor(ele: d3.Selection<any>, bringToFront: boolean = true) {
 		
 		// Get self.
 		let self = this;

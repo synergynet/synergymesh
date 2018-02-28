@@ -1,3 +1,4 @@
+import {FlickManager} from 'common/src/listeners/flick_manager';
 import {Networking} from 'common/src/utils/networking';
 import {Random} from 'common/src/utils/random';
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
@@ -79,8 +80,9 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		Transformations.setRotation(textItem.asItem(), Random.getRandomInt(-45, 45));
 				
 		// Add behaviour.
-		let tm = new TouchManager(textItem.asItem(), this);
+		let tm = new TouchManager(textItem.asItem());
 		tm.applyScaleLimits(0.5, 2);
+		new FlickManager(textItem.asItem(), this);
 		
 	}
 	
@@ -112,8 +114,9 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		Transformations.setRotation(rootNode, Random.getRandomInt(-45, 45))
 				
 		// Add behaviour.
-		let tm = new TouchManager(rootNode, this);
+		let tm = new TouchManager(rootNode);
 		tm.applyScaleLimits(0.3, 1.5);
+		new FlickManager(rootNode, this);
 		
 	}
 	
