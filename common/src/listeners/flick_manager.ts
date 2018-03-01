@@ -7,10 +7,10 @@ import {Transformations} from 'common/src/utils/transformations';
 export class FlickManager{
 	
 	
-	//// Private Global Variables. ////
+	//// Protected Global Variables. ////
 	
 	/** The d3 selection to track and move. */
-	private ele: d3.Selection<any>;
+	protected ele: d3.Selection<any>;
 	
 	
 	//// Constructors. ////
@@ -34,10 +34,11 @@ export class FlickManager{
 		let element = document.getElementById(id);
 		
 		// Create listener for tracking movement of object.
-		element.addEventListener('touchmove', function(e) {
-			
-			// TODO Track movement of object.
-			
+		element.addEventListener('touchdown', function(e) {
+			let touches= e['targetTouches']; 
+			if (touches.length == 1) {
+				self.onStartMoving();
+			}						
 		});
 		
 		// Create listeners for release.
@@ -60,7 +61,13 @@ export class FlickManager{
 	 */
 	public flick(): void {
 		
-		// TODO Flick animation.
+		// TODO Call recursive function which runs at a constant rate (in animation frames?).
+		
+			// TODO Reposition the item by increamenting x and y by their appropriate amounts.
+		
+			// TODO Check if item has hit any of the borders.
+		
+			// TODO Apply friction.
 		
 	}
 	
@@ -102,19 +109,29 @@ export class FlickManager{
 		// TODO Reverse y-trajectory.
 		
 	}
-
-	
-	//// Private Methods. ////
 	
 	/**
 	 * Method to be called on releasing an element to work out the flick trajectory
 	 */
-	private onRelease() {
+	protected onRelease(): void {
 		
-		// TODO Calculate the trajectory of the item on release.
+		// TODO Stop sample rate.
+		
+		// TODO Calculate the x and y diff per X ms of the item on release.
 		
 		// Initate the flick.
 		this.flick();
+		
+	}
+	
+	/**
+	 * To be called when the first touch of a gesture happens on the target element.
+	 */
+	protected onStartMoving(): void {
+		
+		// TODO Stop any flicking happening
+		
+		// TODO Start recursive function called at constant sample rate which logs position object and timestamp.
 		
 	}
 	
