@@ -75,10 +75,14 @@ export class FlickManager {
 	
 	/**
 	 * Instigate a flick animation. 
+	 * 
+	 * @param {number} xDiffPerSec The change in x per second.
+	 * @param {number} yDiffPerSec The change in y per second.
 	 */
-	public flick(): void {
+	public flick(xDiffPerSec: number, yDiffPerSec: number): void {
 		
 		// TODO Call recursive function which runs at a constant rate (in animation frames?).
+		console.log(xDiffPerSec + ' ' + yDiffPerSec);
 		
 			// TODO Reposition the item by increamenting x and y by their appropriate amounts.
 		
@@ -132,13 +136,24 @@ export class FlickManager {
 	 */
 	protected onRelease(): void {
 		
-		// TODO Stop sampler.
+		// Stop sampler.
 		window.clearInterval(this.sampler);
 		
-		// TODO Calculate the x and y diff per X ms of the item on release.
+		// Get current item position and timestamp.
+		let currentX = Transformations.getTranslationX(this.ele);
+		let currentY = Transformations.getTranslationY(this.ele);
+		let currentTimestamp =  new Date().getTime();
+		
+		// Get change in x and y since sample.
+		let xDiff = currentX - this.sampleInfo.x;
+		let yDiff = currentY - this.sampleInfo.y;
+		let timeDiff = currentTimestamp - this.sampleInfo.timestamp;
+		
+		// Get x and y difference per second.
+		let timeScale = timeDiff/1000;
 		
 		// Initate the flick.
-		this.flick();
+		this.flick(xDiff * timeScale, yDiff * timeScale);
 		
 	}
 	
@@ -149,8 +164,6 @@ export class FlickManager {
 		
 		// Stop any flicking happening.
 		this.inMotion = false;
-		
-		console.log('go');
 		
 		// Start repeating  function called at constant sample rate which logs position object and timestamp.
 		this.sample();
