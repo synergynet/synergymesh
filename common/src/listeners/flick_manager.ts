@@ -4,13 +4,30 @@ import {Transformations} from 'common/src/utils/transformations';
 /**
  * A class which manages all the flick events relating to an item.
  */
-export class FlickManager{
+export class FlickManager {
+	
+	//// Private Constants. ////
+	
+	/** How often (in ms) to sample the location of the element. */
+	private static SAMPLE_RATE: number = 100;
 	
 	
 	//// Protected Global Variables. ////
 	
 	/** The d3 selection to track and move. */
 	protected ele: d3.Selection<any>;
+	
+	/** Flag to indicated that the item is in motion from a flick. */
+	protected inMotion: boolean = false;
+	
+	
+	//// Private Global Variables. ////
+	
+	/** The id of the timeout function of the sample function. */
+	private sampler: number;
+	
+	/** Object holding the position and timestamp information from the most recent sample. */ 
+	private sampleInfo: {x: number, y: number, timestamp: number} = {x: 0, y: 0, timestamp: 0};;
 	
 	
 	//// Constructors. ////
@@ -34,7 +51,7 @@ export class FlickManager{
 		let element = document.getElementById(id);
 		
 		// Create listener for tracking movement of object.
-		element.addEventListener('touchdown', function(e) {
+		element.addEventListener('touchstart', function(e) {
 			let touches= e['targetTouches']; 
 			if (touches.length == 1) {
 				self.onStartMoving();
@@ -115,7 +132,8 @@ export class FlickManager{
 	 */
 	protected onRelease(): void {
 		
-		// TODO Stop sample rate.
+		// TODO Stop sampler.
+		window.clearInterval(this.sampler);
 		
 		// TODO Calculate the x and y diff per X ms of the item on release.
 		
@@ -129,9 +147,31 @@ export class FlickManager{
 	 */
 	protected onStartMoving(): void {
 		
-		// TODO Stop any flicking happening
+		// Stop any flicking happening.
+		this.inMotion = false;
 		
-		// TODO Start recursive function called at constant sample rate which logs position object and timestamp.
+		console.log('go');
+		
+		// Start repeating  function called at constant sample rate which logs position object and timestamp.
+		this.sample();
+		this.sampler = setInterval(this.sample.bind(this), FlickManager.SAMPLE_RATE);
+		
+	}
+	
+	
+	//// Private methods. ////
+	
+	/**
+	 * Store the element's location and the timestamp.
+	 */
+	private sample(): void {
+		
+		// Store the location of the item and timestamp.
+		this.sampleInfo = {
+			x: Transformations.getTranslationX(this.ele),
+			y: Transformations.getTranslationY(this.ele),
+			timestamp: new Date().getTime()
+		};
 		
 	}
 	

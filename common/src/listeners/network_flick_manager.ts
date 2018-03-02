@@ -8,6 +8,8 @@ export class NetworkFlickManager extends FlickManager{
 	// TODO Static function for establishing network flick listener for creating (as new arrival) and flicking into view transferred items.
 	// Include callback for adding listeners to new arrivals (except flick).
 	
+	// TODO Text entry field for establishing session name.
+	
 	// TODO Need abstract SynergyMesh Item Type which has a (static?) contstruct-on-message function.
 	
 	
