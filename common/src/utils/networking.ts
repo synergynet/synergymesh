@@ -6,7 +6,7 @@
 export class Networking {
 	
 	/** The port number of the server. */
-	public static PORT: number = 3000;
+	public static PORT: number = 3000; // TODO Add method to supply host through config.
 	
 	/** Identifier for student joining server event. */
 	public static EVENTS_STUDENTS_JOIN = 'join_students';
