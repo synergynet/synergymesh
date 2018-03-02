@@ -1,4 +1,5 @@
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
+import {TouchManager} from 'common/src/listeners/touch_manager';
 import {Transformations} from 'common/src/utils/transformations'; 
 
 /**
@@ -6,10 +7,20 @@ import {Transformations} from 'common/src/utils/transformations';
  */
 export class FlickManager {
 	
+	
 	//// Private Constants. ////
 	
+	/** How small the change in x and y should be on flick before stopping. */
+	private static CUT_OFF_CHANGE: number = 0.01;
+	
+	/** The amount of friction to apply when none set by default. */
+	private static DEFAULT_FRICTION: number = 0.95;
+	
+	/** How often (in ms) to move the location of the element. */
+	private static MOVE_RATE: number = (1000/60);
+	
 	/** How often (in ms) to sample the location of the element. */
-	private static SAMPLE_RATE: number = 100;
+	private static SAMPLE_RATE: number = 250;
 	
 	
 	//// Protected Global Variables. ////
@@ -17,17 +28,32 @@ export class FlickManager {
 	/** The d3 selection to track and move. */
 	protected ele: d3.Selection<any>;
 	
-	/** Flag to indicated that the item is in motion from a flick. */
-	protected inMotion: boolean = false;
-	
 	
 	//// Private Global Variables. ////
+	
+	/** The app the element exists in. */
+	private app: SynergyMeshApp;
+	
+	/** The amount to slow down change on each move. */
+	private friction: number = 1;
+	
+	/** The current position of the element when flicked. */
+	private posOnFlick: {x: number, y: number} = {x: 0, y:0};
+		
+	/** The id of the timeout function of the move function. */
+	private mover: number;
+	
+	/** Object holding the amount to move in each direction per micro second. */ 
+	private movementInfo: {x: number, y: number} = {x: 0, y: 0};	
 	
 	/** The id of the timeout function of the sample function. */
 	private sampler: number;
 	
 	/** Object holding the position and timestamp information from the most recent sample. */ 
-	private sampleInfo: {x: number, y: number, timestamp: number} = {x: 0, y: 0, timestamp: 0};;
+	private sampleInfo: {x: number, y: number, timestamp: number} = {x: 0, y: 0, timestamp: 0};
+	
+	/** Touch manager assigned to the element. */
+	private touchManager: TouchManager;
 	
 	
 	//// Constructors. ////
@@ -37,14 +63,19 @@ export class FlickManager {
 	 * 
 	 * @param {d3.Selection<any>} ele The d3 selection to add the listener to (requires id to be set).
 	 * @param {SynergyMeshApp} app The SynergyMesh app that the element is part of.
+	 * @param {TouchManager} touchManager  Touch manager assigned to the element.
+	 * @param {number} friction The amount to slow down change on each move.
 	 */
-	constructor(ele: d3.Selection<any>, app: SynergyMeshApp) {
+	constructor(ele: d3.Selection<any>, app: SynergyMeshApp, touchManager: TouchManager, friction: number = FlickManager.DEFAULT_FRICTION) {
 		
 		// Get self.
 		let self = this;
 		
-		// Store element.
+		// Store supplied values.
 		this.ele = ele;
+		this.app = app;
+		this.touchManager = touchManager;
+		this.friction = friction;
 		
 		// Get the HTML Element representation.
 		let id = ele.attr('id');
@@ -81,15 +112,19 @@ export class FlickManager {
 	 */
 	public flick(xDiffPerSec: number, yDiffPerSec: number): void {
 		
-		// TODO Call recursive function which runs at a constant rate (in animation frames?).
-		console.log(xDiffPerSec + ' ' + yDiffPerSec);
+		// Work out movement.
+		this.movementInfo = {x: xDiffPerSec / 1000, y: yDiffPerSec / 1000}; 
 		
-			// TODO Reposition the item by increamenting x and y by their appropriate amounts.
+		// Store current location.
+		this.posOnFlick = {
+			x: Transformations.getTranslationX(this.ele), 
+			y: Transformations.getTranslationY(this.ele)
+		}
 		
-			// TODO Check if item has hit any of the borders.
-		
-			// TODO Apply friction.
-		
+		// Start repeating function called at constant sample rate which logs position object and timestamp.
+		this.move();
+		this.mover = setInterval(this.move.bind(this), FlickManager.MOVE_RATE);
+
 	}
 	
 	
@@ -100,7 +135,8 @@ export class FlickManager {
 	 */
 	protected onHitLeft(): void {
 		
-		// TODO Reverse x-trajectory.
+		// Reverse x-trajectory.
+		this.movementInfo.x = Math.abs(this.movementInfo.x);
 		
 	}
 	
@@ -109,7 +145,8 @@ export class FlickManager {
 	 */
 	protected onHitRight(): void {
 		
-		// TODO Reverse x-trajectory.
+		// Reverse x-trajectory.
+		this.movementInfo.x = -Math.abs(this.movementInfo.x);
 		
 	}
 	
@@ -118,7 +155,8 @@ export class FlickManager {
 	 */
 	protected onHitTop(): void {
 		
-		// TODO Reverse y-trajectory.
+		// Reverse y-trajectory.
+		this.movementInfo.y = -Math.abs(this.movementInfo.y);
 		
 	}
 	
@@ -127,7 +165,8 @@ export class FlickManager {
 	 */
 	protected onHitBottom(): void {
 		
-		// TODO Reverse y-trajectory.
+		// Reverse y-trajectory.
+		this.movementInfo.y = Math.abs(this.movementInfo.y);
 		
 	}
 	
@@ -149,11 +188,8 @@ export class FlickManager {
 		let yDiff = currentY - this.sampleInfo.y;
 		let timeDiff = currentTimestamp - this.sampleInfo.timestamp;
 		
-		// Get x and y difference per second.
-		let timeScale = timeDiff/1000;
-		
 		// Initate the flick.
-		this.flick(xDiff * timeScale, yDiff * timeScale);
+		this.flick((xDiff/timeDiff) * 1000, (yDiff/timeDiff) * 1000);
 		
 	}
 	
@@ -163,16 +199,70 @@ export class FlickManager {
 	protected onStartMoving(): void {
 		
 		// Stop any flicking happening.
-		this.inMotion = false;
+		this.stop();
 		
-		// Start repeating  function called at constant sample rate which logs position object and timestamp.
+		// Start repeating function called at constant sample rate which logs position object and timestamp.
 		this.sample();
 		this.sampler = setInterval(this.sample.bind(this), FlickManager.SAMPLE_RATE);
 		
 	}
 	
+	/**
+	 * Stop element from moving.
+	 */
+	protected stop(): void {
+		
+		// Stop sampler.
+		window.clearInterval(this.mover);
+		
+	}
+	
 	
 	//// Private methods. ////
+	
+	/**
+	 * Move the element.
+	 */
+	private move(): void {
+		
+		// Check if item has hit any of the borders.
+		if (this.posOnFlick.x > this.app.vizWidth) {
+			this.onHitRight();
+		} else if (this.posOnFlick.x < 0) {
+			this.onHitLeft();
+		}
+		if (this.posOnFlick.y > this.app.vizHeight) {
+			this.onHitTop();
+		} else if (this.posOnFlick.y < 0) {
+			this.onHitBottom();
+		}
+		
+		// Update location.
+		this.requestElementUpdate();
+	
+		// Apply friction.
+		if (Math.abs(this.movementInfo.x) < FlickManager.CUT_OFF_CHANGE 
+			&& Math.abs(this.movementInfo.y) < FlickManager.CUT_OFF_CHANGE ) {
+				this.stop();
+		} else {
+			this.movementInfo.x *= this.friction;
+			this.movementInfo.y *= this.friction;
+		}
+			
+		
+	}
+	
+	private ticking = false;
+	
+	/**
+	 * Function for scheduling an update.
+	 */
+	private requestElementUpdate(): void{
+	    if(!this.ticking) {
+			this.ticking = true;
+	        window.requestAnimationFrame(this.updateElementTransform.bind(this));
+	    }
+	}	
 	
 	/**
 	 * Store the element's location and the timestamp.
@@ -186,6 +276,25 @@ export class FlickManager {
 			timestamp: new Date().getTime()
 		};
 		
+	}
+	
+	/**
+	* Function for updating the element.
+	*/
+	private updateElementTransform(): void {
+		
+		// Get change.
+		let xChange = this.movementInfo.x * FlickManager.MOVE_RATE;
+		let yChange = this.movementInfo.y * FlickManager.MOVE_RATE;
+		
+		// Reposition the item by incrementing x and y by their appropriate amounts.
+		this.posOnFlick.x += xChange;
+		this.posOnFlick.y += yChange;
+		Transformations.setTranslation(this.ele, this.posOnFlick.x, this.posOnFlick.y);
+		this.touchManager.establishTransformation();
+		
+		// Allow next animation frame.
+		this.ticking = false;
 	}
 	
 }

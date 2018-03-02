@@ -20,20 +20,27 @@ export class NetworkFlickManager extends FlickManager{
 	 */
 	protected onHitTop(): void {
 		
-		// TODO Check if valid transfer: not a new arrival, not already transferring and has one valid target.
+		// TODO Check if valid transfer: not a new arrival and has one valid target.
 		let validTransfer = false;
 		if (validTransfer) {
 			
-			// TODO Log as transferring.
-		
-			// TODO Remove friction.
+			// TODO Check if not already transferring
+			let transferring = false;
+			if (!transferring){
 			
-			// TODO Fade out.
+				// TODO Log as transferring.
 			
-			// TODO At end of fade out send out transfer message.
-			
-			// TODO At end of fade out stop moving, remove item and self.
-			
+				// TODO Remove friction.
+				
+				// TODO Fade out.
+				
+				// TODO At end of fade out send out transfer message.
+				
+				// TODO At end of fade out stop moving, remove item and self.
+				this.stop();
+				
+			}
+				
 		} else {
 		
 			// Bounce as usual.

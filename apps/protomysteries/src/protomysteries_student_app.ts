@@ -82,7 +82,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		// Add behaviour.
 		let tm = new TouchManager(textItem.asItem());
 		tm.applyScaleLimits(0.5, 2);
-		new NetworkFlickManager(textItem.asItem(), this);
+		new NetworkFlickManager(textItem.asItem(), this, tm);
 		
 	}
 	
@@ -116,7 +116,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		// Add behaviour.
 		let tm = new TouchManager(rootNode);
 		tm.applyScaleLimits(0.3, 1.5);
-		new NetworkFlickManager(rootNode, this);
+		new NetworkFlickManager(rootNode, this, tm);
 		
 	}
 	

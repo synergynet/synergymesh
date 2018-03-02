@@ -6,20 +6,26 @@ import {CommonElements} from 'common/src/constants/common_elements';
  */
 export abstract class SynergyMeshApp {	
 
+
+	//// Public Global Variables. ////
+	
+	/** Flag to indicate whether the app is ready yet. */
+	public isReady = false;
+
 	/** The height of the SVG element. */
-	protected vizHeight: number;
+	public vizHeight: number;
 
 	/** The width of the SVG element. */
-	protected vizWidth: number;
+	public vizWidth: number;
+
+
+	//// Public Global Variables. ////
 	
 	/** The URL root of the page. */
 	protected rootPath;
 
 	/** The width of the SVG element. */
 	protected svg: d3.Selection<any>;
-	
-	/** Flag to indicate whether the app is ready yet. */
-	public isReady = false;
 
 	/**
 	 * Initialise a SynergyMeshApp object.
