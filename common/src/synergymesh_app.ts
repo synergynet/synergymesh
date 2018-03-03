@@ -6,6 +6,12 @@ import {CommonElements} from 'common/src/constants/common_elements';
  */
 export abstract class SynergyMeshApp {	
 
+	
+	//// Private Constants. ////
+	
+	/** Key to use in local storage to store the session key. */
+	private static SESSION_ID_STORE_KEY = 'synergymesh-session';
+
 
 	//// Public Global Variables. ////
 	
@@ -55,12 +61,21 @@ export abstract class SynergyMeshApp {
 		// Create self object for referencing elsewhere.
 		let self = this;
 		
+		// Get session input.
+		let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
+		
+		// Set session input default value.
+		if (sessionInput != undefined) {
+			if (SynergyMeshApp.SESSION_ID_STORE_KEY in localStorage) {
+				sessionInput.value = localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY];
+			}
+		}
+		
 		// Function for attempting to start the app.
 		let startAppAttempt = function() {
 			
 			// Check if session input field is present.
-			let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
-			if (sessionInput != undefined){
+			if (sessionInput != undefined) {
 				
 				// Get valid text.
 				let input = sessionInput.value.replace(self.pattern, '');
@@ -73,6 +88,7 @@ export abstract class SynergyMeshApp {
 				
 				// Store supplied session.
 				self.sessionId = input;
+				localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY] = input;
 				
 				// Hide session input and prompt.
 				document.getElementById(CommonElements.SESSION_PROMPT).hidden = true;;
