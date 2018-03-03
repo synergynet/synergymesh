@@ -19,6 +19,9 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		// Announce presence to server.
 		Networking.establishConnection();
 		
+		// Establish network flick listener.
+		NetworkFlickManager.registerForNetworkFlick();
+		
 		// Add title.
 		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, 75);

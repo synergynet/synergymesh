@@ -1,12 +1,15 @@
-/// <reference path='../../../lib/typings/socket.io-client-1.4.4.d.ts' />
-  
- /**
+/**
  * Class with static methods for supporting networking.
  */
 export class Networking {
 	
+	// TODO Config to enable/disable network debugging.
+	
+	
+	//// Public Constants. ////
+	
 	/** The port number of the server. */
-	public static PORT: number = 3000; // TODO Add method to supply host through config.
+	public static PORT: number = 3000; // TODO Add method to supply host through config. 
 	
 	/** Identifier for student joining server event. */
 	public static EVENTS_STUDENTS_JOIN = 'join_students';
@@ -39,6 +42,8 @@ export class Networking {
 	public static TO_MESSAGE: string = 'message';
 	
 	
+	//// Public Static Variables. ////
+	
 	/** The static API for accessing Socket.io features set in the bootstrap. */
 	public static io: SocketIOClientStatic;
 	
@@ -47,6 +52,9 @@ export class Networking {
 	
 	/** List of socket ids of students currently connected to the same server. */
 	public static students: string[] = [];
+	
+	
+	//// Private Static Variables. ////
 	
 	/** Socket io instance. */
 	private static socket;
@@ -57,7 +65,7 @@ export class Networking {
 	 * 
 	 * @param {boolean} isTeacher Flag to indicate whether the client is a teacher or student.
 	 */
-	public static establishConnection(isTeacher: boolean = false): void {
+	public static establishConnection(isTeacher: boolean = false): void {  // TODO Supply session name and role instead.
 		
 		// Establish socket.
 		Networking.socket = Networking.io.connect(Networking.getFullHost() + ':' + Networking.PORT);

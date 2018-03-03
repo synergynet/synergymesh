@@ -23,9 +23,21 @@ export abstract class SynergyMeshApp {
 	
 	/** The URL root of the page. */
 	protected rootPath;
+	
+	/** The ID of the network session to use. */
+	protected sessionId;
 
 	/** The width of the SVG element. */
 	protected svg: d3.Selection<any>;
+	
+	
+	//// Private Global Variables. */
+	
+	/** Regular expression for just alpha-numeric characters. */
+	private pattern: RegExp = /[^a-zA-Z0-9 ]/g;
+	
+	
+	//// Constructor. ////
 
 	/**
 	 * Initialise a SynergyMeshApp object.
@@ -43,15 +55,60 @@ export abstract class SynergyMeshApp {
 		// Create self object for referencing elsewhere.
 		let self = this;
 		
-		// Create button to start the app.
-		let startButton = document.getElementById(CommonElements.START_BUTTON);
-		startButton.addEventListener('touchstart', function(e) {
-			e.preventDefault();
+		// Function for attempting to start the app.
+		let startAppAttempt = function() {
+			
+			// Check if session input field is present.
+			let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
+			if (sessionInput != undefined){
+				
+				// Get valid text.
+				let input = sessionInput.value.replace(self.pattern, '');
+				
+				// Display warning if blank.
+				if (input == '') {
+					alert('You need to enter a session ID for this app.');
+					return;
+				}
+				
+				// Store supplied session.
+				self.sessionId = input;
+				
+				// Hide session input and prompt.
+				document.getElementById(CommonElements.SESSION_PROMPT).hidden = true;;
+				sessionInput.hidden = true;
+				
+			}
+			
+			// Hide elements.
 			startButton.hidden = true;
+			
+			// Start app.
 			self.startAppEnvironment();	
+			
+			// Full screen on desktop.
 			if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent))){
 				self.requestFullscreen(document.getElementById(CommonElements.APP_SVG));
 			}
+			
+		};
+		
+		// Create button to start the app.
+		let startButton = document.getElementById(CommonElements.START_BUTTON);
+		startButton.addEventListener('touchstart', function(e) {		
+			e.preventDefault();
+			startAppAttempt();			
+		});
+		
+		// Add listener to session input field which filters out non-alphanumeric characters..
+		$('#' + CommonElements.SESSION_INPUT).bind('keypress', function(event) {			
+			let value = String.fromCharCode(event.which);			
+			let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
+			sessionInput.value = sessionInput.value.replace(self.pattern, '');
+			if (event.keyCode == 13) {
+				startAppAttempt();
+			}
+			return !self.pattern.test(value);
 		});
 		
 	}
@@ -108,6 +165,9 @@ export abstract class SynergyMeshApp {
 	public test(): void {
 		this.startAppEnvironment();	
 	}
+	
+	
+	//// Protected Methods. ////
 	
 	/**
 	 * Add the contents specific to this app to override.

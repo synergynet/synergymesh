@@ -31,6 +31,9 @@ export class FlickManager {
 	/** The amount to slow down change on each move. */
 	protected friction: number = 1;
 	
+	/** Touch manager assigned to the element. */
+	protected touchManager: TouchManager;
+	
 	
 	//// Private Global Variables. ////
 	
@@ -51,9 +54,6 @@ export class FlickManager {
 	
 	/** Object holding the position and timestamp information from the most recent sample. */ 
 	private sampleInfo: {x: number, y: number, timestamp: number} = {x: 0, y: 0, timestamp: 0};
-	
-	/** Touch manager assigned to the element. */
-	private touchManager: TouchManager;
 	
 	
 	//// Constructors. ////
