@@ -28,14 +28,14 @@ export class FlickManager {
 	/** The d3 selection to track and move. */
 	protected ele: d3.Selection<any>;
 	
+	/** The amount to slow down change on each move. */
+	protected friction: number = 1;
+	
 	
 	//// Private Global Variables. ////
 	
 	/** The app the element exists in. */
 	private app: SynergyMeshApp;
-	
-	/** The amount to slow down change on each move. */
-	private friction: number = 1;
 	
 	/** The current position of the element when flicked. */
 	private posOnFlick: {x: number, y: number} = {x: 0, y:0};
@@ -156,7 +156,7 @@ export class FlickManager {
 	protected onHitTop(): void {
 		
 		// Reverse y-trajectory.
-		this.movementInfo.y = -Math.abs(this.movementInfo.y);
+		this.movementInfo.y = Math.abs(this.movementInfo.y);
 		
 	}
 	
@@ -166,7 +166,7 @@ export class FlickManager {
 	protected onHitBottom(): void {
 		
 		// Reverse y-trajectory.
-		this.movementInfo.y = Math.abs(this.movementInfo.y);
+		this.movementInfo.y = -Math.abs(this.movementInfo.y);
 		
 	}
 	
@@ -232,9 +232,9 @@ export class FlickManager {
 			this.onHitLeft();
 		}
 		if (this.posOnFlick.y > this.app.vizHeight) {
-			this.onHitTop();
-		} else if (this.posOnFlick.y < 0) {
 			this.onHitBottom();
+		} else if (this.posOnFlick.y < 0) {
+			this.onHitTop();
 		}
 		
 		// Update location.

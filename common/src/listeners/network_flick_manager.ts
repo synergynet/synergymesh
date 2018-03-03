@@ -5,12 +5,25 @@ import {FlickManager} from 'common/src/listeners/flick_manager';
  */
 export class NetworkFlickManager extends FlickManager{
 	
-	// TODO Static function for establishing network flick listener for creating (as new arrival) and flicking into view transferred items.
+	// TODO Static function for establishing network flick listener.
+	// On message: create (as new arrival),  flick into view and fade in transferred items.
 	// Include callback for adding listeners to new arrivals (except flick).
 	
 	// TODO Text entry field for establishing session name.
 	
 	// TODO Need abstract SynergyMesh Item Type which has a (static?) contstruct-on-message function.
+	
+	
+	//// Private Constant. ////
+	
+	/** Time to take to fade a transferring object out or in (in seconds). */
+	private FADE_TIME:number = 0.25;
+	
+	
+	//// Private Global Variables. ////
+	
+	/** Flag to indicate that the item is due to be transferred. */
+	private transferring: boolean = false;
 	
 	
 	//// Protected Methods. ////
@@ -21,23 +34,35 @@ export class NetworkFlickManager extends FlickManager{
 	protected onHitTop(): void {
 		
 		// TODO Check if valid transfer: not a new arrival and has one valid target.
-		let validTransfer = false;
+		let validTransfer = true;
 		if (validTransfer) {
 			
-			// TODO Check if not already transferring
-			let transferring = false;
-			if (!transferring){
+			// Check if not already transferring
+			if (!this.transferring) {
 			
-				// TODO Log as transferring.
+				// Log as transferring.
+				this.transferring = true;
 			
-				// TODO Remove friction.
+				// Remove friction.
+				this.friction = 1;
 				
-				// TODO Fade out.
+				// Fade out.
+				$(document.getElementById(this.ele.attr('id'))).fadeOut(this.FADE_TIME * 1000);
 				
-				// TODO At end of fade out send out transfer message.
+				// Get self.
+				let self = this;
 				
-				// TODO At end of fade out stop moving, remove item and self.
-				this.stop();
+				// When the fade is done.
+				setTimeout(function() {
+					
+					// TODO Send out transfer message.
+				
+					// Stop moving, remove item and self.
+					this.stop();
+					
+					// TODO Remove item and self.
+					
+				}, this.FADE_TIME);
 				
 			}
 				
