@@ -17,7 +17,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	protected addContents() {
 		
 		// Announce presence to server.
-		Networking.establishConnection();
+		this.establishNetworking();
 		
 		// Establish network flick listener.
 		NetworkFlickManager.registerForNetworkFlick();

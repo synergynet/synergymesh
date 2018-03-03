@@ -1,6 +1,10 @@
 /// <reference path='../../lib/typings/socket.io-1.4.4.d.ts' />
 
 import {Networking} from '../../common/src/utils/networking';
+import {Config} from '../../common/src/utils/config';
+
+// Get config.
+Config.getConfigOnServer();
 
 // Setup basic server.
 let server = require('http').createServer();
@@ -9,8 +13,9 @@ let server = require('http').createServer();
 let io: SocketIO.Server = require('socket.io')(server);
 
 // Start server running on port.
-server.listen(Networking.PORT, function () {
-  console.log('Server listening at port ' + Networking.PORT);
+let port = Config.getConfigValue(Config.SERVER_PORT);
+server.listen(port, function () {
+  console.log('Server listening at port ' + port);
 });
 
 // Establish client lists.
@@ -173,6 +178,5 @@ io.on('connection', function (socket: SocketIO.Socket) {
 			
 		}
 	});
-	
 	
 });

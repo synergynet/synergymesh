@@ -3,13 +3,8 @@
  */
 export class Networking {
 	
-	// TODO Config to enable/disable network debugging.
-	
 	
 	//// Public Constants. ////
-	
-	/** The port number of the server. */
-	public static PORT: number = 3000; // TODO Add method to supply host through config. 
 	
 	/** Identifier for student joining server event. */
 	public static EVENTS_STUDENTS_JOIN = 'join_students';
@@ -44,6 +39,9 @@ export class Networking {
 	
 	//// Public Static Variables. ////
 	
+	/** The flag to set if the debugging is shown. */
+	public static debug: boolean = false;
+	
 	/** The static API for accessing Socket.io features set in the bootstrap. */
 	public static io: SocketIOClientStatic;
 	
@@ -63,53 +61,45 @@ export class Networking {
 	/**
 	 * Initialise the socket io instance connected to the server on the same host.
 	 * 
+	 * @param {string} host The protocol and name of the host.
+	 * @param {string} port the port of the host.
 	 * @param {boolean} isTeacher Flag to indicate whether the client is a teacher or student.
 	 */
-	public static establishConnection(isTeacher: boolean = false): void {  // TODO Supply session name and role instead.
+	public static establishConnection(host: string, port: string, isTeacher: boolean = false): void { 
+	// TODO Use session name and role to set up what messages to get. 
 		
 		// Establish socket.
-		Networking.socket = Networking.io.connect(Networking.getFullHost() + ':' + Networking.PORT);
-		console.log('Connected to server.');
+		Networking.socket = Networking.io.connect(host + ':' + port);
+		Networking.debugMessage('Connected to server.');
 		
 		// Check if student or teacher.
 		if (!isTeacher) {
 			
 			// Establish self as student.
 			Networking.socket.emit(Networking.EVENTS_STUDENTS_JOIN, {});	
-			console.log('Joined students on server,');
+			Networking.debugMessage('Joined students on server,');
 				
 		} else {
 			
 			// Establish self as teacher.
 			Networking.socket.emit(Networking.EVENTS_TEACHERS_JOIN, {});	
-			console.log('Joined teachers on server.');
+			Networking.debugMessage('Joined teachers on server.');
 			
 		}
 		
 		// Listen for the students list being updated.
 		Networking.socket.on(Networking.EVENTS_STUDENTS_UPDATE, function(message){
 			Networking.students = message['students'];
-			console.log('Student list updated.');
+			Networking.debugMessage('Student list updated.');
 		});
 		
 		// Listen for the teachers list being updated.
 		Networking.socket.on(Networking.EVENTS_TEACHERS_UPDATE, function(message){
 			Networking.teachers = message['teachers'];
-			console.log('Teachers list updated.');
+			Networking.debugMessage('Teachers list updated.');
 		});
 		
 	}	
-	
-	/**
-	 * Returns the current host and its protocol.
-	 * 
-	 * @param {string} The host and its protocol.
-	 */
-	private static getFullHost(): string {
-		let host = (<any>window).location.host;
-		host = host.split(':')[0];
-		return  (<any>window).location.protocol + '//' + host;
-	}
 	
 	/**
 	 * Set up a listener for server-side events.
@@ -122,7 +112,7 @@ export class Networking {
 		Networking.socket.on(Networking.EVENTS_MESSAGE, function(message){
 			
 				// Call the callback.
-				console.log('Received a message: ' + JSON.stringify(message));
+				Networking.debugMessage('Received a message: ' + JSON.stringify(message));
 				callback(message);
 			
 		});		
@@ -137,7 +127,7 @@ export class Networking {
 		
 		// Send message.
 		Networking.socket.emit(Networking.EVENTS_STUDENTS_TO, messageToSend);		
-		console.log('Sent this message to students: ' + JSON.stringify(messageToSend));	
+		Networking.debugMessage('Sent this message to students: ' + JSON.stringify(messageToSend));	
 			
 	}
 	
@@ -150,7 +140,7 @@ export class Networking {
 		
 		// Send message.
 		Networking.socket.emit(Networking.EVENTS_TEACHERS_TO, messageToSend);		
-		console.log('Sent this message to teachers: ' + JSON.stringify(messageToSend));	
+		Networking.debugMessage('Sent this message to teachers: ' + JSON.stringify(messageToSend));	
 			
 	}
 	
@@ -169,8 +159,22 @@ export class Networking {
 		
 		// Send message.
 		Networking.socket.emit(Networking.EVENTS_CLIENT_TO, wrappedMessageToSend);		
-		console.log('Sent this message to ' + targetClient + ': ' + JSON.stringify(messageToSend));	
+		Networking.debugMessage('Sent this message to ' + targetClient + ': ' + JSON.stringify(messageToSend));	
 			
+	}
+	
+	
+	//// Private Static Methods. ////
+	
+	/**
+	 * Output message (if debugging enabled).
+	 * 
+	 * @param {string} message The message to output (maybe).
+	 */
+	private static debugMessage (message: string): void {
+		if (Networking.debug) {
+			console.log(message);
+		}
 	}
 	
 }

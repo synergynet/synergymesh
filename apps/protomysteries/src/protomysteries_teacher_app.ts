@@ -13,8 +13,8 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 	 */
 	protected addContents() {
 		
-		// Announce presence to server.
-		Networking.establishConnection(true);
+		// Announce presence to server.		
+		this.establishNetworking();
 		
 		// Add Freeze button.
 		let freezeButton = new TextItem(this.svg, 'Freeze All Student Devices', 225, 25, 'freeze-button', 'freeze-bg', 'freeze-text');

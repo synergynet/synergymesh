@@ -30,7 +30,7 @@ export class NetworkFlickManager extends FlickManager {
 	 */
 	public static registerForNetworkFlick() {
 		
-		// TODO Network flick arrival listener.
+		// TODO Network flick arrival listener (for messages from same role).
 		// On message: create (as new arrival),  flick into view and fade in transferred items.
 		// Include callback for adding listeners to new arrivals (except flick).
 		
@@ -76,7 +76,7 @@ export class NetworkFlickManager extends FlickManager {
 					// Remove item and self.
 					self.terminate();
 					
-				}, this.FADE_TIME);
+				}, this.FADE_TIME * 1000);
 				
 			}
 				
@@ -110,6 +110,8 @@ export class NetworkFlickManager extends FlickManager {
 	 * Destroy the item and this listener.
 	 */
 	private terminate(): void {
+		this.shouldBeMoving = false;
+		this.shouldBeSampling = false;
 		let element = document.getElementById(this.ele.attr('id'));
 		element.parentNode.removeChild(element);
 		delete this.touchManager;

@@ -1,4 +1,6 @@
 import {CommonElements} from 'common/src/constants/common_elements'; 
+import {Config} from 'common/src/utils/config'; 
+import {Networking} from 'common/src/utils/networking';
   
  /**
  * Abstract class which defines what all SynergyMesh apps should do.
@@ -57,6 +59,16 @@ export abstract class SynergyMeshApp {
 		
 		// Store root.
 		this.rootPath = rootPath;
+		
+		// Get values from config.
+		Config.getConfig(this.buildAppStarter.bind(this));
+		
+	}
+	
+	/**
+	 * Put in place listeners for building the app with.
+	 */
+	private buildAppStarter(): void{
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
@@ -189,6 +201,22 @@ export abstract class SynergyMeshApp {
 	 * Add the contents specific to this app to override.
 	 */
 	protected addContents() {}
+	
+	protected establishNetworking() {
+		
+		// Get host and port from config.
+		let host = Config.getConfigValue(Config.SERVER_HOST);
+		let port = Config.getConfigValue(Config.SERVER_PORT);
+		
+		// Set debugging if needed.
+		if (Config.getConfigValue(Config.NETWORK_DEBUGGING)) {
+			Networking.debug = true;
+		}
+		
+		// Announce presence to server.
+		Networking.establishConnection(host, port);
+		
+	}
 	
 	/**
 	 * Function to be called after initial setup to indicate that the app is ready.

@@ -31,6 +31,12 @@ export class FlickManager {
 	/** The amount to slow down change on each move. */
 	protected friction: number = 1;
 	
+	/** Flag for stopping mover. */
+	protected shouldBeMoving: boolean = false;
+	
+	/** Flag for stopping sampler. */
+	protected shouldBeSampling: boolean = false;
+	
 	/** Touch manager assigned to the element. */
 	protected touchManager: TouchManager;
 	
@@ -54,6 +60,9 @@ export class FlickManager {
 	
 	/** Object holding the position and timestamp information from the most recent sample. */ 
 	private sampleInfo: {x: number, y: number, timestamp: number} = {x: 0, y: 0, timestamp: 0};
+	
+	/** Flag to indicate whether something is queued up to animate. */	
+	private ticking: boolean= false;
 	
 	
 	//// Constructors. ////
@@ -111,6 +120,9 @@ export class FlickManager {
 	 * @param {number} yDiffPerSec The change in y per second.
 	 */
 	public flick(xDiffPerSec: number, yDiffPerSec: number): void {
+		
+		// Allow movement.
+		this.shouldBeMoving = true;
 		
 		// Work out movement.
 		this.movementInfo = {x: xDiffPerSec / 1000, y: yDiffPerSec / 1000}; 
@@ -176,6 +188,7 @@ export class FlickManager {
 	protected onRelease(): void {
 		
 		// Stop sampler.
+		this.shouldBeSampling = false;
 		window.clearInterval(this.sampler);
 		
 		// Get current item position and timestamp.
@@ -198,6 +211,9 @@ export class FlickManager {
 	 */
 	protected onStartMoving(): void {
 		
+		// Allow sampling.
+		this.shouldBeSampling = true;
+		
 		// Stop any flicking happening.
 		this.stop();
 		
@@ -213,6 +229,7 @@ export class FlickManager {
 	protected stop(): void {
 		
 		// Stop sampler.
+		this.shouldBeMoving = false;
 		window.clearInterval(this.mover);
 		
 	}
@@ -224,6 +241,12 @@ export class FlickManager {
 	 * Move the element.
 	 */
 	private move(): void {
+		
+		// Check this is allowed.
+		if (!this.shouldBeMoving) {
+			window.clearInterval(this.mover);
+			return;
+		}
 		
 		// Check if item has hit any of the borders.
 		if (this.posOnFlick.x > this.app.vizWidth) {
@@ -252,8 +275,6 @@ export class FlickManager {
 		
 	}
 	
-	private ticking = false;
-	
 	/**
 	 * Function for scheduling an update.
 	 */
@@ -269,6 +290,12 @@ export class FlickManager {
 	 */
 	private sample(): void {
 		
+		// Check this is allowed.
+		if (!this.shouldBeSampling) {
+			window.clearInterval(this.sampler);
+			return;
+		}
+		
 		// Store the location of the item and timestamp.
 		this.sampleInfo = {
 			x: Transformations.getTranslationX(this.ele),
@@ -282,6 +309,12 @@ export class FlickManager {
 	* Function for updating the element.
 	*/
 	private updateElementTransform(): void {
+		
+		// Double check should be moving.
+		if (!this.shouldBeMoving) {
+			this.ticking = false;
+			return;
+		}
 		
 		// Get change.
 		let xChange = this.movementInfo.x * FlickManager.MOVE_RATE;
