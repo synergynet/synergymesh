@@ -1,5 +1,4 @@
 import {NetworkFlickManager} from 'common/src/listeners/network_flick_manager';
-import {Networking} from 'common/src/utils/networking';
 import {Random} from 'common/src/utils/random';
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
@@ -21,6 +20,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		
 		// Announce presence to server.
 		this.establishNetworking();
+		this.addTeacherControlListeners();
 		
 		// Establish network flick listener.
 		NetworkFlickManager.registerForNetworkFlick();
@@ -57,9 +57,6 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		this.addImage('image8', '../salad.png', 319, 207);
 		this.addImage('image9', '../tanya.png', 180, 208);
 		this.addImage('image10', '../yogurt.png', 260, 278);
-		
-		// Add freeze and unfreeze listeners.
-		this.addNetworkingListeners();		
 		
 		// Signal app is ready.
 		this.ready();
@@ -126,44 +123,4 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		
 	}
 	
-	/**
-	 * Add listeners for messages from the server.
-	 */
-	private addNetworkingListeners(): void { // TODO Make part of generic SynergyMesh app.
-		
-		// Create self object for referencing elsewhere.
-		let self = this;
-		
-		// Build hidden freeze block. 
-		let freezeBlock = this.svg.append('rect');
-		freezeBlock.attr('id', 'freeze-block');
-		freezeBlock.attr('width', this.vizWidth);
-		freezeBlock.attr('height', this.vizHeight);
-		freezeBlock.style('visibility', 'hidden');
-					
-		// Create function for handling response to messages received.
-		let messageResponse = function(message: JSON){
-			
-			// Check the contents of the message.
-			if (message['command']== 'freeze') {				
-			
-				// Show freeze block and bring it to the front.
-				freezeBlock.each(function(){
-					this.parentNode.appendChild(this);
-				});
-				freezeBlock.style('visibility', 'visible');
-				
-			} else if (message['command'] == 'unfreeze') {		
-			
-				// Hide the freeze block.	
-				freezeBlock.style('visibility', 'hidden');
-								
-			}		
-				
-		}
-		
-		// Set up listener.
-		Networking.listenForMessage(messageResponse);
-			
-	}
 }

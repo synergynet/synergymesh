@@ -1,4 +1,5 @@
 import {CommonElements} from 'common/src/constants/common_elements'; 
+import {CommonNetworkEvents} from 'common/src/constants/common_network_events'; 
 import {Config} from 'common/src/utils/config'; 
 import {Networking} from 'common/src/utils/networking';
 import {Roles} from 'common/src/constants/roles'; 
@@ -209,7 +210,37 @@ export abstract class SynergyMeshApp {
 	 */
 	protected addContents() {}
 	
-	protected establishNetworking() {
+	/**
+	 * Add listeners for teacher control messages from the server.
+	 */
+	protected addTeacherControlListeners(): void {
+		
+		// Build hidden freeze block. 
+		let freezeBlock = this.svg.append('rect');
+		freezeBlock.attr('id', 'freeze-block');
+		freezeBlock.attr('width', this.vizWidth);
+		freezeBlock.attr('height', this.vizHeight);
+		freezeBlock.style('visibility', 'hidden');
+		
+		// Set up freeze listener.
+		Networking.listenForMessage(CommonNetworkEvents.FREEZE, function() {
+			freezeBlock.each(function(){
+				this.parentNode.appendChild(this);
+			});
+			freezeBlock.style('visibility', 'visible');
+		});
+		
+		// Set up unfreeze listener.
+		Networking.listenForMessage(CommonNetworkEvents.UNFREEZE, function() {
+			freezeBlock.style('visibility', 'hidden');
+		});
+			
+	}
+	
+	/**
+	 * Set up the networking connection.
+	 */
+	protected establishNetworking(): void {
 		
 		// Get host and port from config.
 		let host = Config.getConfigValue(Config.SERVER_HOST);

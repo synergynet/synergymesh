@@ -12,9 +12,6 @@ export class Networking {
 		/** Event for telling the server that the client is joining a session. */
 		JOIN: 'join',
 		
-		/** Event for passing a message to an app. */
-		MESSAGE: 'message',
-		
 		/** Event for sending a message to all in a session */
 		TO_ALL: 'to_all',
 		
@@ -42,7 +39,10 @@ export class Networking {
 		CLIENTS: 'clients',				
 		
 		/** The actual contents of the message to be used by the app. */
-		CONTENTS: 'contents',		
+		CONTENTS: 'contents',			
+		
+		/** The name of the event to send to the client. */
+		EVENT_NAME: 'event_name',			
 		
 		/** The target app for the message. */
 		TARGET_APP: 'target_app',		
@@ -122,15 +122,16 @@ export class Networking {
 	/**
 	 * Set up a listener for server-side events.
 	 * 
+	 * @param {string} eventName The name of the event to listen for.
 	 * @param {(data: JSON) => void)} callback Function to handle incoming message.
 	 */
-	public static listenForMessage (callback: (message: JSON) => void): void {
+	public static listenForMessage (eventName: string, callback: (message: JSON) => void): void {
 		
 		// Establish listener for any messages that calls the passed function.
-		Networking.socket.on(Networking.EVENTS.MESSAGE, function(message){
+		Networking.socket.on(eventName, function(message){
 			
 				// Call the callback.
-				Networking.debugMessage('Received a network message.');
+				Networking.debugMessage('Received a message for the following network event: ' + eventName + '.');
 				callback(message);
 			
 		});		
@@ -139,12 +140,14 @@ export class Networking {
 	/**
 	 * Send a command to the server asking for it to be broadcast to all clients in the session.
 	 * 
+	 * @param {string} eventName The name of the event to listen for.
 	 * @param {JSON} messageToSend The message to be sent.
 	 */
-	public static sendMessageToAll (messageToSend: JSON): void {		
+	public static sendMessageToAll (eventName: string, messageToSend: JSON): void {		
 	
 		// Create JSON wrapper for sending message.
 		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
 		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
 		
@@ -158,13 +161,15 @@ export class Networking {
 	 * Send a command to the server asking for it to be broadcast to all clients in the session 
 	 * of a specific role.
 	 * 
+	 * @param {string} eventName The name of the event to listen for.
 	 * @param {string} role The role to send messages to.
 	 * @param {JSON} messageToSend The message to be sent.
 	 */
-	public static sendMessageToRole (role: string, messageToSend: JSON): void{		
+	public static sendMessageToRole (eventName: string, role: string, messageToSend: JSON): void{		
 	
 		// Create JSON wrapper for sending message.
 		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
 		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
@@ -179,13 +184,15 @@ export class Networking {
 	 * Send a message to the server asking for it to be broadcast to all clients in the session 
 	 * in a specific app.
 	 * 
+	 * @param {string} eventName The name of the event to listen for.
 	 * @param {string} app The app to send messages to.
 	 * @param {JSON} messageToSend The message to be sent.
 	 */
-	public static sendMessageToApp (app: string, messageToSend: JSON): void {		
+	public static sendMessageToApp (eventName: string, app: string, messageToSend: JSON): void {		
 	
 		// Create JSON wrapper for sending message.
 		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_APP] = app;
 		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
@@ -200,14 +207,16 @@ export class Networking {
 	 * Send a message to the server asking for it to be broadcast to all clients in the session 
 	 * with a specific role in a specific app.
 	 * 
+	 * @param {string} eventName The name of the event to listen for.
 	 * @param {string} role The role to send messages to.
 	 * @param {string} app The app to send messages to.
 	 * @param {JSON} messageToSend The message to be sent.
 	 */
-	public static sendMessageToRoleInApp (role: string, app: string, messageToSend: JSON): void {		
+	public static sendMessageToRoleInApp (eventName: string, role: string, app: string, messageToSend: JSON): void {		
 	
 		// Create JSON wrapper for sending message.
 		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_APP] = app;
@@ -222,13 +231,15 @@ export class Networking {
 	/**
 	 * Send a command to the server asking for it to be broadcast to a specific client.
 	 * 
+	 * @param {string} eventName The name of the event to listen for.
 	 * @param {string} targetClient The socket id of the client to sent the message to..
 	 * @param {JSON} messageToSend The message to be sent.
 	 */
-	public static sendMessageToSpecificClient (targetClient: string, messageToSend: JSON): void {		
+	public static sendMessageToSpecificClient (eventName: string, targetClient: string, messageToSend: JSON): void {		
 	
 		// Create JSON wrapper for sending message.
 		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
 		wrappedMessageToSend[Networking.MESSAGE.TARGET_CLIENT] = targetClient;
 		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
 		

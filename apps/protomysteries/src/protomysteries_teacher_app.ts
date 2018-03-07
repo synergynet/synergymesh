@@ -1,3 +1,4 @@
+import {CommonNetworkEvents} from 'common/src/constants/common_network_events'; 
 import {Networking} from 'common/src/utils/networking';
 import {Roles} from 'common/src/constants/roles'; 
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
@@ -26,12 +27,8 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 		Transformations.setTranslation(freezeButton.asItem(), this.vizWidth/2, (this.vizHeight/2) - 100);
 		freezeButton.asItem().on('mousedown', function() {
 			
-			// Build message to send to students.
-			let messageToSend = {};
-			messageToSend['command'] = 'freeze';
-			
 			// Send message to server.
-			Networking.sendMessageToRole(Roles.STUDENT, <JSON>messageToSend);
+			Networking.sendMessageToRole(CommonNetworkEvents.FREEZE, Roles.STUDENT, <JSON>{});
 				
 		});
 		
@@ -40,12 +37,8 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 		Transformations.setTranslation(unfreezeButton.asItem(), this.vizWidth/2, (this.vizHeight/2) + 100);
 		unfreezeButton.asItem().on('mousedown', function() {
 			
-			// Build message to send to students.
-			let messageToSend = {};
-			messageToSend['command'] = 'unfreeze';
-			
 			// Send message to server.
-			Networking.sendMessageToRole(Roles.STUDENT, <JSON>messageToSend);
+			Networking.sendMessageToRole(CommonNetworkEvents.UNFREEZE, Roles.STUDENT, <JSON>{});
 			
 		});		
 		

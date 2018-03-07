@@ -83,6 +83,9 @@ io.on('connection', function (socket: SocketIO.Socket) {
 	// Listen for a message to all clients in a session.
 	socket.on(Networking.EVENTS.TO_ALL, function (data: JSON) {
 		
+		// Get event name from data.
+		let eventName = data[Networking.MESSAGE.EVENT_NAME];
+		
 		// Get session from data.
 		let session = data[Networking.MESSAGE.TARGET_SESSION];
 		
@@ -91,7 +94,7 @@ io.on('connection', function (socket: SocketIO.Socket) {
 			for (let appKey in clients[session][roleKey]) {
 				for (let tagretClient of clients[session][roleKey][appKey]) {			
 					if (socket.id != tagretClient) {
-						socket.to(tagretClient).emit(Networking.EVENTS.MESSAGE, data[Networking.MESSAGE.CONTENTS]);
+						socket.to(tagretClient).emit(eventName, data[Networking.MESSAGE.CONTENTS]);
 					}	
 				}
 			}
@@ -104,6 +107,9 @@ io.on('connection', function (socket: SocketIO.Socket) {
 	// Listen for a message to all clients with a s specific role in a session.
 	socket.on(Networking.EVENTS.TO_ROLE, function (data: JSON) {
 		
+		// Get event name from data.
+		let eventName = data[Networking.MESSAGE.EVENT_NAME];
+		
 		// Get session from data.
 		let session = data[Networking.MESSAGE.TARGET_SESSION];
 		
@@ -115,7 +121,7 @@ io.on('connection', function (socket: SocketIO.Socket) {
 			for (let appKey in clients[session][roleKey]) {	
 				for (let targetClient of clients[session][roleKey][appKey]) {			
 					if (socket.id != targetClient) {
-						socket.to(targetClient).emit(Networking.EVENTS.MESSAGE, data[Networking.MESSAGE.CONTENTS]);
+						socket.to(targetClient).emit(eventName, data[Networking.MESSAGE.CONTENTS]);
 					}	
 				}
 			}
@@ -128,6 +134,9 @@ io.on('connection', function (socket: SocketIO.Socket) {
 	// Listen for a message to all clients in a specific app in a session.
 	socket.on(Networking.EVENTS.TO_APP, function (data: JSON) {
 		
+		// Get event name from data.
+		let eventName = data[Networking.MESSAGE.EVENT_NAME];
+		
 		// Get session from data.
 		let session = data[Networking.MESSAGE.TARGET_SESSION];
 		
@@ -139,7 +148,7 @@ io.on('connection', function (socket: SocketIO.Socket) {
 			if (appKey in clients[session][roleKey]) {
 				for (let targetClient of clients[session][roleKey][appKey]) {			
 					if (socket.id != targetClient) {
-						socket.to(targetClient).emit(Networking.EVENTS.MESSAGE, data[Networking.MESSAGE.CONTENTS]);
+						socket.to(targetClient).emit(eventName, data[Networking.MESSAGE.CONTENTS]);
 					}	
 				}
 			}
@@ -150,6 +159,9 @@ io.on('connection', function (socket: SocketIO.Socket) {
 	
 	// Give ability to send to all clients with a specific role with a specific role in a specific app in a session. 	
 	socket.on(Networking.EVENTS.TO_ROLE_IN_APP, function (data: JSON) {
+		
+		// Get event name from data.
+		let eventName = data[Networking.MESSAGE.EVENT_NAME];
 		
 		// Get session from data.
 		let session = data[Networking.MESSAGE.TARGET_SESSION];
@@ -165,7 +177,7 @@ io.on('connection', function (socket: SocketIO.Socket) {
 			if (appKey in clients[session][roleKey]) {
 				for (let targetClient of clients[session][roleKey][appKey]) {			
 					if (socket.id != targetClient) {
-						socket.to(targetClient).emit(Networking.EVENTS.MESSAGE, data[Networking.MESSAGE.CONTENTS]);
+						socket.to(targetClient).emit(eventName, data[Networking.MESSAGE.CONTENTS]);
 					}	
 				}
 			}
@@ -178,11 +190,14 @@ io.on('connection', function (socket: SocketIO.Socket) {
 	// Listen for a message to a specific client.
 	socket.on(Networking.EVENTS.TO_CLIENT, function (data: JSON) {
 		
+		// Get event name from data.
+		let eventName = data[Networking.MESSAGE.EVENT_NAME];
+		
 		// Get target client from data.
 		let clientTarget = data[Networking.MESSAGE.TARGET_CLIENT];
 		
 		// Send message to client.
-		socket.to(clientTarget).emit(Networking.EVENTS.MESSAGE, data[Networking.MESSAGE.CONTENTS]);
+		socket.to(clientTarget).emit(eventName, data[Networking.MESSAGE.CONTENTS]);
 		console.log(socket.id + ' sent a message to client ' + clientTarget + '.');
 		
 	});
