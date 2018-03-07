@@ -6,38 +6,63 @@ export class Networking {
 	
 	//// Public Constants. ////
 	
-	/** Identifier for student joining server event. */
-	public static EVENTS_STUDENTS_JOIN = 'join_students';
+	/** Object for holding constant strings relating to networking events. */
+	public static EVENTS = {
+		
+		/** Event for telling the server that the client is joining a session. */
+		JOIN: 'join',
+		
+		/** Event for passing a message to an app. */
+		MESSAGE: 'message',
+		
+		/** Event for sending a message to all in a session */
+		TO_ALL: 'to_all',
+		
+		/** Event for sending a message to a specific client in a session */
+		TO_CLIENT: 'to_app',
+		
+		/** Event for sending a message to all in a specific app in a session */
+		TO_APP: 'to_app',
+		
+		/** Event for sending a message to all of a specific role in a session */
+		TO_ROLE: 'to_role',
+		
+		/** Event for sending a message to all of a specific role in a specific app in a session */
+		TO_ROLE_IN_APP: 'to_app',
+		
+		/** Event for updating the client list. */
+		UPDATE_CLIENTS: 'update_clients'
+			
+	};	
 	
-	/** Identifier for student joining server event. */
-	public static EVENTS_STUDENTS_TO = 'to_students';
-	
-	/** Identifier for student joining server event. */
-	public static EVENTS_STUDENTS_UPDATE = 'update_students';
-	
-	/** Identifier for student joining server event. */
-	public static EVENTS_TEACHERS_JOIN = 'join_teachers';
-	
-	/** Identifier for student joining server event. */
-	public static EVENTS_TEACHERS_TO = 'to_teachers';
-	
-	/** Identifier for student joining server event. */
-	public static EVENTS_TEACHERS_UPDATE= 'update_teachers';
-	
-	/** Identifier for student joining server event. */
-	public static EVENTS_CLIENT_TO= 'to_client';
-	
-	/** Identifier for student joining server event. */
-	public static EVENTS_MESSAGE = 'message';
-	
-	/** The target field for messages sent to specific client. */
-	public static TO_TARGET: string = 'target';
-	
-	/** The message field for messages sent to specific client. */
-	public static TO_MESSAGE: string = 'message';
+	/** Object for holding constant strings relating to networking message elements. */
+	public static MESSAGE = {			
+		
+		/** The list of clients used in a client update. */
+		CLIENTS: 'clients',				
+		
+		/** The actual contents of the message to be used by the app. */
+		CONTENTS: 'contents',		
+		
+		/** The target app for the message. */
+		TARGET_APP: 'target_app',		
+		
+		/** The target client for the message. */
+		TARGET_CLIENT: 'target_client',
+		
+		/** The target role for the message. */
+		TARGET_ROLE: 'target_role',
+		
+		/** The target session for the message. */
+		TARGET_SESSION: 'target_session'
+		
+	}
 	
 	
 	//// Public Static Variables. ////
+	
+	/** Multi-dimensional array of clients currently connected to the same session. */
+	public static clients = [];	
 	
 	/** The flag to set if the debugging is shown. */
 	public static debug: boolean = false;
@@ -45,14 +70,13 @@ export class Networking {
 	/** The static API for accessing Socket.io features set in the bootstrap. */
 	public static io: SocketIOClientStatic;
 	
-	/** List of socket ids of teachers currently connected to the same server. */
-	public static teachers: string[] = [];
-	
-	/** List of socket ids of students currently connected to the same server. */
-	public static students: string[] = [];
-	
 	
 	//// Private Static Variables. ////
+	
+	
+	
+	/** The session to connect to. */
+	private static session: string;
 	
 	/** Socket io instance. */
 	private static socket;
@@ -62,42 +86,36 @@ export class Networking {
 	 * Initialise the socket io instance connected to the server on the same host.
 	 * 
 	 * @param {string} host The protocol and name of the host.
-	 * @param {string} port the port of the host.
-	 * @param {boolean} isTeacher Flag to indicate whether the client is a teacher or student.
+	 * @param {string} port The port of the host.
+	 * @param {string} session The session to connect to.
+	 * @param {string} role The role of the app user..
+	 * @param {string} app he app being run.
+	 * 
 	 */
-	public static establishConnection(host: string, port: string, isTeacher: boolean = false): void { 
-	// TODO Use session name and role to set up what messages to get. 
+	public static establishConnection (host: string, port: string, session: string, role: string, app: string): void { 
 		
 		// Establish socket.
 		Networking.socket = Networking.io.connect(host + ':' + port);
 		Networking.debugMessage('Connected to server.');
 		
-		// Check if student or teacher.
-		if (!isTeacher) {
-			
-			// Establish self as student.
-			Networking.socket.emit(Networking.EVENTS_STUDENTS_JOIN, {});	
-			Networking.debugMessage('Joined students on server,');
-				
-		} else {
-			
-			// Establish self as teacher.
-			Networking.socket.emit(Networking.EVENTS_TEACHERS_JOIN, {});	
-			Networking.debugMessage('Joined teachers on server.');
-			
-		}
+		// Store passed values.
+		Networking.session = session;
 		
-		// Listen for the students list being updated.
-		Networking.socket.on(Networking.EVENTS_STUDENTS_UPDATE, function(message){
-			Networking.students = message['students'];
-			Networking.debugMessage('Student list updated.');
+		// Listen for the clients list being updated.
+		Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message){
+			Networking.clients = message[Networking.MESSAGE.CLIENTS];
+			Networking.debugMessage('Clients list updated.');
 		});
 		
-		// Listen for the teachers list being updated.
-		Networking.socket.on(Networking.EVENTS_TEACHERS_UPDATE, function(message){
-			Networking.teachers = message['teachers'];
-			Networking.debugMessage('Teachers list updated.');
-		});
+		// Establish join object.
+		let messageToSend = {};
+		messageToSend[Networking.MESSAGE.TARGET_SESSION] = session;
+		messageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
+		messageToSend[Networking.MESSAGE.TARGET_APP] = app;
+			
+		// Join the session (or establish it) on the server.
+		Networking.socket.emit(Networking.EVENTS.JOIN, messageToSend);	
+		Networking.debugMessage('Joined session ' + session + ' on server,');
 		
 	}	
 	
@@ -106,41 +124,98 @@ export class Networking {
 	 * 
 	 * @param {(data: JSON) => void)} callback Function to handle incoming message.
 	 */
-	public static listenForMessage(callback: (message: JSON) => void) {
+	public static listenForMessage (callback: (message: JSON) => void): void {
 		
 		// Establish listener for any messages that calls the passed function.
-		Networking.socket.on(Networking.EVENTS_MESSAGE, function(message){
+		Networking.socket.on(Networking.EVENTS.MESSAGE, function(message){
 			
 				// Call the callback.
-				Networking.debugMessage('Received a message: ' + JSON.stringify(message));
+				Networking.debugMessage('Received a network message.');
 				callback(message);
 			
 		});		
 	}
 	
 	/**
-	 * Send a command to the server asking for it to be broadcast to students.
+	 * Send a command to the server asking for it to be broadcast to all clients in the session.
 	 * 
 	 * @param {JSON} messageToSend The message to be sent.
 	 */
-	public static sendMessageToStudents(messageToSend: JSON) {		
+	public static sendMessageToAll (messageToSend: JSON): void {		
+	
+		// Create JSON wrapper for sending message.
+		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
+		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
 		
 		// Send message.
-		Networking.socket.emit(Networking.EVENTS_STUDENTS_TO, messageToSend);		
-		Networking.debugMessage('Sent this message to students: ' + JSON.stringify(messageToSend));	
+		Networking.socket.emit(Networking.EVENTS.TO_ALL, wrappedMessageToSend);		
+		Networking.debugMessage('Sent network message to all in session');
 			
 	}
 	
 	/**
-	 * Send a command to the server asking for it to be broadcast to teachers.
+	 * Send a command to the server asking for it to be broadcast to all clients in the session 
+	 * of a specific role.
 	 * 
+	 * @param {string} role The role to send messages to.
 	 * @param {JSON} messageToSend The message to be sent.
 	 */
-	public static sendMessageToTeachers(messageToSend: JSON) {		
+	public static sendMessageToRole (role: string, messageToSend: JSON): void{		
+	
+		// Create JSON wrapper for sending message.
+		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
+		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
 		
 		// Send message.
-		Networking.socket.emit(Networking.EVENTS_TEACHERS_TO, messageToSend);		
-		Networking.debugMessage('Sent this message to teachers: ' + JSON.stringify(messageToSend));	
+		Networking.socket.emit(Networking.EVENTS.TO_ROLE, wrappedMessageToSend);		
+		Networking.debugMessage('Sent network message to all in session with the ' + role + ' role.');
+			
+	}
+	
+	/**
+	 * Send a message to the server asking for it to be broadcast to all clients in the session 
+	 * in a specific app.
+	 * 
+	 * @param {string} app The app to send messages to.
+	 * @param {JSON} messageToSend The message to be sent.
+	 */
+	public static sendMessageToApp (app: string, messageToSend: JSON): void {		
+	
+		// Create JSON wrapper for sending message.
+		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_APP] = app;
+		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
+		
+		// Send message.
+		Networking.socket.emit(Networking.EVENTS.TO_APP, wrappedMessageToSend);		
+		Networking.debugMessage('Sent network message to all in session in the ' + app + ' app.');
+			
+	}
+	
+	/**
+	 * Send a message to the server asking for it to be broadcast to all clients in the session 
+	 * with a specific role in a specific app.
+	 * 
+	 * @param {string} role The role to send messages to.
+	 * @param {string} app The app to send messages to.
+	 * @param {JSON} messageToSend The message to be sent.
+	 */
+	public static sendMessageToRoleInApp (role: string, app: string, messageToSend: JSON): void {		
+	
+		// Create JSON wrapper for sending message.
+		let wrappedMessageToSend = {};
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_APP] = app;
+		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
+		
+		// Send message.
+		Networking.socket.emit(Networking.EVENTS.TO_ROLE_IN_APP, wrappedMessageToSend);		
+		Networking.debugMessage('Sent network message to all in session with the ' + role + ' role in the ' + app + ' app.');
 			
 	}
 	
@@ -150,15 +225,15 @@ export class Networking {
 	 * @param {string} targetClient The socket id of the client to sent the message to..
 	 * @param {JSON} messageToSend The message to be sent.
 	 */
-	public static sendMessageToSpecificClient(targetClient: string, messageToSend: JSON) {		
+	public static sendMessageToSpecificClient (targetClient: string, messageToSend: JSON): void {		
 	
 		// Create JSON wrapper for sending message.
 		let wrappedMessageToSend = {};
-		wrappedMessageToSend[Networking.TO_TARGET] = targetClient;
-		wrappedMessageToSend[Networking.TO_MESSAGE] = messageToSend;
+		wrappedMessageToSend[Networking.MESSAGE.TARGET_CLIENT] = targetClient;
+		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
 		
 		// Send message.
-		Networking.socket.emit(Networking.EVENTS_CLIENT_TO, wrappedMessageToSend);		
+		Networking.socket.emit(Networking.EVENTS.TO_CLIENT, wrappedMessageToSend);		
 		Networking.debugMessage('Sent this message to ' + targetClient + ': ' + JSON.stringify(messageToSend));	
 			
 	}

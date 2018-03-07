@@ -16,6 +16,9 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	 */
 	protected addContents() {
 		
+		// Establish app details.
+		this.appName = 'Proto Mysteries';
+		
 		// Announce presence to server.
 		this.establishNetworking();
 		
@@ -126,7 +129,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	/**
 	 * Add listeners for messages from the server.
 	 */
-	private addNetworkingListeners(): void {
+	private addNetworkingListeners(): void { // TODO Make part of generic SynergyMesh app.
 		
 		// Create self object for referencing elsewhere.
 		let self = this;
@@ -141,25 +144,22 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		// Create function for handling response to messages received.
 		let messageResponse = function(message: JSON){
 			
-			// Check message came from the same app.
-			if (message['app'] == 'protomysteries') {
+			// Check the contents of the message.
+			if (message['command']== 'freeze') {				
 			
-				// Check the contents of the message.
-				if (message['command']== 'freeze') {				
+				// Show freeze block and bring it to the front.
+				freezeBlock.each(function(){
+					this.parentNode.appendChild(this);
+				});
+				freezeBlock.style('visibility', 'visible');
 				
-					// Show freeze block and bring it to the front.
-					freezeBlock.each(function(){
-						this.parentNode.appendChild(this);
-					});
-					freezeBlock.style('visibility', 'visible');
-					
-				} else if (message['command'] == 'unfreeze') {		
+			} else if (message['command'] == 'unfreeze') {		
+			
+				// Hide the freeze block.	
+				freezeBlock.style('visibility', 'hidden');
+								
+			}		
 				
-					// Hide the freeze block.	
-					freezeBlock.style('visibility', 'hidden');
-									
-				}			
-			}
 		}
 		
 		// Set up listener.

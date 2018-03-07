@@ -1,6 +1,7 @@
 import {CommonElements} from 'common/src/constants/common_elements'; 
 import {Config} from 'common/src/utils/config'; 
 import {Networking} from 'common/src/utils/networking';
+import {Roles} from 'common/src/constants/roles'; 
   
  /**
  * Abstract class which defines what all SynergyMesh apps should do.
@@ -29,8 +30,14 @@ export abstract class SynergyMeshApp {
 
 	//// Public Global Variables. ////
 	
+	/** The name of this app. */
+	protected appName: string = 'SynergyMesh';;
+	
 	/** The URL root of the page. */
 	protected rootPath;
+	
+	/** The role of the intended user of this app. */
+	protected role: string = Roles.STUDENT;
 	
 	/** The ID of the network session to use. */
 	protected sessionId;
@@ -214,7 +221,7 @@ export abstract class SynergyMeshApp {
 		}
 		
 		// Announce presence to server.
-		Networking.establishConnection(host, port);
+		Networking.establishConnection(host, port, this.sessionId, this.role, this.appName);
 		
 	}
 	

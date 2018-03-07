@@ -1,4 +1,5 @@
 import {Networking} from 'common/src/utils/networking';
+import {Roles} from 'common/src/constants/roles'; 
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
 import {Transformations} from 'common/src/utils/transformations';
@@ -13,6 +14,10 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 	 */
 	protected addContents() {
 		
+		// Establish app and role details.
+		this.appName = 'Teacher Controls';
+		this.role = Roles.TEACHER;
+		
 		// Announce presence to server.		
 		this.establishNetworking();
 		
@@ -23,11 +28,10 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 			
 			// Build message to send to students.
 			let messageToSend = {};
-			messageToSend['app'] = 'protomysteries';
 			messageToSend['command'] = 'freeze';
 			
 			// Send message to server.
-			Networking.sendMessageToStudents(<JSON>messageToSend);
+			Networking.sendMessageToRole(Roles.STUDENT, <JSON>messageToSend);
 				
 		});
 		
@@ -38,11 +42,10 @@ export class ProtomysteriesTeacherApp extends SynergyMeshApp {
 			
 			// Build message to send to students.
 			let messageToSend = {};
-			messageToSend['app'] = 'protomysteries';
 			messageToSend['command'] = 'unfreeze';
 			
 			// Send message to server.
-			Networking.sendMessageToStudents(<JSON>messageToSend);
+			Networking.sendMessageToRole(Roles.STUDENT, <JSON>messageToSend);
 			
 		});		
 		
