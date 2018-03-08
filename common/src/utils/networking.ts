@@ -16,7 +16,7 @@ export class Networking {
 		TO_ALL: 'to_all',
 		
 		/** Event for sending a message to a specific client in a session */
-		TO_CLIENT: 'to_app',
+		TO_CLIENT: 'to_client',
 		
 		/** Event for sending a message to all in a specific app in a session */
 		TO_APP: 'to_app',
@@ -106,7 +106,7 @@ export class Networking {
 			Networking.session = session;
 			
 			// Listen for the clients list being updated.
-			Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message){
+			Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message) {
 				Networking.clients = message[Networking.MESSAGE.CLIENTS];
 				Networking.debugMessage('Clients list updated.');
 			});

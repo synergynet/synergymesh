@@ -1,4 +1,6 @@
 import {FlickManager} from 'common/src/listeners/flick_manager';
+import {Networking} from 'common/src/utils/networking';
+import {Roles} from 'common/src/constants/roles'; 
 
 /**
  * A class which manages all the network flick events relating to an item.
@@ -44,8 +46,12 @@ export class NetworkFlickManager extends FlickManager {
 	 */
 	protected onHitTop(): void {
 		
-		// TODO Check if has a valid transfer target.
-		let validTarget = true;
+		// Check if has a valid transfer target.
+		let studentCount = 0;
+		for (let app in Networking.clients[Roles.STUDENT]) {
+			studentCount+= Networking.clients[Roles.STUDENT][app].length;
+		}
+		let validTarget = studentCount > 1;
 		
 		// Check if a valid target and not a new arrival.
 		if (validTarget && !this.newArrival) {

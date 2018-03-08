@@ -19,7 +19,7 @@ server.listen(port, function () {
 });
 
 // Establish client lists.
-let clients = [];
+let clients = {};
 
 // Set up connection environment.
 io.on('connection', function (socket: SocketIO.Socket) {
@@ -42,12 +42,12 @@ io.on('connection', function (socket: SocketIO.Socket) {
 		
 		// Create session if it doesn't already exist.
 		if (!(session in clients)){
-			clients[session] = [];
+			clients[session] = {};
 		}
 		
 		// Create role in session if it doesn't already exist.
 		if (!(role in clients[session])){
-			clients[session][role] = [];
+			clients[session][role] = {};
 		}
 		
 		// Create app for role if it doesn't already exist.
@@ -61,13 +61,13 @@ io.on('connection', function (socket: SocketIO.Socket) {
 	  
 		// Establish data to send (i.e. client list).
 		let clientsJson = {};
-		clientsJson[Networking.MESSAGE.CLIENTS] = clients[session];
+		clientsJson[Networking.MESSAGE.CLIENTS] = clients[session]; 
 	  
 		// Broadcast data to send to all clients (including self).
 		socket.emit(Networking.EVENTS.UPDATE_CLIENTS, clientsJson);	
 		for (let roleKey in clients[session]) {
 			for (let appKey in clients[session][roleKey]) {
-				for (let targetClient of clients[session][roleKey][appKey]) {			
+				for (let targetClient of clients[session][roleKey][appKey]) {	
 					socket.to(targetClient).emit(Networking.EVENTS.UPDATE_CLIENTS, clientsJson);				
 				}
 			}
