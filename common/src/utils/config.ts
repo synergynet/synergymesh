@@ -19,10 +19,13 @@ export class Config {
 	//// Private Constants. ////
 	
 	/** The URL of the config file relative to app pages. */
-	private static CONFIG_ADDRESS: string = '../../../../config.json';
+	private static CONFIG_ADDRESS: string = '../../../config.json';
 	
 	/** The URL of the config file relative to the server. */
 	private static CONFIG_ADDRESS_SERVER: string = '/../../../config.json';
+	
+	/** The URL of the config file relative to test pages. */
+	private static CONFIG_ADDRESS_TEST: string = '../config.json';
 	
 
 	//// Private Global Variables. ////
@@ -30,23 +33,36 @@ export class Config {
 	/** The config values in JSON form. */
 	public static config: JSON;
 	
+	/** Flag to indicate if networking is enabled. */
+	private static enabled: boolean = true;
+	
 	
 	//// Public Static Methods. ////
 	
 	/**
 	 * Get the config file and read the config values from it.
 	 * 
+	 * @param {boolean} testMode Flag to indicate if the app is in test mode.
 	 * @param {() => void} callback Function to call when config is collected.
 	 */
-	public static getConfig(callback: () => void): void { 	
+	public static getConfig(testMode: boolean, callback: () => void): void { 	
+	
+		// Establish config address.
+		let configAddress = Config.CONFIG_ADDRESS;
+		if (testMode) {
+			configAddress = Config.CONFIG_ADDRESS_TEST;
+		}
 		
 		// Read from config file.
-		$.getJSON(Config.CONFIG_ADDRESS, function(json) {
+		$.getJSON(configAddress, function(json) {
+			
+			// Store the config settings.
 			Config.config = json;
-		});
 		
-		// Call callback.
-		callback();
+			// Call callback.
+			callback();
+			
+		});
 	
 	}
 	

@@ -8,7 +8,7 @@ import {Transformations} from 'common/src/utils/transformations';
  /**
  * Protomysteries student app.
  */
-export class ProtomysteriesStudentApp extends SynergyMeshApp {
+export class ProtomysteriesApp extends SynergyMeshApp {
 
 	/**
 	 * Add the contents specific to this app.
@@ -16,7 +16,7 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 	protected addContents() {
 		
 		// Establish app details.
-		this.appName = 'Proto Mysteries';
+		this.appName = 'Proto-Mysteries';
 		
 		// Announce presence to server.
 		this.establishNetworking();
@@ -47,16 +47,16 @@ export class ProtomysteriesStudentApp extends SynergyMeshApp {
 		this.addClue('clue6', 'clue', clueSixText, 250, 125);
 
 		// Add images. 
-		this.addImage('image1', '../burger.png', 313, 201);
-		this.addImage('image2', '../fries.png', 242, 247);
-		this.addImage('image3', '../grace.png', 176, 180);
-		this.addImage('image4', '../jack.png', 158, 190);
-		this.addImage('image5', '../mike.png', 181, 210);
-		this.addImage('image6', '../pizza.png', 232, 204);
-		this.addImage('image7', '../ruby.png', 180, 200);
-		this.addImage('image8', '../salad.png', 319, 207);
-		this.addImage('image9', '../tanya.png', 180, 208);
-		this.addImage('image10', '../yogurt.png', 260, 278);
+		this.addImage('image1', 'burger.png', 313, 201);
+		this.addImage('image2', 'fries.png', 242, 247);
+		this.addImage('image3', 'grace.png', 176, 180);
+		this.addImage('image4', 'jack.png', 158, 190);
+		this.addImage('image5', 'mike.png', 181, 210);
+		this.addImage('image6', 'pizza.png', 232, 204);
+		this.addImage('image7', 'ruby.png', 180, 200);
+		this.addImage('image8', 'salad.png', 319, 207);
+		this.addImage('image9', 'tanya.png', 180, 208);
+		this.addImage('image10', 'yogurt.png', 260, 278);
 		
 		// Signal app is ready.
 		this.ready();

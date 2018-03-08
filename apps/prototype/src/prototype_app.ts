@@ -6,7 +6,7 @@ import {Transformations} from 'common/src/utils/transformations';
  /**
  * App for testing out new SynergyMesh features.
  */
-export class PrototypeStudentApp extends SynergyMeshApp {
+export class PrototypeApp extends SynergyMeshApp {
 		
 	/** Circles' radius. */
 	private static RADIUS: number = 50;
@@ -24,7 +24,7 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		
 		// Add circle one. 
 		let circleOne = this.svg.append('circle');   
-		circleOne.attr('r', PrototypeStudentApp.RADIUS);                   
+		circleOne.attr('r', PrototypeApp.RADIUS);                   
 		Transformations.setTranslationX(circleOne, this.vizWidth/4);
 		Transformations.setTranslationY(circleOne, this.vizHeight/2);
 		circleOne.attr('id', 'circle-one');
@@ -32,7 +32,7 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		
 		// Add circle two. 
 		let circleTwo = this.svg.append('circle');    
-		circleTwo.attr('r', PrototypeStudentApp.RADIUS);
+		circleTwo.attr('r', PrototypeApp.RADIUS);
 		Transformations.setTranslationX(circleTwo, (this.vizWidth/4) * 3);
 		Transformations.setTranslationY(circleTwo, this.vizHeight/2);
 		circleTwo.attr('id', 'circle-two');
@@ -40,19 +40,19 @@ export class PrototypeStudentApp extends SynergyMeshApp {
 		
 		// Add rectangle one. 
 		let rectangleOne = this.svg.append('rect');
-		rectangleOne.attr('width', PrototypeStudentApp.RECTANGLE_WIDTH);    
-		rectangleOne.attr('height', PrototypeStudentApp.RECTANGLE_HEIGHT);                           
-		Transformations.setTranslationX(rectangleOne, (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
-		Transformations.setTranslationY(rectangleOne, (this.vizHeight/4) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
+		rectangleOne.attr('width', PrototypeApp.RECTANGLE_WIDTH);    
+		rectangleOne.attr('height', PrototypeApp.RECTANGLE_HEIGHT);                           
+		Transformations.setTranslationX(rectangleOne, (this.vizWidth/2) - (PrototypeApp.RECTANGLE_WIDTH/2));
+		Transformations.setTranslationY(rectangleOne, (this.vizHeight/4) - (PrototypeApp.RECTANGLE_HEIGHT/2));
 		rectangleOne.attr('id', 'rectangle-one');
 		new TouchManager(rectangleOne);
 		
 		// Add rectangle one. 
 		let rectangleTwo = this.svg.append('rect');		
-		rectangleTwo.attr('width', PrototypeStudentApp.RECTANGLE_WIDTH);    
-		rectangleTwo.attr('height', PrototypeStudentApp.RECTANGLE_HEIGHT);          
-		Transformations.setTranslationX(rectangleTwo, (this.vizWidth/2) - (PrototypeStudentApp.RECTANGLE_WIDTH/2));
-		Transformations.setTranslationY(rectangleTwo, ((this.vizHeight/4) * 3) - (PrototypeStudentApp.RECTANGLE_HEIGHT/2));
+		rectangleTwo.attr('width', PrototypeApp.RECTANGLE_WIDTH);    
+		rectangleTwo.attr('height', PrototypeApp.RECTANGLE_HEIGHT);          
+		Transformations.setTranslationX(rectangleTwo, (this.vizWidth/2) - (PrototypeApp.RECTANGLE_WIDTH/2));
+		Transformations.setTranslationY(rectangleTwo, ((this.vizHeight/4) * 3) - (PrototypeApp.RECTANGLE_HEIGHT/2));
 		rectangleTwo.attr('id', 'rectangle-two');    
 		new TouchManager(rectangleTwo);
 		

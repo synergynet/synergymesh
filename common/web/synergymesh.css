@@ -52,3 +52,8 @@ body {
 .start_app_button_wrapper {
 	text-align: center;
 }
+
+#freeze-block {
+	fill: #3399FF;
+	fill-opacity: 0.5;
+}

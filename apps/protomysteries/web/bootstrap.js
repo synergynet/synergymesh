@@ -13,14 +13,14 @@ function loadApp(root){
 		baseUrl: root,
 		paths: {
 			'BootStrap': 'common/src/bootstrap',
-			'PrototypeStudentApp': APPS_PATH + 'prototype/src/prototype_student_app',
+			'ProtomysteriesApp': APPS_PATH + 'protomysteries/src/protomysteries_app',
 		}
 	});
 	
 	// Load libraries and report script through RequireJS.
 	require(['BootStrap'], function (bootstrap) {
 		bootstrap.start(function(){
-			require(['PrototypeStudentApp'], function (prototype_student_app) {
+			require(['ProtomysteriesApp'], function (protomysteries_app) {
 				$(document).ready(function run() {
 					
 					// Disable Zoom Gesture.
@@ -29,7 +29,8 @@ function loadApp(root){
 					    .on("touchmove", noZoom);
 					
 					// Call app.
-					new prototype_student_app.PrototypeStudentApp();
+					new protomysteries_app.ProtomysteriesApp();
+					
 				});
 			});
 		});
@@ -41,5 +42,5 @@ function loadApp(root){
  * Prevents zoom gestures.
  */
 function noZoom() {
-	  d3.event.preventDefault();
-	}
+	d3.event.preventDefault();
+}

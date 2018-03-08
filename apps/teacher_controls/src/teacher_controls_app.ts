@@ -8,7 +8,7 @@ import {Transformations} from 'common/src/utils/transformations';
  /**
  * Protomysteries teacher app.
  */
-export class ProtomysteriesTeacherApp extends SynergyMeshApp {
+export class TeacherControlsApp extends SynergyMeshApp {
 	
 	/**
 	 * Add the contents specific to this app.

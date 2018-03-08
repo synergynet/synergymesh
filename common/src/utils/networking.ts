@@ -71,9 +71,10 @@ export class Networking {
 	public static io: SocketIOClientStatic;
 	
 	
-	//// Private Static Variables. ////
+	//// Private Static Variables. ////	
 	
-	
+	/** Flag to indicate if networking is enabled. */
+	private static enabled: boolean = true;
 	
 	/** The session to connect to. */
 	private static session: string;
@@ -93,29 +94,34 @@ export class Networking {
 	 * 
 	 */
 	public static establishConnection (host: string, port: string, session: string, role: string, app: string): void { 
+	
+		// Check if networking is enabled.
+		if (Networking.enabled) {
 		
-		// Establish socket.
-		Networking.socket = Networking.io.connect(host + ':' + port);
-		Networking.debugMessage('Connected to server.');
-		
-		// Store passed values.
-		Networking.session = session;
-		
-		// Listen for the clients list being updated.
-		Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message){
-			Networking.clients = message[Networking.MESSAGE.CLIENTS];
-			Networking.debugMessage('Clients list updated.');
-		});
-		
-		// Establish join object.
-		let messageToSend = {};
-		messageToSend[Networking.MESSAGE.TARGET_SESSION] = session;
-		messageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
-		messageToSend[Networking.MESSAGE.TARGET_APP] = app;
+			// Establish socket.
+			Networking.socket = Networking.io.connect(host + ':' + port);
+			Networking.debugMessage('Connected to server.');
 			
-		// Join the session (or establish it) on the server.
-		Networking.socket.emit(Networking.EVENTS.JOIN, messageToSend);	
-		Networking.debugMessage('Joined session ' + session + ' on server,');
+			// Store passed values.
+			Networking.session = session;
+			
+			// Listen for the clients list being updated.
+			Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message){
+				Networking.clients = message[Networking.MESSAGE.CLIENTS];
+				Networking.debugMessage('Clients list updated.');
+			});
+			
+			// Establish join object.
+			let messageToSend = {};
+			messageToSend[Networking.MESSAGE.TARGET_SESSION] = session;
+			messageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
+			messageToSend[Networking.MESSAGE.TARGET_APP] = app;
+				
+			// Join the session (or establish it) on the server.
+			Networking.socket.emit(Networking.EVENTS.JOIN, messageToSend);	
+			Networking.debugMessage('Joined session ' + session + ' on server,');	
+			
+		}
 		
 	}	
 	
@@ -126,15 +132,21 @@ export class Networking {
 	 * @param {(data: JSON) => void)} callback Function to handle incoming message.
 	 */
 	public static listenForMessage (eventName: string, callback: (message: JSON) => void): void {
+	
+		// Check if networking is enabled.
+		if (Networking.enabled) {
 		
-		// Establish listener for any messages that calls the passed function.
-		Networking.socket.on(eventName, function(message){
+			// Establish listener for any messages that calls the passed function.
+			Networking.socket.on(eventName, function(message){
+				
+					// Call the callback.
+					Networking.debugMessage('Received a message for the following network event: ' + eventName + '.');
+					callback(message);
+				
+			});			
 			
-				// Call the callback.
-				Networking.debugMessage('Received a message for the following network event: ' + eventName + '.');
-				callback(message);
-			
-		});		
+		}
+		
 	}
 	
 	/**
@@ -145,15 +157,20 @@ export class Networking {
 	 */
 	public static sendMessageToAll (eventName: string, messageToSend: JSON): void {		
 	
-		// Create JSON wrapper for sending message.
-		let wrappedMessageToSend = {};
-		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
-		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
-		
-		// Send message.
-		Networking.socket.emit(Networking.EVENTS.TO_ALL, wrappedMessageToSend);		
-		Networking.debugMessage('Sent network message to all in session');
+		// Check if networking is enabled.
+		if (Networking.enabled) {
+	
+			// Create JSON wrapper for sending message.
+			let wrappedMessageToSend = {};
+			wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
+			wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
+			
+			// Send message.
+			Networking.socket.emit(Networking.EVENTS.TO_ALL, wrappedMessageToSend);		
+			Networking.debugMessage('Sent network message to all in session');	
+			
+		}
 			
 	}
 	
@@ -167,16 +184,21 @@ export class Networking {
 	 */
 	public static sendMessageToRole (eventName: string, role: string, messageToSend: JSON): void{		
 	
-		// Create JSON wrapper for sending message.
-		let wrappedMessageToSend = {};
-		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
-		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
+		// Check if networking is enabled.
+		if (Networking.enabled) {
 		
-		// Send message.
-		Networking.socket.emit(Networking.EVENTS.TO_ROLE, wrappedMessageToSend);		
-		Networking.debugMessage('Sent network message to all in session with the ' + role + ' role.');
+			// Create JSON wrapper for sending message.
+			let wrappedMessageToSend = {};
+			wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
+			wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
+			
+			// Send message.
+			Networking.socket.emit(Networking.EVENTS.TO_ROLE, wrappedMessageToSend);		
+			Networking.debugMessage('Sent network message to all in session with the ' + role + ' role.');	
+			
+		}
 			
 	}
 	
@@ -190,16 +212,21 @@ export class Networking {
 	 */
 	public static sendMessageToApp (eventName: string, app: string, messageToSend: JSON): void {		
 	
-		// Create JSON wrapper for sending message.
-		let wrappedMessageToSend = {};
-		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_APP] = app;
-		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
-		
-		// Send message.
-		Networking.socket.emit(Networking.EVENTS.TO_APP, wrappedMessageToSend);		
-		Networking.debugMessage('Sent network message to all in session in the ' + app + ' app.');
+		// Check if networking is enabled.
+		if (Networking.enabled) {
+	
+			// Create JSON wrapper for sending message.
+			let wrappedMessageToSend = {};
+			wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_APP] = app;
+			wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
+			
+			// Send message.
+			Networking.socket.emit(Networking.EVENTS.TO_APP, wrappedMessageToSend);		
+			Networking.debugMessage('Sent network message to all in session in the ' + app + ' app.');	
+			
+		}
 			
 	}
 	
@@ -214,17 +241,22 @@ export class Networking {
 	 */
 	public static sendMessageToRoleInApp (eventName: string, role: string, app: string, messageToSend: JSON): void {		
 	
-		// Create JSON wrapper for sending message.
-		let wrappedMessageToSend = {};
-		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_APP] = app;
-		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
-		
-		// Send message.
-		Networking.socket.emit(Networking.EVENTS.TO_ROLE_IN_APP, wrappedMessageToSend);		
-		Networking.debugMessage('Sent network message to all in session with the ' + role + ' role in the ' + app + ' app.');
+		// Check if networking is enabled.
+		if (Networking.enabled) {
+	
+			// Create JSON wrapper for sending message.
+			let wrappedMessageToSend = {};
+			wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_SESSION] = Networking.session;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_ROLE] = role;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_APP] = app;
+			wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
+			
+			// Send message.
+			Networking.socket.emit(Networking.EVENTS.TO_ROLE_IN_APP, wrappedMessageToSend);		
+			Networking.debugMessage('Sent network message to all in session with the ' + role + ' role in the ' + app + ' app.');	
+			
+		}
 			
 	}
 	
@@ -237,16 +269,30 @@ export class Networking {
 	 */
 	public static sendMessageToSpecificClient (eventName: string, targetClient: string, messageToSend: JSON): void {		
 	
-		// Create JSON wrapper for sending message.
-		let wrappedMessageToSend = {};
-		wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
-		wrappedMessageToSend[Networking.MESSAGE.TARGET_CLIENT] = targetClient;
-		wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
+		// Check if networking is enabled.
+		if (Networking.enabled) {
 		
-		// Send message.
-		Networking.socket.emit(Networking.EVENTS.TO_CLIENT, wrappedMessageToSend);		
-		Networking.debugMessage('Sent this message to ' + targetClient + ': ' + JSON.stringify(messageToSend));	
+			// Create JSON wrapper for sending message.
+			let wrappedMessageToSend = {};
+			wrappedMessageToSend[Networking.MESSAGE.EVENT_NAME] = eventName;
+			wrappedMessageToSend[Networking.MESSAGE.TARGET_CLIENT] = targetClient;
+			wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
 			
+			// Send message.
+			Networking.socket.emit(Networking.EVENTS.TO_CLIENT, wrappedMessageToSend);		
+			Networking.debugMessage('Sent this message to ' + targetClient + ': ' + JSON.stringify(messageToSend));	
+			
+		}
+			
+	}
+	
+	/**
+	 * Set whether networking is enabled or not.
+	 * 
+	 * @param {boolean} enabled Flag to indicate if networking is enabled.
+	 */
+	public static setEnabled(enabled: boolean): void {
+		Networking.enabled = enabled;
 	}
 	
 	

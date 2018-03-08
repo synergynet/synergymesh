@@ -19,7 +19,11 @@ xcopy /i "../../lib" "synergymesh/lib" /e
 echo Copying in server.
 xcopy /i "../../server" "synergymesh/server" /e
 
-cd synergymesh
+echo Copying in index page.
+cd ../../
+echo f | xcopy "index.html" "build/output/synergymesh/index.html"
+
+cd build/output/synergymesh
 
 echo Deleting all .ts files.
 del /S *.ts

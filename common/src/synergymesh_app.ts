@@ -29,10 +29,10 @@ export abstract class SynergyMeshApp {
 	public vizWidth: number;
 
 
-	//// Public Global Variables. ////
+	//// Protected Global Variables. ////
 	
 	/** The name of this app. */
-	protected appName: string = 'SynergyMesh';;
+	protected appName: string = 'SynergyMesh';
 	
 	/** The URL root of the page. */
 	protected rootPath;
@@ -45,6 +45,9 @@ export abstract class SynergyMeshApp {
 
 	/** The width of the SVG element. */
 	protected svg: d3.Selection<any>;
+	
+	/** Flag to indicate if the app is in test mode. */
+	protected testMode: boolean = false;
 	
 	
 	//// Private Global Variables. */
@@ -59,18 +62,22 @@ export abstract class SynergyMeshApp {
 	 * Initialise a SynergyMeshApp object.
 	 * 
 	 * @param {string} root The URL root of the page.
+	 * @param {boolean} testMode Flag to indicate if the app is in test mode.
 	 */
-	public constructor(rootPath: string = '') {
+	public constructor(rootPath: string = '', testMode: boolean = false) {
 		
 		// Enable touch emulator.
 		TouchEmulator();
 		
 		// Store root.
-		this.rootPath = rootPath;
-		
+		this.rootPath = rootPath;		
+			
+		// Store test mode.
+		this.testMode = testMode;
+			
 		// Get values from config.
-		Config.getConfig(this.buildAppStarter.bind(this));
-		
+		Config.getConfig(testMode, this.buildAppStarter.bind(this));
+			
 	}
 	
 	/**
@@ -78,74 +85,87 @@ export abstract class SynergyMeshApp {
 	 */
 	private buildAppStarter(): void{
 		
-		// Create self object for referencing elsewhere.
-		let self = this;
-		
-		// Get session input.
-		let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
-		
-		// Set session input default value.
-		if (sessionInput != undefined) {
-			if (SynergyMeshApp.SESSION_ID_STORE_KEY in localStorage) {
-				sessionInput.value = localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY];
-			}
-		}
-		
-		// Function for attempting to start the app.
-		let startAppAttempt = function() {
+		// Check is not in test mode.
+		if (!this.testMode) {
 			
-			// Check if session input field is present.
+			// Create self object for referencing elsewhere.
+			let self = this;
+			
+			// Get session input.
+			let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
+			
+			// Set session input default value.
 			if (sessionInput != undefined) {
+				if (SynergyMeshApp.SESSION_ID_STORE_KEY in localStorage) {
+					sessionInput.value = localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY];
+				}
+			}
+			
+			// Function for attempting to start the app.
+			let startAppAttempt = function() {
 				
-				// Get valid text.
-				let input = sessionInput.value.replace(self.pattern, '');
-				
-				// Display warning if blank.
-				if (input == '') {
-					alert('You need to enter a session ID for this app.');
-					return;
+				// Check if session input field is present.
+				if (sessionInput != undefined) {
+					
+					// Get valid text.
+					let input = sessionInput.value.replace(self.pattern, '');
+					
+					// Display warning if blank.
+					if (input == '') {
+						alert('You need to enter a session ID for this app.');
+						return;
+					}
+					
+					// Store supplied session.
+					self.sessionId = input;
+					localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY] = input;
+					
+					// Hide session input and prompt.
+					document.getElementById(CommonElements.SESSION_PROMPT).hidden = true;;
+					sessionInput.hidden = true;
+					
 				}
 				
-				// Store supplied session.
-				self.sessionId = input;
-				localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY] = input;
+				// Hide elements.
+				startButton.hidden = true;
 				
-				// Hide session input and prompt.
-				document.getElementById(CommonElements.SESSION_PROMPT).hidden = true;;
-				sessionInput.hidden = true;
+				// Start app.
+				self.startAppEnvironment();	
 				
-			}
+				// Full screen on desktop.
+				if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent))){
+					self.requestFullscreen(document.getElementById(CommonElements.APP_SVG));
+				}
+				
+			};
 			
-			// Hide elements.
-			startButton.hidden = true;
+			// Create button to start the app.
+			let startButton = document.getElementById(CommonElements.START_BUTTON);
+			startButton.addEventListener('touchstart', function(e) {		
+				e.preventDefault();
+				startAppAttempt();			
+			});
 			
-			// Start app.
-			self.startAppEnvironment();	
+			// Add listener to session input field which filters out non-alphanumeric characters..
+			$('#' + CommonElements.SESSION_INPUT).bind('keypress', function(event) {			
+				let value = String.fromCharCode(event.which);			
+				let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
+				sessionInput.value = sessionInput.value.replace(self.pattern, '');
+				if (event.keyCode == 13) {
+					startAppAttempt();
+				}
+				return !self.pattern.test(value);
+			});
+				
+		} else {
 			
-			// Full screen on desktop.
-			if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent))){
-				self.requestFullscreen(document.getElementById(CommonElements.APP_SVG));
-			}
+			// Disable networking.
+			Networking.setEnabled(false);
 			
-		};
-		
-		// Create button to start the app.
-		let startButton = document.getElementById(CommonElements.START_BUTTON);
-		startButton.addEventListener('touchstart', function(e) {		
-			e.preventDefault();
-			startAppAttempt();			
-		});
-		
-		// Add listener to session input field which filters out non-alphanumeric characters..
-		$('#' + CommonElements.SESSION_INPUT).bind('keypress', function(event) {			
-			let value = String.fromCharCode(event.which);			
-			let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
-			sessionInput.value = sessionInput.value.replace(self.pattern, '');
-			if (event.keyCode == 13) {
-				startAppAttempt();
-			}
-			return !self.pattern.test(value);
-		});
+			// Trigger the app running.
+			this.startAppEnvironment();
+				
+		}
 		
 	}
 	
@@ -195,13 +215,6 @@ export abstract class SynergyMeshApp {
 		
 	}
 	
-	/**
-	 * Circumvent the need to press a button when testing.
-	 */
-	public test(): void {
-		this.startAppEnvironment();	
-	}
-	
 	
 	//// Protected Methods. ////
 	
@@ -241,7 +254,7 @@ export abstract class SynergyMeshApp {
 	 * Set up the networking connection.
 	 */
 	protected establishNetworking(): void {
-		
+	
 		// Get host and port from config.
 		let host = Config.getConfigValue(Config.SERVER_HOST);
 		let port = Config.getConfigValue(Config.SERVER_PORT);
@@ -253,7 +266,7 @@ export abstract class SynergyMeshApp {
 		
 		// Announce presence to server.
 		Networking.establishConnection(host, port, this.sessionId, this.role, this.appName);
-		
+	
 	}
 	
 	/**
