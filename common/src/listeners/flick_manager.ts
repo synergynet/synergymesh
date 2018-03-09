@@ -23,13 +23,16 @@ export class FlickManager {
 	private static SAMPLE_RATE: number = 250;
 	
 	
+	//// Public Global Variables. ////
+	
+	/** The amount to slow down change on each move. */
+	public friction: number = 1;
+	
+	
 	//// Protected Global Variables. ////
 	
 	/** The d3 selection to track and move. */
 	protected ele: d3.Selection<any>;
-	
-	/** The amount to slow down change on each move. */
-	protected friction: number = 1;
 	
 	/** Object holding the amount to move in each direction per micro second. */ 
 	protected movementInfo: {x: number, y: number} = {x: 0, y: 0};	

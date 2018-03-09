@@ -9,6 +9,8 @@ import {Transformations} from 'common/src/utils/transformations';
  * Protomysteries student app.
  */
 export class ProtomysteriesApp extends SynergyMeshApp {
+	
+	//// Protected Methods. ////
 
 	/**
 	 * Add the contents specific to this app.
@@ -23,7 +25,20 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		this.addTeacherControlListeners();
 		
 		// Establish network flick listener.
-		NetworkFlickManager.registerForNetworkFlick(this); // TODO Add callback to add scale limits.
+		NetworkFlickManager.registerForNetworkFlick(this, function (objectReceived: JSON, ele: d3.Selection<any>, 
+			touchManager: TouchManager, networkflickManager: NetworkFlickManager) {
+			
+			//  Get if item text or an image.
+			let isText = document.getElementById(ele.attr('id')).classList.contains('is-text');			
+			
+			// Add scale limits to newly arrived items.
+			if (isText) {
+				touchManager.applyScaleLimits(0.5, 2);				
+			} else {
+				touchManager.applyScaleLimits(0.3, 1.5);
+			}
+				
+		});
 		
 		// Add title.
 		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
@@ -81,6 +96,9 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
 		Transformations.setScale(textItem.asItem(), Random.getRandomArbitrary(1.25, 1.75));
 		Transformations.setRotation(textItem.asItem(), Random.getRandomInt(-45, 45));
+		
+		// Tag with class for identification as a text item.
+		document.getElementById(id).classList.add('is-text');
 				
 		// Add behaviour.
 		let tm = new TouchManager(textItem.asItem());

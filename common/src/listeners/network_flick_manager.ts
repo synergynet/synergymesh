@@ -17,8 +17,34 @@ export class NetworkFlickManager extends FlickManager {
 	/** Time to take to fade a transferring object out or in (in seconds). */
 	private static FADE_TIME:number = 0.25;
 	
-	/** Name of the network event to use for the tranfer.. */
+	/** Name of the network event to use for the tranfer. */
 	private static FLICK_EVENT: string = 'network-flick';
+	
+	/** String elements representing keys in a typical network flick event network message. */
+	private static FLICK_MESSAGE = {
+		
+		/** The friction of the transferred item. */
+		FRICTION: 'friction',  
+		
+		/** The outer HTML of the transferred item. */
+		HTML: 'html',
+		
+		/** The ID of the transferred item. */
+		ID: 'id', 
+		
+		/** The movement of the transferred item. */
+		MOVEMENT: 'movement',  
+		
+		/** The position of the transferred item. */
+		POSITION: 'position'
+		
+	};
+	
+	
+	//// Private Static Global Variables. ////
+	
+	/** Function to be called when transferring an item. */
+	private static onSend: (objectToSend: JSON, ele: d3.Selection<any>) => JSON = null;
 	
 	
 	//// Private Global Variables. ////
@@ -36,36 +62,58 @@ export class NetworkFlickManager extends FlickManager {
 	 * Method for setting up listener for network flick arrivals.
 	 * 
 	 * @param {SynergyMeshApp} app The app the listener is to be used for.
+	 * @param {(objectReceived: JSON, ele: d3.Selection<any>, touchManager: TouchManager, 
+	 * 	networkflickManager: NetworkFlickManager) => void} onReceive Function to be called when receiving an item.
+	 * @param {(objectToSend: JSON, ele: d3.Selection<any>)  => JSON} onSend Function to be called when transferring an item.
 	 */
-	public static registerForNetworkFlick(app: SynergyMeshApp) {
+	public static registerForNetworkFlick(app: 	SynergyMeshApp, 
+		onReceive: (objectReceived: JSON, ele: d3.Selection<any>, touchManager: 
+		TouchManager, networkflickManager: NetworkFlickManager) => void = null, 
+		onSend: (objectToSend: JSON, ele: d3.Selection<any>)  => JSON = null) {
+		
+		// Store on send function.
+		if (onSend != null) {
+			NetworkFlickManager.onSend = onSend;
+		}
 		
 		// Add network flick arrival listener.
 		Networking.listenForMessage(NetworkFlickManager.FLICK_EVENT, function(data) {
 		
-			// Create new element and select it.
+			// Create new element.
 			let newElement = document.createElement('div');
 			let svg = document.getElementById(CommonElements.APP_SVG);
 			svg.appendChild(newElement);
-			newElement.outerHTML = data['html'];
-			let ele = d3.select('#' + data['id']);
+			newElement.outerHTML = data[NetworkFlickManager.FLICK_MESSAGE.HTML];
 			
-			// Move element into place.
-			Transformations.setTranslation(ele, data['pos'].x, data['pos'].y);
+			// Prepare new element as d3 selection.
+			let ele = d3.select('#' + data[NetworkFlickManager.FLICK_MESSAGE.ID]);
+			ele.style('display', null);
+			ele.style('opacity', 0);
+			
+			// Move element into place.	
+			let pos = data[NetworkFlickManager.FLICK_MESSAGE.POSITION];
+			Transformations.setTranslation(ele, app.vizWidth -pos.x, pos.y);
+			Transformations.setRotation(ele, Transformations.getRotation(ele) + 180);
 
 			// Add listeners to new element.
 			let touchManager = new TouchManager(ele);
 			let networkflickManager = new NetworkFlickManager(ele, app, touchManager);
+			networkflickManager.newArrival = true;
+			networkflickManager.friction = 1;
 			
-			// TODO Run callback on new element.
+			// Run on receive callback on new element.
+			if (onReceive != null) {
+				onReceive(data, ele, touchManager, networkflickManager);
+			}
 			
-			// TODO Flick new element.
+			// Flick new element.
+			let movement = data[NetworkFlickManager.FLICK_MESSAGE.MOVEMENT];
+			networkflickManager.flick(-movement.x * 1000, -movement.y * 1000);
 			
 			// TODO Fade in new element.
-			ele.style('display', null);
 			ele.style('opacity', 1);
 			
-			// TODO No friction until centre is in view.			
-
+			// TODO No friction until centre is in view.		
 			
 		});
 		
@@ -114,12 +162,20 @@ export class NetworkFlickManager extends FlickManager {
 					let newId = 'tranfer-' + new Date().getTime();
 					element.id = newId;
 					
-					// Send out transfer message.
+					// Prepare transfer message.
 					let objectToSend = <JSON>{};
-					objectToSend['html'] = element.outerHTML;
-					objectToSend['id'] = newId;
-					objectToSend['pos'] =  self.posOnFlick;
-					objectToSend['movement'] = self.movementInfo;
+					objectToSend[NetworkFlickManager.FLICK_MESSAGE.HTML] = element.outerHTML;
+					objectToSend[NetworkFlickManager.FLICK_MESSAGE.ID] = newId;
+					objectToSend[NetworkFlickManager.FLICK_MESSAGE.POSITION] =  self.posOnFlick;
+					objectToSend[NetworkFlickManager.FLICK_MESSAGE.MOVEMENT] = self.movementInfo;
+					objectToSend[NetworkFlickManager.FLICK_MESSAGE.FRICTION] = self.friction;
+					
+					// On send call back.
+					if (NetworkFlickManager.onSend != null) {
+						objectToSend = NetworkFlickManager.onSend(objectToSend, self.ele);
+					}
+					
+					// Send out transfer message. 
 					Networking.sendMessageToRole(NetworkFlickManager.FLICK_EVENT, Roles.STUDENT, objectToSend);
 				
 					// Stop moving, remove item and self.
