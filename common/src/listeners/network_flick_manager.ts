@@ -14,8 +14,11 @@ export class NetworkFlickManager extends FlickManager {
 	
 	//// Private Constant. ////
 	
+	/** How often (in seconds) to sample for whether friction should be appliedon a newly arrive object. */
+	private static ARRIVAL_SAMPLE: number = 0.01;
+	
 	/** Time to take to fade a transferring object out or in (in seconds). */
-	private static FADE_TIME:number = 0.25;
+	private static FADE_TIME: number = 0.25;
 	
 	/** Name of the network event to use for the tranfer. */
 	private static FLICK_EVENT: string = 'network-flick';
@@ -97,23 +100,33 @@ export class NetworkFlickManager extends FlickManager {
 
 			// Add listeners to new element.
 			let touchManager = new TouchManager(ele);
-			let networkflickManager = new NetworkFlickManager(ele, app, touchManager);
-			networkflickManager.newArrival = true;
-			networkflickManager.friction = 1;
+			let networkFlickManager = new NetworkFlickManager(ele, app, touchManager);
+			networkFlickManager.newArrival = true;
+			networkFlickManager.friction = 1;
 			
 			// Run on receive callback on new element.
 			if (onReceive != null) {
-				onReceive(data, ele, touchManager, networkflickManager);
+				onReceive(data, ele, touchManager, networkFlickManager);
 			}
 			
 			// Flick new element.
 			let movement = data[NetworkFlickManager.FLICK_MESSAGE.MOVEMENT];
-			networkflickManager.flick(-movement.x * 1000, -movement.y * 1000);
+			networkFlickManager.flick(-movement.x * 1000, -movement.y * 1000);
 			
 			// Fade in new element.
 			$(document.getElementById(ele.attr('id'))).fadeTo(NetworkFlickManager.FADE_TIME * 1000, 1);
 			
-			// TODO No friction until centre is in view.		
+			// No friction until centre is in view.	
+			let applyFunction = 	function() {
+				let x = Transformations.getTranslationX(ele);
+				let y = Transformations.getTranslationY(ele);
+				if (x > 0 && x < app.vizWidth && y > 0 && y < app.vizHeight) {
+					networkFlickManager.friction = data[NetworkFlickManager.FLICK_MESSAGE.FRICTION];
+				} else {
+					setTimeout(applyFunction, NetworkFlickManager.ARRIVAL_SAMPLE * 1000);		
+				}
+			}
+			applyFunction();
 			
 		});
 		
@@ -144,6 +157,7 @@ export class NetworkFlickManager extends FlickManager {
 				this.transferring = true;
 			
 				// Remove friction.
+				let oldFriction = this.friction;
 				this.friction = 1;
 				
 				// Fade out.
@@ -168,7 +182,7 @@ export class NetworkFlickManager extends FlickManager {
 					objectToSend[NetworkFlickManager.FLICK_MESSAGE.ID] = newId;
 					objectToSend[NetworkFlickManager.FLICK_MESSAGE.POSITION] =  self.posOnFlick;
 					objectToSend[NetworkFlickManager.FLICK_MESSAGE.MOVEMENT] = self.movementInfo;
-					objectToSend[NetworkFlickManager.FLICK_MESSAGE.FRICTION] = self.friction;
+					objectToSend[NetworkFlickManager.FLICK_MESSAGE.FRICTION] = oldFriction;
 					
 					// On send call back.
 					if (NetworkFlickManager.onSend != null) {
