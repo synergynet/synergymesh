@@ -64,7 +64,11 @@ export abstract class SynergyMeshApp {
 	 * @param {string} root The URL root of the page.
 	 * @param {boolean} testMode Flag to indicate if the app is in test mode.
 	 */
-	public constructor(rootPath: string = '', testMode: boolean = false) {
+	public constructor(rootPath: string = '', testMode: boolean = false) {	
+	
+		// Get inital display dimensions.
+		this.vizHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, screen.height|| 0);
+		this.vizWidth = Math.max(document.documentElement.clientWidth, window.innerWidth, screen.width || 0);
 		
 		// Enable touch emulator.
 		TouchEmulator();
@@ -101,49 +105,11 @@ export abstract class SynergyMeshApp {
 				}
 			}
 			
-			// Function for attempting to start the app.
-			let startAppAttempt = function() {
-				
-				// Check if session input field is present.
-				if (sessionInput != undefined) {
-					
-					// Get valid text.
-					let input = sessionInput.value.replace(self.pattern, '');
-					
-					// Display warning if blank.
-					if (input == '') {
-						alert('You need to enter a session ID for this app.');
-						return;
-					}
-					
-					// Store supplied session.
-					self.sessionId = input;
-					localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY] = input;
-					
-					// Hide session input and prompt.
-					document.getElementById(CommonElements.SESSION_PROMPT).hidden = true;;
-					sessionInput.hidden = true;
-					
-				}
-				
-				// Hide elements.
-				startButton.hidden = true;
-				
-				// Start app.
-				self.startAppEnvironment();	
-				
-				// Full screen on desktop.
-				if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent))){
-					self.requestFullscreen(document.getElementById(CommonElements.APP_SVG));
-				}
-				
-			};
-			
 			// Create button to start the app.
 			let startButton = document.getElementById(CommonElements.START_BUTTON);
 			startButton.addEventListener('touchstart', function(e) {		
 				e.preventDefault();
-				startAppAttempt();			
+				self.startAppAttempt(startButton, sessionInput);			
 			});
 			
 			// Add listener to session input field which filters out non-alphanumeric characters..
@@ -151,9 +117,9 @@ export abstract class SynergyMeshApp {
 				let value = String.fromCharCode(event.which);			
 				let sessionInput = <HTMLInputElement>document.getElementById(CommonElements.SESSION_INPUT);
 				sessionInput.value = sessionInput.value.replace(self.pattern, '');
-				if (event.keyCode == 13) {
-					startAppAttempt();
-				}
+				     if (event.keyCode == 13) { 
+						self.startAppAttempt(startButton, sessionInput); 
+					} 
 				return !self.pattern.test(value);
 			});
 				
@@ -165,6 +131,56 @@ export abstract class SynergyMeshApp {
 			// Trigger the app running.
 			this.startAppEnvironment();
 				
+		}
+		
+	}
+	
+	/**
+	 * Function for attempting to start the app.
+	 * 
+	 * @param {HTMLElement} startButton The button to start the app with.
+	 * @param {HTMLInputElement} sessionInput The text input button. 
+	 */
+	private startAppAttempt(startButton: HTMLElement, sessionInput: HTMLInputElement): void {
+		
+		// Check if session input field is present.
+		if (sessionInput != undefined) {
+			
+			// Get valid text.
+			let input = sessionInput.value.replace(this.pattern, '');
+			
+			// Display warning if blank.
+			if (input == '') {
+				alert('You need to enter a session ID for this app.');
+				return;
+			}
+			
+			// Store supplied session.
+			this.sessionId = input;
+			localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY] = input;
+			
+			// Hide session input and prompt.
+			document.getElementById(CommonElements.SESSION_PROMPT).hidden = true;;
+			sessionInput.hidden = true;
+			
+		}
+		
+		// Hide elements.
+		startButton.hidden = true;
+		
+		// Start app.
+		this.startAppEnvironment();	
+		
+		// Full screen on desktop.
+		if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent))){
+			
+			// Set full screen.
+			this.requestFullscreen(document.getElementById(CommonElements.APP_SVG));			
+	
+			// Get fullscreen display dimensions.
+			this.vizHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, screen.height|| 0);
+			this.vizWidth = Math.max(document.documentElement.clientWidth, window.innerWidth, screen.width || 0);
+			
 		}
 		
 	}
@@ -192,10 +208,6 @@ export abstract class SynergyMeshApp {
 	 * Builds the initial environment.
 	 */
 	private startAppEnvironment() {		
-	
-		// Get display dimensions.
-		this.vizHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, screen.height|| 0);
-		this.vizWidth = Math.max(document.documentElement.clientWidth, window.innerWidth, screen.width || 0);
 		
 		// Create SVG that fits window size.
 		this.svg = d3.select('#' + CommonElements.APP_SVG_DIV).append('svg');
