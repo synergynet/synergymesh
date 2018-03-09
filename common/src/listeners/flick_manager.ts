@@ -31,6 +31,12 @@ export class FlickManager {
 	/** The amount to slow down change on each move. */
 	protected friction: number = 1;
 	
+	/** Object holding the amount to move in each direction per micro second. */ 
+	protected movementInfo: {x: number, y: number} = {x: 0, y: 0};	
+	
+	/** The current position of the element when flicked. */
+	protected posOnFlick: {x: number, y: number} = {x: 0, y:0};
+	
 	/** Flag for stopping mover. */
 	protected shouldBeMoving: boolean = false;
 	
@@ -45,15 +51,9 @@ export class FlickManager {
 	
 	/** The app the element exists in. */
 	private app: SynergyMeshApp;
-	
-	/** The current position of the element when flicked. */
-	private posOnFlick: {x: number, y: number} = {x: 0, y:0};
 		
 	/** The id of the timeout function of the move function. */
 	private mover: number;
-	
-	/** Object holding the amount to move in each direction per micro second. */ 
-	private movementInfo: {x: number, y: number} = {x: 0, y: 0};	
 	
 	/** The id of the timeout function of the sample function. */
 	private sampler: number;

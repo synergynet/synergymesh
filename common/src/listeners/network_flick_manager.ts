@@ -1,19 +1,24 @@
+import {CommonElements} from 'common/src/constants/common_elements';
 import {FlickManager} from 'common/src/listeners/flick_manager';
 import {Networking} from 'common/src/utils/networking';
 import {Roles} from 'common/src/constants/roles'; 
+import {SynergyMeshApp} from 'common/src/synergymesh_app';
+import {TouchManager} from 'common/src/listeners/touch_manager';
+import {Transformations} from 'common/src/utils/transformations'; 
 
 /**
  * A class which manages all the network flick events relating to an item.
  */
-export class NetworkFlickManager extends FlickManager {	
-	
-	// TODO Need abstract SynergyMesh Item Type which has a (static?) contstruct-on-message function.
+export class NetworkFlickManager extends FlickManager {
 	
 	
 	//// Private Constant. ////
 	
 	/** Time to take to fade a transferring object out or in (in seconds). */
-	private FADE_TIME:number = 0.25;
+	private static FADE_TIME:number = 0.25;
+	
+	/** Name of the network event to use for the tranfer.. */
+	private static FLICK_EVENT: string = 'network-flick';
 	
 	
 	//// Private Global Variables. ////
@@ -29,12 +34,40 @@ export class NetworkFlickManager extends FlickManager {
 	
 	/**
 	 * Method for setting up listener for network flick arrivals.
+	 * 
+	 * @param {SynergyMeshApp} app The app the listener is to be used for.
 	 */
-	public static registerForNetworkFlick() {
+	public static registerForNetworkFlick(app: SynergyMeshApp) {
 		
-		// TODO Network flick arrival listener (for messages from same role).
-		// On message: create (as new arrival),  flick into view and fade in transferred items.
-		// Include callback for adding listeners to new arrivals (except flick).
+		// Add network flick arrival listener.
+		Networking.listenForMessage(NetworkFlickManager.FLICK_EVENT, function(data) {
+		
+			// Create new element and select it.
+			let newElement = document.createElement('div');
+			let svg = document.getElementById(CommonElements.APP_SVG);
+			svg.appendChild(newElement);
+			newElement.outerHTML = data['html'];
+			let ele = d3.select('#' + data['id']);
+			
+			// Move element into place.
+			Transformations.setTranslation(ele, data['pos'].x, data['pos'].y);
+
+			// Add listeners to new element.
+			let touchManager = new TouchManager(ele);
+			let networkflickManager = new NetworkFlickManager(ele, app, touchManager);
+			
+			// TODO Run callback on new element.
+			
+			// TODO Flick new element.
+			
+			// TODO Fade in new element.
+			ele.style('display', null);
+			ele.style('opacity', 1);
+			
+			// TODO No friction until centre is in view.			
+
+			
+		});
 		
 	}
 	
@@ -66,7 +99,7 @@ export class NetworkFlickManager extends FlickManager {
 				this.friction = 1;
 				
 				// Fade out.
-				$(document.getElementById(this.ele.attr('id'))).fadeOut(this.FADE_TIME * 1000);
+				$(document.getElementById(this.ele.attr('id'))).fadeOut(NetworkFlickManager.FADE_TIME * 1000);
 				
 				// Get self.
 				let self = this;
@@ -74,7 +107,20 @@ export class NetworkFlickManager extends FlickManager {
 				// When the fade is done.
 				setTimeout(function() {
 					
-					// TODO Send out transfer message.
+					// Get element.
+					let element = document.getElementById(self.ele.attr('id'));
+					
+					// Update object ID.
+					let newId = 'tranfer-' + new Date().getTime();
+					element.id = newId;
+					
+					// Send out transfer message.
+					let objectToSend = <JSON>{};
+					objectToSend['html'] = element.outerHTML;
+					objectToSend['id'] = newId;
+					objectToSend['pos'] =  self.posOnFlick;
+					objectToSend['movement'] = self.movementInfo;
+					Networking.sendMessageToRole(NetworkFlickManager.FLICK_EVENT, Roles.STUDENT, objectToSend);
 				
 					// Stop moving, remove item and self.
 					self.stop();
@@ -82,7 +128,7 @@ export class NetworkFlickManager extends FlickManager {
 					// Remove item and self.
 					self.terminate();
 					
-				}, this.FADE_TIME * 1000);
+				}, NetworkFlickManager.FADE_TIME * 1000);
 				
 			}
 				

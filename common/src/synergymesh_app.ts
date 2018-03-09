@@ -43,7 +43,7 @@ export abstract class SynergyMeshApp {
 	/** The ID of the network session to use. */
 	protected sessionId;
 
-	/** The width of the SVG element. */
+	/** The svg which holds all the elements. */
 	protected svg: d3.Selection<any>;
 	
 	/** Flag to indicate if the app is in test mode. */

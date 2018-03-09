@@ -23,7 +23,7 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		this.addTeacherControlListeners();
 		
 		// Establish network flick listener.
-		NetworkFlickManager.registerForNetworkFlick();
+		NetworkFlickManager.registerForNetworkFlick(this); // TODO Add callback to add scale limits.
 		
 		// Add title.
 		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
