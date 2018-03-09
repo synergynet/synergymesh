@@ -18,6 +18,9 @@ cp -R "../../lib" "synergymesh/"
 echo Copying in server.
 cp -R "../../server" "synergymesh/"
 
+echo Copying in index page.
+cp "../../index.html" "synergymesh/"
+
 cd synergymesh
 
 echo Deleting all .ts files.
