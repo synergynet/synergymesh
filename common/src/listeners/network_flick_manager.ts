@@ -110,8 +110,8 @@ export class NetworkFlickManager extends FlickManager {
 			let movement = data[NetworkFlickManager.FLICK_MESSAGE.MOVEMENT];
 			networkflickManager.flick(-movement.x * 1000, -movement.y * 1000);
 			
-			// TODO Fade in new element.
-			ele.style('opacity', 1);
+			// Fade in new element.
+			$(document.getElementById(ele.attr('id'))).fadeTo(NetworkFlickManager.FADE_TIME * 1000, 1);
 			
 			// TODO No friction until centre is in view.		
 			
