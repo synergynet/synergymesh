@@ -13,14 +13,14 @@ function loadApp(root){
 		baseUrl: root,
 		paths: {
 			'BootStrap': 'common/src/bootstrap',
-			'TemplateTeacherApp': APPS_PATH + 'template/src/template_teacher_app',
+			'TemplateApp': APPS_PATH + 'template/src/template_app',
 		}
 	});
 	
 	// Load libraries and report script through RequireJS.
 	require(['BootStrap'], function (bootstrap) {
 		bootstrap.start(function(){
-			require(['TemplateTeacherApp'], function (template_teacher_app) {
+			require(['TemplateApp'], function (template_app) {
 				$(document).ready(function run() {
 					
 					// Disable Zoom Gesture.
@@ -29,7 +29,7 @@ function loadApp(root){
 					    .on("touchmove", noZoom);
 					
 					// Call app.
-					new template_teacher_app.TemplateTeacherApp();
+					new template_app.TemplateApp();
 				});
 			});
 		});
@@ -41,5 +41,5 @@ function loadApp(root){
  * Prevents zoom gestures.
  */
 function noZoom() {
-	  d3.event.preventDefault();
-	}
+	d3.event.preventDefault();
+}

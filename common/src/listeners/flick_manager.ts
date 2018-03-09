@@ -23,28 +23,40 @@ export class FlickManager {
 	private static SAMPLE_RATE: number = 250;
 	
 	
+	//// Public Global Variables. ////
+	
+	/** The amount to slow down change on each move. */
+	public friction: number = 1;
+	
+	
 	//// Protected Global Variables. ////
 	
 	/** The d3 selection to track and move. */
 	protected ele: d3.Selection<any>;
+	
+	/** Object holding the amount to move in each direction per micro second. */ 
+	protected movementInfo: {x: number, y: number} = {x: 0, y: 0};	
+	
+	/** The current position of the element when flicked. */
+	protected posOnFlick: {x: number, y: number} = {x: 0, y:0};
+	
+	/** Flag for stopping mover. */
+	protected shouldBeMoving: boolean = false;
+	
+	/** Flag for stopping sampler. */
+	protected shouldBeSampling: boolean = false;
+	
+	/** Touch manager assigned to the element. */
+	protected touchManager: TouchManager;
 	
 	
 	//// Private Global Variables. ////
 	
 	/** The app the element exists in. */
 	private app: SynergyMeshApp;
-	
-	/** The amount to slow down change on each move. */
-	private friction: number = 1;
-	
-	/** The current position of the element when flicked. */
-	private posOnFlick: {x: number, y: number} = {x: 0, y:0};
 		
 	/** The id of the timeout function of the move function. */
 	private mover: number;
-	
-	/** Object holding the amount to move in each direction per micro second. */ 
-	private movementInfo: {x: number, y: number} = {x: 0, y: 0};	
 	
 	/** The id of the timeout function of the sample function. */
 	private sampler: number;
@@ -52,8 +64,8 @@ export class FlickManager {
 	/** Object holding the position and timestamp information from the most recent sample. */ 
 	private sampleInfo: {x: number, y: number, timestamp: number} = {x: 0, y: 0, timestamp: 0};
 	
-	/** Touch manager assigned to the element. */
-	private touchManager: TouchManager;
+	/** Flag to indicate whether something is queued up to animate. */	
+	private ticking: boolean= false;
 	
 	
 	//// Constructors. ////
@@ -112,6 +124,9 @@ export class FlickManager {
 	 */
 	public flick(xDiffPerSec: number, yDiffPerSec: number): void {
 		
+		// Allow movement.
+		this.shouldBeMoving = true;
+		
 		// Work out movement.
 		this.movementInfo = {x: xDiffPerSec / 1000, y: yDiffPerSec / 1000}; 
 		
@@ -156,7 +171,7 @@ export class FlickManager {
 	protected onHitTop(): void {
 		
 		// Reverse y-trajectory.
-		this.movementInfo.y = -Math.abs(this.movementInfo.y);
+		this.movementInfo.y = Math.abs(this.movementInfo.y);
 		
 	}
 	
@@ -166,7 +181,7 @@ export class FlickManager {
 	protected onHitBottom(): void {
 		
 		// Reverse y-trajectory.
-		this.movementInfo.y = Math.abs(this.movementInfo.y);
+		this.movementInfo.y = -Math.abs(this.movementInfo.y);
 		
 	}
 	
@@ -176,6 +191,7 @@ export class FlickManager {
 	protected onRelease(): void {
 		
 		// Stop sampler.
+		this.shouldBeSampling = false;
 		window.clearInterval(this.sampler);
 		
 		// Get current item position and timestamp.
@@ -198,6 +214,9 @@ export class FlickManager {
 	 */
 	protected onStartMoving(): void {
 		
+		// Allow sampling.
+		this.shouldBeSampling = true;
+		
 		// Stop any flicking happening.
 		this.stop();
 		
@@ -213,6 +232,7 @@ export class FlickManager {
 	protected stop(): void {
 		
 		// Stop sampler.
+		this.shouldBeMoving = false;
 		window.clearInterval(this.mover);
 		
 	}
@@ -225,6 +245,12 @@ export class FlickManager {
 	 */
 	private move(): void {
 		
+		// Check this is allowed.
+		if (!this.shouldBeMoving) {
+			window.clearInterval(this.mover);
+			return;
+		}
+		
 		// Check if item has hit any of the borders.
 		if (this.posOnFlick.x > this.app.vizWidth) {
 			this.onHitRight();
@@ -232,9 +258,9 @@ export class FlickManager {
 			this.onHitLeft();
 		}
 		if (this.posOnFlick.y > this.app.vizHeight) {
-			this.onHitTop();
-		} else if (this.posOnFlick.y < 0) {
 			this.onHitBottom();
+		} else if (this.posOnFlick.y < 0) {
+			this.onHitTop();
 		}
 		
 		// Update location.
@@ -252,8 +278,6 @@ export class FlickManager {
 		
 	}
 	
-	private ticking = false;
-	
 	/**
 	 * Function for scheduling an update.
 	 */
@@ -269,6 +293,12 @@ export class FlickManager {
 	 */
 	private sample(): void {
 		
+		// Check this is allowed.
+		if (!this.shouldBeSampling) {
+			window.clearInterval(this.sampler);
+			return;
+		}
+		
 		// Store the location of the item and timestamp.
 		this.sampleInfo = {
 			x: Transformations.getTranslationX(this.ele),
@@ -282,6 +312,12 @@ export class FlickManager {
 	* Function for updating the element.
 	*/
 	private updateElementTransform(): void {
+		
+		// Double check should be moving.
+		if (!this.shouldBeMoving) {
+			this.ticking = false;
+			return;
+		}
 		
 		// Get change.
 		let xChange = this.movementInfo.x * FlickManager.MOVE_RATE;

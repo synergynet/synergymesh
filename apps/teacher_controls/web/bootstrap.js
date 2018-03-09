@@ -13,14 +13,14 @@ function loadApp(root){
 		baseUrl: root,
 		paths: {
 			'BootStrap': 'common/src/bootstrap',
-			'ProtomysteriesTeacherApp': APPS_PATH + 'protomysteries/src/protomysteries_teacher_app',
+			'TeacherControlsApp': APPS_PATH + 'teacher_controls/src/teacher_controls_app',
 		}
 	});
 	
 	// Load libraries and report script through RequireJS.
 	require(['BootStrap'], function (bootstrap) {
 		bootstrap.start(function(){
-			require(['ProtomysteriesTeacherApp'], function (protomysteries_teacher_app) {
+			require(['TeacherControlsApp'], function (teacher_controls_app) {
 				$(document).ready(function run() {
 					
 					// Disable Zoom Gesture.
@@ -29,7 +29,8 @@ function loadApp(root){
 					    .on("touchmove", noZoom);
 					
 					// Call app.
-					new protomysteries_teacher_app.ProtomysteriesTeacherApp();
+					new teacher_controls_app.TeacherControlsApp();
+					
 				});
 			});
 		});
@@ -41,5 +42,5 @@ function loadApp(root){
  * Prevents zoom gestures.
  */
 function noZoom() {
-	  d3.event.preventDefault();
-	}
+  d3.event.preventDefault();
+}
