@@ -1,6 +1,5 @@
 import {Networking} from 'common/src/utils/networking';
 import {NetworkFlickManager} from 'common/src/listeners/network_flick_manager';
-import {QueryStrings} from 'common/src/utils/query_strings';
 import {Random} from 'common/src/utils/random';
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
@@ -75,29 +74,44 @@ export class MysteriesApp extends SynergyMeshApp {
 		// Establish app details.
 		this.appName = 'Mysteries';
 		
-		// Get the content target and mystery type from the query string.
-		let queryStrings = QueryStrings.getQueryStrings();
-		let targetContent = 'dinner_disaster';
-		let mode = 'standalone';
-		if ('content' in queryStrings) {
-			targetContent = queryStrings['content'];
-		}
-		if ('mode' in queryStrings) {
-			mode = queryStrings['mode'];
-		}
+		// Get content from the selection.
+		let targetContentSelector = <HTMLInputElement>document.getElementById('mystery_selector');
+		let targetContent = targetContentSelector.value;
+		
+		// Get mystery mode from the selection.
+		let mysteryModeSelector = <HTMLInputElement>document.getElementById('mystery_mode');
+		let mysteryMode = mysteryModeSelector.value;
+		
+		// Get teacher controls from the selection.
+		let teacherControlsSelector = <HTMLInputElement>document.getElementById('teacher_controls');
+		let teacherControls = teacherControlsSelector.value;		
+		
+		// Store select from local storage.
+		localStorage['mystery_selector'] = targetContent;
+		localStorage['mystery_mode'] = mysteryMode;
+		localStorage['teacher_controls'] = teacherControls;
+		
+		// Hide the mystery controls.
+		document.getElementById('mystery_controls').style.display = 'none';
 		
 		// Get the contents.
 		$.getJSON(this.rootPath + MysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
 			
 			// Store content.
-			self.content = json;
+			self.content = json;			
+				
+			// Announce presence to server (if any networking needed).
+			if (teacherControls == 'enabled' || mysteryMode == 'networked') {
+				self.establishNetworking(self.onClientListUpdate.bind(self));
+			}
+			
+			// Add teacher controls (if requested)
+			if (teacherControls == 'enabled') {
+				self.addTeacherControlListeners();
+			}
 			
 			// Check whether to run standalone or networked.
-			if (mode == 'networked') {	
-				
-				// Announce presence to server.
-				self.establishNetworking(self.onClientListUpdate.bind(self));
-				self.addTeacherControlListeners();
+			if (mysteryMode == 'networked') {	
 				
 				// Establish function to be called when sending network flicked elements.
 				let onSend = function(objectToSend: JSON, ele: d3.Selection<any>) {
@@ -200,22 +214,19 @@ export class MysteriesApp extends SynergyMeshApp {
 	 * Function to be called when the page is first loaded.
 	 */
 	protected preStart() {
-		
-		// Check if in networked mode.
-		let networkedMode = false;
-		let queryStrings = QueryStrings.getQueryStrings();
-		if ('mode' in queryStrings) {
-			if (queryStrings['mode'] == 'networked') {
-				networkedMode = true;
-			}
+			
+		// Apply selects from local storage.
+		if (localStorage['mystery_selector'] != null) {
+			let mysterySelector = <HTMLInputElement>(document.getElementById('mystery_selector'));
+			mysterySelector.value = localStorage['mystery_selector'];
 		}
-		
-		// Show session input if in networked mode else remove it.
-		let displaycontrols = document.getElementById('session_controls');
-		if (networkedMode) {
-			displaycontrols.style.display = 'block';
-		} else {
-			displaycontrols.parentNode.removeChild(displaycontrols);
+		if (localStorage['mystery_mode'] != null) {
+			let mysteryModeSelector = <HTMLInputElement>(document.getElementById('mystery_mode'));
+			mysteryModeSelector.value = localStorage['mystery_mode'];
+		}
+		if (localStorage['teacher_controls'] != null) {
+			let teachercontrolsSelector = <HTMLInputElement>(document.getElementById('teacher_controls'));
+			teachercontrolsSelector.value = localStorage['teacher_controls'];
 		}
 		
 	}

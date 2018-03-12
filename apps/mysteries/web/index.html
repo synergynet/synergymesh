@@ -13,21 +13,55 @@
 		<!-- Load required libraries -->
 		<script src="../../../lib/scripts/requirejs/requirejs-2.1.20.js"></script>
 	
-		<!-- Load report's script -->
+		<!-- Load report"s script -->
 		<script src="bootstrap.js"></script>
 	
 		<!-- Create the element that the script will place the generated app svg into. -->
 		<div id="synergymesh-app"></div>
 		
 		<!-- Input field for setting text ID. -->
-		<div id='session_controls'>
-			<div id='session_prompt'>Session ID: </div>
-			<input id="session_input" type="text" disabled="disabled" autofocus/>
-		</div>
-
+		<div id="session_prompt">Session ID: </div>
+		<input id="session_input" type="text" disabled="disabled" autofocus/>
+	
 		<!-- Add button to start the app-->
 		<div class="start_app_button_wrapper">
 			<button id="start_app_button" disabled="disabled">Start App</button>
+		</div>
+		
+		<!-- Add mystery controls  -->
+		<div id="mystery_controls">
+			<span class="mystery_prompt">Mystery:  </span>
+			<select class="mystery_select" id="mystery_selector">
+				<option value="charlie">Charlie</option>
+				<option value="dan">Dan</option>
+				<option value="london">Great Fire of London</option>
+				<option value="dinner_disaster">Dinner Disaster</option>
+				<option value="judith">Cat Food Conundrum</option>
+				<option value="mary">Mary and Archie</option>
+				<option value="meet_up">Meet Up</option>
+				<option value="money_trail">Money Trail</option>
+				<option value="robert_dixon">Robert Dixon</option>
+				<option value="school_trip">School Trip</option>
+				<option value="senghenydd">Senghenydd Colliery Disaster</option>
+				<option value="sneaky_sydney">Sneaky Sydney</option>
+				<option value="sports_day">Sports Day</option>
+				<option value="swimmer">Swimming</option>
+				<option value="triplets">Triplets</option>
+				<option value="waltzer">Waltzer</option>
+				<option value="wilf">Wilf</option>
+			</select>
+			<br>
+			<span class="mystery_prompt">Mode:  </span>
+			<select class="mystery_select" id="mystery_mode">
+				<option value="standalone">Standalone</option>
+				<option value="networked">Networked</option>		
+			</select>
+			<br>
+			<span class="mystery_prompt">Teacher Controls:  </span>
+			<select class="mystery_select" id="teacher_controls">
+				<option value="enabled">Enabled</option>
+				<option value="disabled">Disabled</option>		
+			</select>
 		</div>
 		
 		<!-- Add script to prepare the app-->
