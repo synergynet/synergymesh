@@ -197,6 +197,33 @@ export class MysteriesApp extends SynergyMeshApp {
 	}
 	
 	/**
+	 * Function to be called when the page is first loaded.
+	 */
+	protected preStart() {
+		
+		// Check if in networked mode.
+		let networkedMode = false;
+		let queryStrings = QueryStrings.getQueryStrings();
+		if ('mode' in queryStrings) {
+			if (queryStrings['mode'] == 'networked') {
+				networkedMode = true;
+			}
+		}
+		
+		// Show session input if in networked mode else remove it.
+		let displaycontrols = document.getElementById('session_controls');
+		if (networkedMode) {
+			displaycontrols.style.display = 'block';
+		} else {
+			displaycontrols.parentNode.removeChild(displaycontrols);
+		}
+		
+	}
+	
+	
+	//// Private Methods. ////
+	
+	/**
 	 * Method for building an item from a content definition.
 	 * 
 	 * @param {string} id The id of the definition.
