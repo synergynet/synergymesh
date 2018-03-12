@@ -5,6 +5,8 @@ import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
 import {TouchManager} from 'common/src/listeners/touch_manager';
 import {Transformations} from 'common/src/utils/transformations';
+
+// TODO Restructure Protomysteries into Mysteries.
   
  /**
  * Protomysteries student app.
@@ -14,11 +16,11 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 	
 	//// Private Constants. ////
 	
-	/** The default content for the app. */
-	private static CONTENTS_FILE_NAME: string = 'contents.json';
+	/** The directory holding the files defining content for the app. */
+	private static CONTENTS_DIR_NAME: string = 'contents/';
 	
-	/** The default content for the app. */
-	private static DEFAULT_CONTENT: string[] = ['clue1', 'clue2', 'clue3', 'image1', 'image2', 'image3', 'image4', 'image5'];
+	/** The query in the url to define the content. */
+	private static CONTENT_QUERY: string = 'content=';
 	
 	/** The networking events for this app. */
 	private static EVENTS = {
@@ -71,8 +73,11 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		// Establish app details.
 		this.appName = 'Proto-Mysteries';
 		
+		// Get the content target.
+		let targetContent = window.location.href.split(ProtomysteriesApp.CONTENT_QUERY)[1];
+		
 		// Get the contents.
-		$.getJSON(this.rootPath + ProtomysteriesApp.CONTENTS_FILE_NAME, function(json) {
+		$.getJSON(this.rootPath + ProtomysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
 			
 			// Store content.
 			self.content = json;
@@ -217,9 +222,11 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 			if (Networking.clients[this.role][this.appName].length < 2) {
 			
 				// Establish default content.
-				for (let contentId of ProtomysteriesApp.DEFAULT_CONTENT) {
-					this.buildItem(contentId);			
-					this.currentContent.push(contentId);		
+				for (let contentKey in this.content) {
+					if (this.content[contentKey]['default']) {
+						this.buildItem(contentKey);			
+						this.currentContent.push(contentKey);	
+					}	
 				}
 				
 			} else {
@@ -292,7 +299,7 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		
 		// Add Image
 		let imageEle = rootNode.append('image');   
-		imageEle.attr('xlink:href', this.rootPath + imageUrl);
+		imageEle.attr('xlink:href', this.rootPath + 'images/' + imageUrl);
 		imageEle.attr('width', width);
 		imageEle.attr('height', height);
 		Transformations.setTranslation(imageEle, -width/2, -height/2);;
