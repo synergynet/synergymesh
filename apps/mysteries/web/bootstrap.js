@@ -13,14 +13,14 @@ function loadApp(root){
 		baseUrl: root,
 		paths: {
 			'BootStrap': 'common/src/bootstrap',
-			'ProtomysteriesApp': APPS_PATH + 'protomysteries/src/protomysteries_app',
+			'MysteriesApp': APPS_PATH + 'mysteries/src/mysteries_app',
 		}
 	});
 	
 	// Load libraries and report script through RequireJS.
 	require(['BootStrap'], function (bootstrap) {
 		bootstrap.start(function(){
-			require(['ProtomysteriesApp'], function (protomysteries_app) {
+			require(['MysteriesApp'], function (mysteries_app) {
 				$(document).ready(function run() {
 					
 					// Disable Zoom Gesture.
@@ -29,7 +29,7 @@ function loadApp(root){
 					    .on("touchmove", noZoom);
 					
 					// Call app.
-					new protomysteries_app.ProtomysteriesApp();
+					new mysteries_app.MysteriesApp();
 					
 				});
 			});

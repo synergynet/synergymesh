@@ -66,6 +66,13 @@ export abstract class SynergyMeshApp {
 	 */
 	public constructor(rootPath: string = '', testMode: boolean = false) {	
 	
+		// Run any pre-start functions.
+		this.preStart();
+		
+		// Enable controls.
+		$('#session_input').prop('disabled', false);
+		$('#start_app_button').prop('disabled', false);
+	
 		// Get inital display dimensions.
 		this.vizHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, screen.height|| 0);
 		this.vizWidth = Math.max(document.documentElement.clientWidth, window.innerWidth, screen.width || 0);
@@ -282,6 +289,11 @@ export abstract class SynergyMeshApp {
 		Networking.establishConnection(host, port, this.sessionId, this.role, this.appName, clientListCallback);
 	
 	}
+	
+	/**
+	 * Function to be called when the page is first loaded.
+	 */
+	protected preStart() {}
 	
 	/**
 	 * Function to be called after initial setup to indicate that the app is ready.

@@ -6,7 +6,7 @@
 		<!-- Set styles for app -->
 		<link rel="stylesheet" type="text/css" href="../../../common/web/synergymesh.css">
 		<link rel="stylesheet" type="text/css" href="app.css">
-		<title>Protomysteries App</title>
+		<title>Mysteries</title>
 	</head>
 	<body>
 	
@@ -20,12 +20,14 @@
 		<div id="synergymesh-app"></div>
 		
 		<!-- Input field for setting text ID. -->
-		<div id='session_prompt'>Session ID: </div>
-		<input id="session_input" type="text" autofocus/>
+		<div id='session_controls'>
+			<div id='session_prompt'>Session ID: </div>
+			<input id="session_input" type="text" disabled="disabled" autofocus/>
+		</div>
 
 		<!-- Add button to start the app-->
 		<div class="start_app_button_wrapper">
-			<button id="start_app_button">Start App</button>
+			<button id="start_app_button" disabled="disabled">Start App</button>
 		</div>
 		
 		<!-- Add script to prepare the app-->

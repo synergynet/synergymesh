@@ -11,7 +11,7 @@
 .title-text {
 	fill: #00FF00;
 	stroke: none;
-	font-size: 16pt;
+	font-size: 14pt;
 	font-family: sans-serif;
 	text-align: center;
 }
@@ -29,4 +29,8 @@
 	stroke: none;
 	font-family: sans-serif;
 	text-align: center;
+}
+
+#session_controls {
+	display: none;
 }

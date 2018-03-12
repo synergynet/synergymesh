@@ -1,0 +1,72 @@
+{
+	"title": {
+		"content_type": "title",
+		"content": "Which Troublesome Triplet is the thief?",
+		"default": true
+	},
+	"clue1": {
+		"content_type": "clue",
+		"content": "This morning at 10 am, one Troublesome Triplet that had no money stole £40 from the bank.",
+		"default": true
+	},
+	"clue2": {
+		"content_type": "clue",
+		"content": "The Triplets, Tina, Tia, and Tania, look so much alike, the person in the bank couldn't tell which one took the money.",
+		"default": true
+	},
+	"clue3": {
+		"content_type": "clue",
+		"content": "The person in the bank wanted to be sure he didn't accuse the wrong triplet of stealing, so he alerted shopkeepers across town to let him know when one of the sisters bought anything.",
+		"default": true
+	},
+	"clue4": {
+		"content_type": "clue",
+		"content": "When they woke up the Triplets counted their savings. One triplet had no money, one had saved up £30, and another triplet had saved up £19.",
+		"default": true
+	},
+	"clue5": {
+		"content_type": "clue",
+		"content": "Right away, the phone was ringing like mad. Gemma from the game shop said one of those Triplets was just in her shop. She bought a computer game worth £20 at half price during their sale.",
+		"default": true
+	},
+	"clue6": {
+		"content_type": "clue",
+		"content": "The second call was from Tom, the owner of the toy shop. Tom reported that one of the Triplets had bought 2 toys at £5 each.",
+		"default": true
+	},
+	"clue7": {
+		"content_type": "clue",
+		"content": "The next call was from Carla at the candy shop. One of the Triplets had just paid £3 for some sweets.",
+		"default": true
+	},
+	"clue8": {
+		"content_type": "clue",
+		"content": "After Carla, Susan called from the swimming pool. Two of the Triplets just left the swimming pool. They paid £7 each. They've been swimming since 9 o'clock that morning.",
+		"default": false
+	},
+	"clue9": {
+		"content_type": "clue",
+		"content": "At noon, Kate called from the café. The Triplets just sat down for lunch.",
+		"default": false
+	},
+	"clue10": {
+		"content_type": "clue",
+		"content": "The person from the bank came to the café with a policeman and asked the Triplets to empty the contents of their pockets onto the table.",
+		"default": false
+	},
+	"clue11": {
+		"content_type": "clue",
+		"content": "In the café Tina took £23 out of her pocket.",
+		"default": false
+	},
+	"clue12": {
+		"content_type": "clue",
+		"content": "In the café Tia took £17 out of her pocket.",
+		"default": false
+	},
+	"clue13": {
+		"content_type": "clue",
+		"content": "In the café Tania took £12 out of her pocket.",
+		"default": false
+	}
+}

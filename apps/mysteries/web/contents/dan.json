@@ -1,0 +1,57 @@
+{
+	"title": {
+		"content_type": "title",
+		"content": "How much money should Dan give back to his little sister?",
+		"default": true
+	},
+	"clue1": {
+		"content_type": "clue",
+		"content": "But this week Dan made the worst deal ever.",
+		"default": true
+	},
+	"clue2": {
+		"content_type": "clue",
+		"content": "This week Dan told his sister that new money was better than crumpled old money. He swapped his new £20 note for her old £50 note.",
+		"default": true
+	},
+	"clue3": {
+		"content_type": "clue",
+		"content": "On the third week, Dan tried something different. He told Emma that green notes were better than pale orange notes. So she gave him a £10 note for his £5 note!",
+		"default": true
+	},
+	"clue4": {
+		"content_type": "clue",
+		"content": "The second week, Dan told Emma that cute little coins were better than big heavy coins. So he traded his £1 coin for her £2 coin.",
+		"default": true
+	},
+	"clue5": {
+		"content_type": "clue",
+		"content": "His friends said: \"Dan, you pay Emma back or we'll tell your parents about your mean little deals!\"",
+		"default": true
+	},
+	"clue6": {
+		"content_type": "clue",
+		"content": "he first week, Dan swapped his 2 50p pieces for her £2 coin. He told her that it was a good deal because 2 is more than 1!",
+		"default": false
+	},
+	"clue7": {
+		"content_type": "clue",
+		"content": "Emma doesn't know much about money, so he has been making deals with her every week for a month.",
+		"default": false
+	},
+	"clue8": {
+		"content_type": "clue",
+		"content": "His friends asked him where he got all the cash. \"From Emma, my silly little sister.\" Dan bragged.",
+		"default": false
+	},
+	"clue9": {
+		"content_type": "clue",
+		"content": "Dan told his friends to order the 2 biggest ice-cream cones on the menu, and he would pay for them.",
+		"default": false
+	},
+	"clue10": {
+		"content_type": "clue",
+		"content": "In the local sweet shop Dan was bragging to his friends.",
+		"default": false
+	}
+}

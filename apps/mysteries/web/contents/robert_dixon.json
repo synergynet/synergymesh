@@ -1,0 +1,77 @@
+{
+	"title": {
+		"content_type": "title",
+		"content": "What happened to Robert Dixon? Whose fault was it?",
+		"default": false
+	},
+	"clue1": {
+		"content_type": "clue",
+		"content": "Mrs. Richardson, the mine owner's wife, wants an expensive house in the country because she says that it is too dirty living near the mine.",
+		"default": true
+	},
+	"clue2": {
+		"content_type": "clue",
+		"content": "The coalmine is the only employment in the village.",
+		"default": true
+	},
+	"clue3": {
+		"content_type": "clue",
+		"content": "The mine supervisor, John Robson, was feeling ill that morning as a result of too much ale the night before and did not check the wheels on the carts like he sometimes did.",
+		"default": true
+	},
+	"clue4": {
+		"content_type": "clue",
+		"content": "The mine inspectors had reported that there was not enough fresh air in the mine, but John Robson thought they were being too fussy and had not done anything about it.",
+		"default": true
+	},
+	"clue5": {
+		"content_type": "clue",
+		"content": "Workers in the mine had to supply their own candles.",
+		"default": true
+	},
+	"clue6": {
+		"content_type": "clue",
+		"content": "Wages varied depending on the price of coal. If the price was low the miners had to dig more coal to keep the same wage and worked longer hours.",
+		"default": true
+	},
+	"clue7": {
+		"content_type": "clue",
+		"content": "Robert Dixon is 10 years old. He works underground as a trapper. He opens the doors to let the coal trucks through. He has been working at the mine for two years.",
+		"default": true
+	},
+	"clue8": {
+		"content_type": "clue",
+		"content": "Last year Robert's dad, William Dixon, died in an explosion at the pit. 53 men and boys were killed. A fund was set up for their families. Sir Charles Richardson, the mine owner, gave some money, but there was not much for each family.",
+		"default": false
+	},
+	"clue9": {
+		"content_type": "clue",
+		"content": "Robert usually works from 6 am to 6 pm, but has recently had to work longer because his wages had gone down.",
+		"default": false
+	},
+	"clue10": {
+		"content_type": "clue",
+		"content": "The weather has been unusually hot this summer.",
+		"default": false
+	},
+	"clue11": {
+		"content_type": "clue",
+		"content": "Robert gets up at 5 am. He has bread and tea for breakfast and then walks to the pit. He has a break at 11 am for bread and tea. When he gets home he has some more bread and cheese or meat, if the family can afford it, then goes to bed.",
+		"default": false
+	},
+	"clue12": {
+		"content_type": "clue",
+		"content": "Ropes operated by a steam engine pull the coal trucks down the mine. Only one person is needed to pull a whole line of trucks. Until recently horses pulled the trucks.",
+		"default": false
+	},
+	"clue13": {
+		"content_type": "clue",
+		"content": "Robert's mother, Anna Dixon, has been very ill after the birth of her ninth child. She has to stay in bed.",
+		"default": false
+	},
+	"clue14": {
+		"content_type": "clue",
+		"content": "Robert has six younger brothers and sisters. His older sister, Mary, works as a scullery maid for Sir Charles. His older brother William is a miner at the same pit as Robert.",
+		"default": false
+	}
+}
