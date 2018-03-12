@@ -68,6 +68,10 @@ export abstract class SynergyMeshApp {
 	
 		// Run any pre-start functions.
 		this.preStart();
+		
+		// Enable controls.
+		$('#session_input').prop('disabled', false);
+		$('#start_app_button').prop('disabled', false);
 	
 		// Get inital display dimensions.
 		this.vizHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, screen.height|| 0);
