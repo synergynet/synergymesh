@@ -90,10 +90,12 @@ export class Networking {
 	 * @param {string} port The port of the host.
 	 * @param {string} session The session to connect to.
 	 * @param {string} role The role of the app user..
-	 * @param {string} app he app being run.
+	 * @param {string} app The name of the app being run.
+	 * @param {() => void} clientListCallback The function to call when the client list is updated.
 	 * 
 	 */
-	public static establishConnection (host: string, port: string, session: string, role: string, app: string): void { 
+	public static establishConnection (
+		host: string, port: string, session: string, role: string, app: string, clientListCallback: () => void = null): void { 
 	
 		// Check if networking is enabled.
 		if (Networking.enabled) {
@@ -107,8 +109,16 @@ export class Networking {
 			
 			// Listen for the clients list being updated.
 			Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message) {
+				
+				// Update client list.
 				Networking.clients = message[Networking.MESSAGE.CLIENTS];
 				Networking.debugMessage('Clients list updated.');
+				
+				// Callback.
+				if (clientListCallback != null) {
+					clientListCallback();
+				}
+				
 			});
 			
 			// Establish join object.
