@@ -1,0 +1,67 @@
+{
+	"title": {
+		"content_type": "title",
+		"content": "In which room is the statue hidden?",
+		"default": true
+	},
+	"clue1": {
+		"content_type": "clue",
+		"content": "Sneaky Sydney has stolen a special stone statue.",
+		"default": true
+	},
+	"clue2": {
+		"content_type": "clue",
+		"content": "The room number the statue is in is not less than 25.",
+		"default": true
+	},
+	"clue3": {
+		"content_type": "clue",
+		"content": "The room number where the statue is hidden is not even.",
+		"default": true
+	},
+	"clue4": {
+		"content_type": "clue",
+		"content": "He has hidden it in a bedroom in the Grand Hotel.",
+		"default": true
+	},
+	"clue5": {
+		"content_type": "clue",
+		"content": "The Grand Hotel is next to the station.",
+		"default": true
+	},
+	"clue6": {
+		"content_type": "clue",
+		"content": "The room number where Sydney has hidden the statue is not 25.",
+		"default": true
+	},
+	"clue7": {
+		"content_type": "clue",
+		"content": "The Grand Hotel is not as expensive as the Caesar Hotel across the street.",
+		"default": false
+	},
+	"clue8": {
+		"content_type": "clue",
+		"content": "The room number does not contain the digit 3.",
+		"default": false
+	},
+	"clue9": {
+		"content_type": "clue",
+		"content": "There are 100 rooms in the Grand Hotel.",
+		"default": false
+	},
+	"clue10": {
+		"content_type": "clue",
+		"content": "The room number where it is hidden is a multiple of 5.",
+		"default": false
+	},
+	"clue11": {
+		"content_type": "clue",
+		"content": "The statue is in a room whose number is lower than 50.",
+		"default": false
+	},
+	"clue12": {
+		"content_type": "clue",
+		"content": "The statue is small, heavy and very valuable.",
+		"default": false
+	}
+}
