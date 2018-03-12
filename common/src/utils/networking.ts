@@ -61,6 +61,9 @@ export class Networking {
 	
 	//// Public Static Variables. ////
 	
+	/** The Id of this client. */
+	public static clientId: string;
+	
 	/** Multi-dimensional array of clients currently connected to the same session. */
 	public static clients = [];	
 	
@@ -90,10 +93,12 @@ export class Networking {
 	 * @param {string} port The port of the host.
 	 * @param {string} session The session to connect to.
 	 * @param {string} role The role of the app user..
-	 * @param {string} app he app being run.
+	 * @param {string} app The name of the app being run.
+	 * @param {() => void} clientListCallback The function to call when the client list is updated.
 	 * 
 	 */
-	public static establishConnection (host: string, port: string, session: string, role: string, app: string): void { 
+	public static establishConnection (
+		host: string, port: string, session: string, role: string, app: string, clientListCallback: () => void = null): void { 
 	
 		// Check if networking is enabled.
 		if (Networking.enabled) {
@@ -107,8 +112,19 @@ export class Networking {
 			
 			// Listen for the clients list being updated.
 			Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message) {
+				
+				// Update this client's Id.
+				Networking.clientId = Networking.socket.id;
+				
+				// Update client list.
 				Networking.clients = message[Networking.MESSAGE.CLIENTS];
 				Networking.debugMessage('Clients list updated.');
+				
+				// Callback.
+				if (clientListCallback != null) {
+					clientListCallback();
+				}
+				
 			});
 			
 			// Establish join object.
@@ -119,7 +135,7 @@ export class Networking {
 				
 			// Join the session (or establish it) on the server.
 			Networking.socket.emit(Networking.EVENTS.JOIN, messageToSend);	
-			Networking.debugMessage('Joined session ' + session + ' on server,');	
+			Networking.debugMessage('Joined the following session: ' + session);	
 			
 		}
 		
@@ -140,7 +156,7 @@ export class Networking {
 			Networking.socket.on(eventName, function(message){
 				
 					// Call the callback.
-					Networking.debugMessage('Received a message for the following network event: ' + eventName + '.');
+					Networking.debugMessage('Received a message for the following network event: ' + eventName);
 					callback(message);
 				
 			});			
@@ -168,7 +184,7 @@ export class Networking {
 			
 			// Send message.
 			Networking.socket.emit(Networking.EVENTS.TO_ALL, wrappedMessageToSend);		
-			Networking.debugMessage('Sent network message to all in session');	
+			Networking.debugMessage('Sent the following network event to all in the session: ' + eventName);	
 			
 		}
 			
@@ -196,7 +212,7 @@ export class Networking {
 			
 			// Send message.
 			Networking.socket.emit(Networking.EVENTS.TO_ROLE, wrappedMessageToSend);		
-			Networking.debugMessage('Sent network message to all in session with the ' + role + ' role.');	
+			Networking.debugMessage('Sent the following network event to all in session with the ' + role + ' role: ' + eventName);	
 			
 		}
 			
@@ -224,7 +240,7 @@ export class Networking {
 			
 			// Send message.
 			Networking.socket.emit(Networking.EVENTS.TO_APP, wrappedMessageToSend);		
-			Networking.debugMessage('Sent network message to all in session in the ' + app + ' app.');	
+			Networking.debugMessage('Sent the following network event to all in session in the ' + app + ' app: ' + eventName);	
 			
 		}
 			
@@ -253,8 +269,9 @@ export class Networking {
 			wrappedMessageToSend[Networking.MESSAGE.CONTENTS] = messageToSend;
 			
 			// Send message.
-			Networking.socket.emit(Networking.EVENTS.TO_ROLE_IN_APP, wrappedMessageToSend);		
-			Networking.debugMessage('Sent network message to all in session with the ' + role + ' role in the ' + app + ' app.');	
+			Networking.socket.emit(Networking.EVENTS.TO_ROLE_IN_APP, wrappedMessageToSend);	
+			Networking.debugMessage(
+				'Sent the following network event to all in session with the ' + role + ' role in the ' + app + ' app: ' + eventName);		
 			
 		}
 			
@@ -280,7 +297,7 @@ export class Networking {
 			
 			// Send message.
 			Networking.socket.emit(Networking.EVENTS.TO_CLIENT, wrappedMessageToSend);		
-			Networking.debugMessage('Sent this message to ' + targetClient + ': ' + JSON.stringify(messageToSend));	
+			Networking.debugMessage('Sent the following network event to the client ' + targetClient + ': ' + eventName);	
 			
 		}
 			

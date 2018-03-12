@@ -264,8 +264,10 @@ export abstract class SynergyMeshApp {
 	
 	/**
 	 * Set up the networking connection.
+	 * 
+	 * @param {() => void} clientListCallback The function to call when the client list is updated.
 	 */
-	protected establishNetworking(): void {
+	protected establishNetworking(clientListCallback: () => void = null): void {
 	
 		// Get host and port from config.
 		let host = Config.getConfigValue(Config.SERVER_HOST);
@@ -277,7 +279,7 @@ export abstract class SynergyMeshApp {
 		}
 		
 		// Announce presence to server.
-		Networking.establishConnection(host, port, this.sessionId, this.role, this.appName);
+		Networking.establishConnection(host, port, this.sessionId, this.role, this.appName, clientListCallback);
 	
 	}
 	

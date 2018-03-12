@@ -1,3 +1,4 @@
+import {Networking} from 'common/src/utils/networking';
 import {NetworkFlickManager} from 'common/src/listeners/network_flick_manager';
 import {Random} from 'common/src/utils/random';
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
@@ -10,6 +11,53 @@ import {Transformations} from 'common/src/utils/transformations';
  */
 export class ProtomysteriesApp extends SynergyMeshApp {
 	
+	
+	//// Private Constants. ////
+	
+	/** The default content for the app. */
+	private static CONTENTS_FILE_NAME: string = 'contents.json';
+	
+	/** The default content for the app. */
+	private static DEFAULT_CONTENT: string[] = ['clue1', 'clue2', 'clue3', 'image1', 'image2', 'image3', 'image4', 'image5'];
+	
+	/** The networking events for this app. */
+	private static EVENTS = {
+		
+		/** The networking event for requesting content. */
+		REQUEST_CONTENT: 'request_content',
+		
+		/** The networking event for sending content. */
+		CONTENT_INFORMATION: 'content_information'
+		
+	}
+	
+	/** The networking message entries for this app. */
+	private static MESSAGES = {
+		
+		/** The id of a client requesting a content list. */
+		REQUESTER: 'requester',
+		
+		/** The array of content items on the client. */
+		CONTENT_LIST: 'content_list',
+		
+		/** The id of the content item being transferred. */
+		CONTENT_NAME: 'content_name'
+		
+	}
+	
+	
+	//// Private Global Variables. ////
+	
+	/** Array for holding the list of content currently in the app. */
+	private currentContent: string[] = [];
+	
+	/** Flag for checking if the app has already checked for partners. */
+	private firstConnect: boolean = true;
+	
+	/** Object for storing all content definitions. */
+	private content: JSON;
+	
+	
 	//// Protected Methods. ////
 
 	/**
@@ -17,61 +65,101 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 	 */
 	protected addContents() {
 		
+		// Get self.
+		let self = this;
+		
 		// Establish app details.
 		this.appName = 'Proto-Mysteries';
 		
-		// Announce presence to server.
-		this.establishNetworking();
-		this.addTeacherControlListeners();
-		
-		// Establish network flick listener.
-		NetworkFlickManager.registerForNetworkFlick(this, function (objectReceived: JSON, ele: d3.Selection<any>, 
-			touchManager: TouchManager, networkflickManager: NetworkFlickManager) {
+		// Get the contents.
+		$.getJSON(this.rootPath + ProtomysteriesApp.CONTENTS_FILE_NAME, function(json) {
 			
-			//  Get if item text or an image.
-			let isText = document.getElementById(ele.attr('id')).classList.contains('is-text');			
+			// Store content.
+			self.content = json;
 			
-			// Add scale limits to newly arrived items.
-			if (isText) {
-				touchManager.applyScaleLimits(0.5, 2);				
-			} else {
-				touchManager.applyScaleLimits(0.3, 1.5);
-			}
+			// Announce presence to server.
+			self.establishNetworking(self.onClientListUpdate.bind(self));
+			self.addTeacherControlListeners();
+			
+			// Establish function to be called when sending network flicked elements.
+			let onSend = function(objectToSend: JSON, ele: d3.Selection<any>) {
 				
+				// Get name of sent content.
+				let name = ele.attr('name');
+				
+				// Remove name from current content.
+				self.currentContent.splice(self.currentContent.indexOf(name), 1);
+				
+				// Include name in transmitted message.
+				objectToSend[ProtomysteriesApp.MESSAGES.CONTENT_NAME] = name;
+				
+				// Return the modfied object to send.
+				return objectToSend;
+			};		
+			
+			// Establish function to be called when receiving network flicked elements.
+			let onReceive = 
+				function (objectReceived: JSON, ele: d3.Selection<any>, touchManager: TouchManager, networkflickManager: NetworkFlickManager) {
+				
+				//  Get if item text or an image.
+				let isText = document.getElementById(ele.attr('id')).classList.contains('is-text');			
+				
+				// Add scale limits to newly arrived items.
+				if (isText) {
+					touchManager.applyScaleLimits(0.5, 2);				
+				} else {
+					touchManager.applyScaleLimits(0.3, 1.5);
+				}
+				
+				// Add item name to current content list.
+				self.currentContent.push(objectReceived[ProtomysteriesApp.MESSAGES.CONTENT_NAME]);
+					
+			};	
+			
+			// Establish network flick listener.
+			NetworkFlickManager.registerForNetworkFlick(self, onReceive, onSend); 
+			
+			
+			// Add listener for content list request.
+			Networking.listenForMessage(ProtomysteriesApp.EVENTS.REQUEST_CONTENT, function(data) {
+				
+				// Get client making the request.
+				let requester = '/#' + data[ProtomysteriesApp.MESSAGES.REQUESTER];		
+				
+				// Send the current content list.						
+				let messageToSend = <JSON>{};
+				messageToSend[ProtomysteriesApp.MESSAGES.CONTENT_LIST] = self.currentContent;
+				Networking.sendMessageToSpecificClient(ProtomysteriesApp.EVENTS.CONTENT_INFORMATION, requester, messageToSend);
+				
+			});
+			
+			// Add listener for content list.
+			Networking.listenForMessage(ProtomysteriesApp.EVENTS.CONTENT_INFORMATION, function(data) {
+				
+				// Get content not on the other client.
+				let otherContent = <string[]>data[ProtomysteriesApp.MESSAGES.CONTENT_LIST];
+				for (let contentKey in self.content) {
+					if (otherContent.indexOf(contentKey) == -1) {
+						self.currentContent.push(contentKey);
+					}
+				}
+				
+				// Generate the content.
+				for (let contentId of self.currentContent) {
+					self.buildItem(contentId);					
+				}
+				
+			});
+			
+			// Get the title and add it.
+			for (let definitionKey in self.content) {
+				if (self.content[definitionKey]['content_type'] == 'title') {
+					self.buildItem(definitionKey);
+					break;
+				}
+			}
+			
 		});
-		
-		// Add title.
-		let textItem = new TextItem(this.svg, 'Can you work out what Mike should have to eat?', 500, 30, 'title', 'title-bg', 'title-text');
-		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, 75);
-		
-		// Text for clues.
-		let clueOneText = 'The new cook at school, Mrs Baker, has mixed up the trays with the children’s school dinners on.';
-		let clueTwoText = '"YUCK!" cried Ruby, making a face at the slice of pizza in front of her. "I can\'t stand pepperoni!"';
-		let clueThreeText = '"Don\'t look at me," moaned Jack. "I hate any food with cheese on it." At that, he pushed away his cheeseburger.';
-		let clueFourText = '"Hey, anybody want these chicken wings?" asked Grace. "I don\'t like anything with meat in it."';
-		let clueFiveText = 'Mike scooped up a spoonful of his yogurt and grumbled, "Everybody knows I\'m allergic to this stuff."';
-		let clueSixText = '"Well, yogurt is the only thing I like on the menu," replied Tanya. ' + 
-			'"And there\'s no way I\'m going to eat THIS!" At that, she poked her salad with a fork.';
-		
-		// Add clues.
-		this.addClue('clue1', 'clue', clueOneText, 260, 75);
-		this.addClue('clue2', 'clue', clueTwoText, 250, 75);
-		this.addClue('clue3', 'clue', clueThreeText, 250, 100);
-		this.addClue('clue4', 'clue', clueFourText, 275, 75);
-		this.addClue('clue5', 'clue', clueFiveText, 250, 100);
-		this.addClue('clue6', 'clue', clueSixText, 250, 125);
-
-		// Add images. 
-		this.addImage('image1', 'burger.png', 313, 201);
-		this.addImage('image2', 'fries.png', 242, 247);
-		this.addImage('image3', 'grace.png', 176, 180);
-		this.addImage('image4', 'jack.png', 158, 190);
-		this.addImage('image5', 'mike.png', 181, 210);
-		this.addImage('image6', 'pizza.png', 232, 204);
-		this.addImage('image7', 'ruby.png', 180, 200);
-		this.addImage('image8', 'salad.png', 319, 207);
-		this.addImage('image9', 'tanya.png', 180, 208);
-		this.addImage('image10', 'yogurt.png', 260, 278);
 		
 		// Signal app is ready.
 		this.ready();
@@ -79,18 +167,98 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 	}
 	
 	/**
+	 * Method for building an item from a content definition.
+	 * 
+	 * @param {string} id The id of the definition.
+	 */
+	private buildItem (id: string): void {		
+		
+		// Get definition.
+		let definition = this.content[id];
+		
+		// Check object type.
+		switch (definition['content_type']) {
+			case 'title': {
+				
+				// Add title.
+				let textItem = 
+					new TextItem(this.svg, definition['content'], definition['width'], definition['height'], 'title', 'title-bg', 'title-text');
+				Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, (definition['height'] * 2) + 5);
+				break;
+				
+			} 
+			case 'clue': {
+			
+				// Add a clue.
+				this.addClue(id, definition['content'], definition['width'], definition['height']);
+				break;
+			
+			} 
+			case 'image': {
+			
+				// Add an image.
+				this.addImage(id, definition['content'], definition['width'], definition['height']);
+				break;
+			
+			}
+		}
+				 
+	}
+	
+	/**
+	 * Function to be called when the client list is update to determine the content.
+	 */
+	private onClientListUpdate() {
+		
+		// Check that this the first client update.
+		if (this.firstConnect) {
+			
+			// Check number of partners.
+			if (Networking.clients[this.role][this.appName].length < 2) {
+			
+				// Establish default content.
+				for (let contentId of ProtomysteriesApp.DEFAULT_CONTENT) {
+					this.buildItem(contentId);			
+					this.currentContent.push(contentId);		
+				}
+				
+			} else {
+			
+				// Get partner.
+				for (let client of Networking.clients[this.role][this.appName]) {
+					if (client != Networking.clientId) {
+						
+						// Request content list from partner.
+						let messageToSend = <JSON>{};
+						messageToSend[ProtomysteriesApp.MESSAGES.REQUESTER] = Networking.clientId;
+						Networking.sendMessageToSpecificClient(ProtomysteriesApp.EVENTS.REQUEST_CONTENT, client, messageToSend);
+						break;
+						
+					}
+				}
+				
+			}
+		
+			// Switch flag to stop content being initialised again.
+			this.firstConnect = false;
+			
+		}
+		
+	}
+	
+	/**
 	 * Add a text item at a random rotation and scale in the centre of the screen.
 	 * 
 	 * @param {string} id The id to give the element.
-	 * @param {string} className The class prefix to give the elements of the text item.
 	 * @param {string} text The text to show in the clue.
 	 * @param {number} width The width of the clue.
 	 * @param {number} height The height of the clue.
 	 */
-	private addClue(id: string, className: string, text: string, width: number, height: number): void {
+	private addClue(id: string, text: string, width: number, height: number): void {
 		
 		// Create item.
-		let textItem = new TextItem(this.svg, text, width, height, id, className + '-bg', className + '-text');
+		let textItem = new TextItem(this.svg, text, width, height, id, 'clue-bg', 'clue-text');
+		textItem.asItem().attr('name', id);
 		
 		// Randomly place.
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
@@ -120,6 +288,7 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		// Create root node.
 		let rootNode = this.svg.append('g');
 		rootNode.attr('id', id);
+		rootNode.attr('name', id);
 		
 		// Add Image
 		let imageEle = rootNode.append('image');   

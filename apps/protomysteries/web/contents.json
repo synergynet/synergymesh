@@ -1,0 +1,104 @@
+{
+		"title": {
+			"content_type": "title",
+			"content": "Can you work out what Mike should have to eat?",
+			"width": 500,
+			"height": 30
+		},
+		"clue1": {
+			"content_type": "clue",
+			"content": "The new cook at school, Mrs Baker, has mixed up the trays with the children’s school dinners on.",
+			"width": 260,
+			"height": 75
+		},
+		"clue2": {
+			"content_type": "clue",
+			"content": "\"YUCK!\" cried Ruby, making a face at the slice of pizza in front of her. \"I can''t stand pepperoni!\"",
+			"width": 250,
+			"height": 75
+		},
+		"clue3": {
+			"content_type": "clue",
+			"content": "\"Don't look at me,\" moaned Jack. \"I hate any food with cheese on it.\" At that, he pushed away his cheeseburger.",
+			"width": 250,
+			"height": 100
+		},
+		"clue4": {
+			"content_type": "clue",
+			"content": "\"Hey, anybody want these chicken wings?\" asked Grace. \"I don't like anything with meat in it.\"",
+			"width": 275,
+			"height": 75
+		},
+		"clue5": {
+			"content_type": "clue",
+			"content": "Mike scooped up a spoonful of his yogurt and grumbled, \"Everybody knows I'm allergic to this stuff.\"",
+			"width": 250,
+			"height": 100
+		},
+		"clue6": {
+			"content_type": "clue",
+			"content": "\"Well, yogurt is the only thing I like on the menu,\" replied Tanya. And there's no way I'm going to eat THIS!\" At that, she poked her salad with a fork.",
+			"width": 250,
+			"height": 125
+		},
+		"image1": {
+			"content_type": "image",
+			"content": "burger.png",
+			"width": 313,
+			"height": 201
+		},
+		"image2": {
+			"content_type": "image",
+			"content": "fries.png",
+			"width": 242,
+			"height": 247
+		},
+		"image3": {
+			"content_type": "image",
+			"content": "grace.png",
+			"width": 176,
+			"height": 180
+		},
+		"image4": {
+			"content_type": "image",
+			"content": "jack.png",
+			"width": 158,
+			"height": 190
+		},
+		"image5": {
+			"content_type": "image",
+			"content": "mike.png",
+			"width": 181,
+			"height": 210
+		},
+		"image6": {
+			"content_type": "image",
+			"content": "pizza.png",
+			"width": 232,
+			"height": 204
+		},
+		"image7": {
+			"content_type": "image",
+			"content": "ruby.png",
+			"width": 180,
+			"height": 200
+		},
+		"image8": {
+			"content_type": "image",
+			"content": "salad.png",
+			"width": 319,
+			"height": 207
+		},
+		"image9": {
+			"content_type": "image",
+			"content": "tanya.png",
+			"width": 180,
+			"height": 208
+		},
+		"image10": {
+			"content_type": "image",
+			"content": "yogurt.png",
+			"width": 260,
+			"height": 278
+		}
+	}
