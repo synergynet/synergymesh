@@ -1,5 +1,6 @@
 import {Networking} from 'common/src/utils/networking';
 import {NetworkFlickManager} from 'common/src/listeners/network_flick_manager';
+import {QueryStrings} from 'common/src/utils/query_strings';
 import {Random} from 'common/src/utils/random';
 import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
@@ -16,9 +17,6 @@ export class MysteriesApp extends SynergyMeshApp {
 	
 	/** The directory holding the files defining content for the app. */
 	private static CONTENTS_DIR_NAME: string = 'contents/';
-	
-	/** The query in the url to define the content. */
-	private static CONTENT_QUERY: string = 'content=';
 	
 	/** The networking events for this app. */
 	private static EVENTS = {
@@ -75,10 +73,18 @@ export class MysteriesApp extends SynergyMeshApp {
 		let self = this;
 		
 		// Establish app details.
-		this.appName = 'Proto-Mysteries';
+		this.appName = 'Mysteries';
 		
-		// Get the content target.
-		let targetContent = window.location.href.split(MysteriesApp.CONTENT_QUERY)[1];
+		// Get the content target and mystery type from the query string.
+		let queryStrings = QueryStrings.getQueryStrings();
+		let targetContent = 'dinner_disaster';
+		let mode = 'standalone';
+		if ('content' in queryStrings) {
+			targetContent = queryStrings['content'];
+		}
+		if ('mode' in queryStrings) {
+			mode = queryStrings['mode'];
+		}
 		
 		// Get the contents.
 		$.getJSON(this.rootPath + MysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
@@ -86,90 +92,103 @@ export class MysteriesApp extends SynergyMeshApp {
 			// Store content.
 			self.content = json;
 			
-			// Announce presence to server.
-			self.establishNetworking(self.onClientListUpdate.bind(self));
-			self.addTeacherControlListeners();
-			
-			// Establish function to be called when sending network flicked elements.
-			let onSend = function(objectToSend: JSON, ele: d3.Selection<any>) {
+			// Check whether to run standalone or networked.
+			if (mode == 'networked') {	
 				
-				// Get name of sent content.
-				let name = ele.attr('name');
+				// Announce presence to server.
+				self.establishNetworking(self.onClientListUpdate.bind(self));
+				self.addTeacherControlListeners();
 				
-				// Remove name from current content.
-				self.currentContent.splice(self.currentContent.indexOf(name), 1);
-				
-				// Include name in transmitted message.
-				objectToSend[MysteriesApp.MESSAGES.CONTENT_NAME] = name;
-				
-				// Return the modfied object to send.
-				return objectToSend;
-			};		
-			
-			// Establish function to be called when receiving network flicked elements.
-			let onReceive = 
-				function (objectReceived: JSON, ele: d3.Selection<any>, touchManager: TouchManager, networkflickManager: NetworkFlickManager) {
-				
-				//  Get if item text or an image.
-				let isText = document.getElementById(ele.attr('id')).classList.contains('is-text');			
-				
-				// Add scale limits to newly arrived items.
-				if (isText) {
-					touchManager.applyScaleLimits(0.5, 2);				
-				} else {
-					touchManager.applyScaleLimits(0.3, 1.5);
-				}
-				
-				// Add item name to current content list.
-				self.currentContent.push(objectReceived[MysteriesApp.MESSAGES.CONTENT_NAME]);
+				// Establish function to be called when sending network flicked elements.
+				let onSend = function(objectToSend: JSON, ele: d3.Selection<any>) {
 					
-			};	
-			
-			// Establish network flick listener.
-			NetworkFlickManager.registerForNetworkFlick(self, onReceive, onSend); 
-			
-			
-			// Add listener for content list request.
-			Networking.listenForMessage(MysteriesApp.EVENTS.REQUEST_CONTENT, function(data) {
+					// Get name of sent content.
+					let name = ele.attr('name');
+					
+					// Remove name from current content.
+					self.currentContent.splice(self.currentContent.indexOf(name), 1);
+					
+					// Include name in transmitted message.
+					objectToSend[MysteriesApp.MESSAGES.CONTENT_NAME] = name;
+					
+					// Return the modfied object to send.
+					return objectToSend;
+				};		
 				
-				// Get client making the request.
-				let requester = '/#' + data[MysteriesApp.MESSAGES.REQUESTER];		
-				
-				// Send the current content list.						
-				let messageToSend = <JSON>{};
-				messageToSend[MysteriesApp.MESSAGES.CONTENT_LIST] = self.currentContent;
-				Networking.sendMessageToSpecificClient(MysteriesApp.EVENTS.CONTENT_INFORMATION, requester, messageToSend);
-				
-			});
-			
-			// Add listener for content list.
-			Networking.listenForMessage(MysteriesApp.EVENTS.CONTENT_INFORMATION, function(data) {
-				
-				// Get content not on the other client.
-				let otherContent = <string[]>data[MysteriesApp.MESSAGES.CONTENT_LIST];
-				for (let contentKey in self.content) {
-					if (otherContent.indexOf(contentKey) == -1) {
-						self.currentContent.push(contentKey);
+				// Establish function to be called when receiving network flicked elements.
+				let onReceive = 
+					function (objectReceived: JSON, ele: d3.Selection<any>, touchManager: TouchManager, networkflickManager: NetworkFlickManager) {
+					
+					//  Get if item text or an image.
+					let isText = document.getElementById(ele.attr('id')).classList.contains('is-text');			
+					
+					// Add scale limits to newly arrived items.
+					if (isText) {
+						touchManager.applyScaleLimits(0.5, 2);				
+					} else {
+						touchManager.applyScaleLimits(0.3, 1.5);
 					}
+					
+					// Add item name to current content list.
+					self.currentContent.push(objectReceived[MysteriesApp.MESSAGES.CONTENT_NAME]);
+						
+				};	
+				
+				// Establish network flick listener.
+				NetworkFlickManager.registerForNetworkFlick(self, onReceive, onSend); 
+				
+				
+				// Add listener for content list request.
+				Networking.listenForMessage(MysteriesApp.EVENTS.REQUEST_CONTENT, function(data) {
+					
+					// Get client making the request.
+					let requester = '/#' + data[MysteriesApp.MESSAGES.REQUESTER];		
+					
+					// Send the current content list.						
+					let messageToSend = <JSON>{};
+					messageToSend[MysteriesApp.MESSAGES.CONTENT_LIST] = self.currentContent;
+					Networking.sendMessageToSpecificClient(MysteriesApp.EVENTS.CONTENT_INFORMATION, requester, messageToSend);
+					
+				});
+				
+				// Add listener for content list.
+				Networking.listenForMessage(MysteriesApp.EVENTS.CONTENT_INFORMATION, function(data) {
+					
+					// Get content not on the other client.
+					let otherContent = <string[]>data[MysteriesApp.MESSAGES.CONTENT_LIST];
+					for (let contentKey in self.content) {
+						if (otherContent.indexOf(contentKey) == -1) {
+							self.currentContent.push(contentKey);
+						}
+					}
+					
+					// Generate the content.
+					for (let contentId of self.currentContent) {
+						self.buildItem(contentId);					
+					}
+					
+				});
+				
+			} else {
+				
+				// Loop through and add all contents.
+				for (let contentKey of Object.keys(self.content)) {
+					self.buildItem(contentKey);
 				}
 				
-				// Generate the content.
-				for (let contentId of self.currentContent) {
-					self.buildItem(contentId);					
-				}
+			}
 				
-			});
-			
 			// Get the title and add it.
 			for (let definitionKey in self.content) {
 				let def = self.content[definitionKey];
 				if (def['content_type'] == 'title') {
 					let textItem = new TextItem(self.svg, def['content'], MysteriesApp.MAX_WIDTH_TITLE, 'title', 'title-bg', 'title-text');
 					Transformations.setTranslation(textItem.asItem(), self.vizWidth/2, (textItem.getHeight() * 2) + 5);
+					Transformations.setScale(textItem.asItem(), 1.2);
 					break;
 				}
 			}
-			
+				
 		});
 		
 		// Signal app is ready.
