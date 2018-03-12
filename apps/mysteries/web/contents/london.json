@@ -1,0 +1,102 @@
+{
+	"title": {
+		"content_type": "title",
+		"content": "Why did 16 people die in the Great Fire of London?",
+		"default": true
+	},
+	"clue1": {
+		"content_type": "clue",
+		"content": "About 13,200 houses, nearly 90 parish churches, and nearly 50 livery company halls were burnt down.",
+		"default": true
+	},
+	"clue2": {
+		"content_type": "clue",
+		"content": "The strong easterly wind kept the fire burning.",
+		"default": true
+	},
+	"clue3": {
+		"content_type": "clue",
+		"content": "The fire began at night when everybody was asleep.",
+		"default": true
+	},
+	"clue4": {
+		"content_type": "clue",
+		"content": "Houses were pulled down to stop the fire spreading, but wood and rubbish were left lying in the street.",
+		"default": true
+	},
+	"clue5": {
+		"content_type": "clue",
+		"content": "The buckets were made of wood and leather.",
+		"default": true
+	},
+	"clue6": {
+		"content_type": "clue",
+		"content": "The fire started in Pudding Lane.",
+		"default": true
+	},
+	"clue7": {
+		"content_type": "clue",
+		"content": "Sparks from the Baker's burning house fell on hay and straw at the Star Inn.",
+		"default": true
+	},
+	"clue8": {
+		"content_type": "clue",
+		"content": "The Baker lived in Pudding Lane.",
+		"default": true
+	},
+	"clue9": {
+		"content_type": "clue",
+		"content": "Riverfront warehouses were bursting full of oil, tallow and other combustible goods.",
+		"default": true
+	},
+	"clue10": {
+		"content_type": "clue",
+		"content": "The Baker forgot to turn off his oven.",
+		"default": true
+	},
+	"clue11": {
+		"content_type": "clue",
+		"content": "The fire destroyed about four-fifths of the city, or more than 430 acres.",
+		"default": false
+	},
+	"clue12": {
+		"content_type": "clue",
+		"content": "The buildings caught fire very easily.",
+		"default": false
+	},
+	"clue13": {
+		"content_type": "clue",
+		"content": "On Wednesday night the wind hushed and the fire burned gently.",
+		"default": false
+	},
+	"clue14": {
+		"content_type": "clue",
+		"content": "Lots of people spent time saving their things instead of trying to stop the fire spreading.",
+		"default": false
+	},
+	"clue15": {
+		"content_type": "clue",
+		"content": "Hundreds of rats lived in Pudding Lane.",
+		"default": false
+	},
+	"clue16": {
+		"content_type": "clue",
+		"content": "The people tried to put the fire out with buckets of water.",
+		"default": false
+	},
+	"clue17": {
+		"content_type": "clue",
+		"content": "The Baker's maid was the first victim of the Great Fire.",
+		"default": false
+	},
+	"clue18": {
+		"content_type": "clue",
+		"content": "The Baker said that he thought he had put out his oven, but embers from the fire set light to nearby firewood.",
+		"default": false
+	},
+	"clue19": {
+		"content_type": "clue",
+		"content": "Thomas Farrinor was Baker to King Charles II",
+		"default": false
+	}
+}
