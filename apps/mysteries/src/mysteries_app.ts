@@ -5,13 +5,11 @@ import {SynergyMeshApp} from 'common/src/synergymesh_app';
 import {TextItem} from 'common/src/items/text_item';
 import {TouchManager} from 'common/src/listeners/touch_manager';
 import {Transformations} from 'common/src/utils/transformations';
-
-// TODO Restructure Protomysteries into Mysteries.
   
  /**
- * Protomysteries student app.
+ * Mysteries student app.
  */
-export class ProtomysteriesApp extends SynergyMeshApp {
+export class MysteriesApp extends SynergyMeshApp {
 	
 	
 	//// Private Constants. ////
@@ -74,10 +72,10 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		this.appName = 'Proto-Mysteries';
 		
 		// Get the content target.
-		let targetContent = window.location.href.split(ProtomysteriesApp.CONTENT_QUERY)[1];
+		let targetContent = window.location.href.split(MysteriesApp.CONTENT_QUERY)[1];
 		
 		// Get the contents.
-		$.getJSON(this.rootPath + ProtomysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
+		$.getJSON(this.rootPath + MysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
 			
 			// Store content.
 			self.content = json;
@@ -96,7 +94,7 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 				self.currentContent.splice(self.currentContent.indexOf(name), 1);
 				
 				// Include name in transmitted message.
-				objectToSend[ProtomysteriesApp.MESSAGES.CONTENT_NAME] = name;
+				objectToSend[MysteriesApp.MESSAGES.CONTENT_NAME] = name;
 				
 				// Return the modfied object to send.
 				return objectToSend;
@@ -117,7 +115,7 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 				}
 				
 				// Add item name to current content list.
-				self.currentContent.push(objectReceived[ProtomysteriesApp.MESSAGES.CONTENT_NAME]);
+				self.currentContent.push(objectReceived[MysteriesApp.MESSAGES.CONTENT_NAME]);
 					
 			};	
 			
@@ -126,23 +124,23 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 			
 			
 			// Add listener for content list request.
-			Networking.listenForMessage(ProtomysteriesApp.EVENTS.REQUEST_CONTENT, function(data) {
+			Networking.listenForMessage(MysteriesApp.EVENTS.REQUEST_CONTENT, function(data) {
 				
 				// Get client making the request.
-				let requester = '/#' + data[ProtomysteriesApp.MESSAGES.REQUESTER];		
+				let requester = '/#' + data[MysteriesApp.MESSAGES.REQUESTER];		
 				
 				// Send the current content list.						
 				let messageToSend = <JSON>{};
-				messageToSend[ProtomysteriesApp.MESSAGES.CONTENT_LIST] = self.currentContent;
-				Networking.sendMessageToSpecificClient(ProtomysteriesApp.EVENTS.CONTENT_INFORMATION, requester, messageToSend);
+				messageToSend[MysteriesApp.MESSAGES.CONTENT_LIST] = self.currentContent;
+				Networking.sendMessageToSpecificClient(MysteriesApp.EVENTS.CONTENT_INFORMATION, requester, messageToSend);
 				
 			});
 			
 			// Add listener for content list.
-			Networking.listenForMessage(ProtomysteriesApp.EVENTS.CONTENT_INFORMATION, function(data) {
+			Networking.listenForMessage(MysteriesApp.EVENTS.CONTENT_INFORMATION, function(data) {
 				
 				// Get content not on the other client.
-				let otherContent = <string[]>data[ProtomysteriesApp.MESSAGES.CONTENT_LIST];
+				let otherContent = <string[]>data[MysteriesApp.MESSAGES.CONTENT_LIST];
 				for (let contentKey in self.content) {
 					if (otherContent.indexOf(contentKey) == -1) {
 						self.currentContent.push(contentKey);
@@ -237,8 +235,8 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 						
 						// Request content list from partner.
 						let messageToSend = <JSON>{};
-						messageToSend[ProtomysteriesApp.MESSAGES.REQUESTER] = Networking.clientId;
-						Networking.sendMessageToSpecificClient(ProtomysteriesApp.EVENTS.REQUEST_CONTENT, client, messageToSend);
+						messageToSend[MysteriesApp.MESSAGES.REQUESTER] = Networking.clientId;
+						Networking.sendMessageToSpecificClient(MysteriesApp.EVENTS.REQUEST_CONTENT, client, messageToSend);
 						break;
 						
 					}
