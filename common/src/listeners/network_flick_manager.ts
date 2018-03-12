@@ -49,6 +49,9 @@ export class NetworkFlickManager extends FlickManager {
 	/** Function to be called when transferring an item. */
 	private static onSend: (objectToSend: JSON, ele: d3.Selection<any>) => JSON = null;
 	
+	/** Flag to indicate that the network flick functionality has been enabled. */
+	private static enabled: boolean = false;
+	
 	
 	//// Private Global Variables. ////
 	
@@ -73,6 +76,9 @@ export class NetworkFlickManager extends FlickManager {
 		onReceive: (objectReceived: JSON, ele: d3.Selection<any>, touchManager: 
 		TouchManager, networkflickManager: NetworkFlickManager) => void = null, 
 		onSend: (objectToSend: JSON, ele: d3.Selection<any>)  => JSON = null) {
+		
+		// Set network flick enabled.
+		NetworkFlickManager.enabled = true;
 		
 		// Store on send function.
 		if (onSend != null) {
@@ -145,7 +151,7 @@ export class NetworkFlickManager extends FlickManager {
 		for (let app in Networking.clients[Roles.STUDENT]) {
 			studentCount+= Networking.clients[Roles.STUDENT][app].length;
 		}
-		let validTarget = studentCount > 1;
+		let validTarget = studentCount > 1 && NetworkFlickManager.enabled;
 		
 		// Check if a valid target and not a new arrival.
 		if (validTarget && !this.newArrival) {
