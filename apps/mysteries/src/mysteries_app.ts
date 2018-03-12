@@ -31,6 +31,12 @@ export class MysteriesApp extends SynergyMeshApp {
 		
 	}
 	
+	/** The maximum width of the clues. */
+	private static MAX_WIDTH_CLUE: number = 275;
+	
+	/** The maximum width of the clues. */
+	private static MAX_WIDTH_TITLE: number = 500
+	
 	/** The networking message entries for this app. */
 	private static MESSAGES = {
 		
@@ -156,8 +162,10 @@ export class MysteriesApp extends SynergyMeshApp {
 			
 			// Get the title and add it.
 			for (let definitionKey in self.content) {
-				if (self.content[definitionKey]['content_type'] == 'title') {
-					self.buildItem(definitionKey);
+				let def = self.content[definitionKey];
+				if (def['content_type'] == 'title') {
+					let textItem = new TextItem(self.svg, def['content'], MysteriesApp.MAX_WIDTH_TITLE, 'title', 'title-bg', 'title-text');
+					Transformations.setTranslation(textItem.asItem(), self.vizWidth/2, (textItem.getHeight() * 2) + 5);
 					break;
 				}
 			}
@@ -181,19 +189,10 @@ export class MysteriesApp extends SynergyMeshApp {
 		
 		// Check object type.
 		switch (definition['content_type']) {
-			case 'title': {
-				
-				// Add title.
-				let textItem = 
-					new TextItem(this.svg, definition['content'], definition['width'], definition['height'], 'title', 'title-bg', 'title-text');
-				Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, (definition['height'] * 2) + 5);
-				break;
-				
-			} 
 			case 'clue': {
 			
 				// Add a clue.
-				this.addClue(id, definition['content'], definition['width'], definition['height']);
+				this.addClue(id, definition['content']);
 				break;
 			
 			} 
@@ -256,13 +255,11 @@ export class MysteriesApp extends SynergyMeshApp {
 	 * 
 	 * @param {string} id The id to give the element.
 	 * @param {string} text The text to show in the clue.
-	 * @param {number} width The width of the clue.
-	 * @param {number} height The height of the clue.
 	 */
-	private addClue(id: string, text: string, width: number, height: number): void {
+	private addClue(id: string, text: string): void {
 		
 		// Create item.
-		let textItem = new TextItem(this.svg, text, width, height, id, 'clue-bg', 'clue-text');
+		let textItem = new TextItem(this.svg, text, MysteriesApp.MAX_WIDTH_CLUE, id, 'clue-bg', 'clue-text');
 		textItem.asItem().attr('name', id);
 		
 		// Randomly place.
