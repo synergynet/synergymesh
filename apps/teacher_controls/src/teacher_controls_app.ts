@@ -23,7 +23,7 @@ export class TeacherControlsApp extends SynergyMeshApp {
 		this.establishNetworking();
 		
 		// Add Freeze button.
-		let freezeButton = new TextItem(this.svg, 'Freeze All Student Devices', 225, 25, 'freeze-button', 'freeze-bg', 'freeze-text');
+		let freezeButton = new TextItem(this.svg, 'Freeze All Student Devices', 225, 'freeze-button', 'freeze-bg', 'freeze-text');
 		Transformations.setTranslation(freezeButton.asItem(), this.vizWidth/2, (this.vizHeight/2) - 100);
 		freezeButton.asItem().on('mousedown', function() {
 			
@@ -33,7 +33,7 @@ export class TeacherControlsApp extends SynergyMeshApp {
 		});
 		
 		// Add Unfreeze button.
-		let unfreezeButton = new TextItem(this.svg, 'Unfreeze All Student Devices', 225, 25, 'freeze-button', 'freeze-bg', 'freeze-text');
+		let unfreezeButton = new TextItem(this.svg, 'Unfreeze All Student Devices', 225, 'freeze-button', 'freeze-bg', 'freeze-text');
 		Transformations.setTranslation(unfreezeButton.asItem(), this.vizWidth/2, (this.vizHeight/2) + 100);
 		unfreezeButton.asItem().on('mousedown', function() {
 			

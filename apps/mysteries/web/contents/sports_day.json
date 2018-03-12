@@ -1,0 +1,32 @@
+{
+	"title": {
+		"content_type": "title",
+		"content": "Can you sort these clues out so all of the children are happy and work out who is going to the best partner for Steve's partner in the three-legged race?",
+		"default": true
+	},
+	"clue1": {
+		"content_type": "clue",
+		"content": "\"I've hurt my hand,\" said Joe, \"I can't go in the egg and spoon race now!\"",
+		"default": true
+	},
+	"clue2": {
+		"content_type": "clue",
+		"content": "\"Why am I in the sprint?\" Asked Ollie, \"My hand is steady as a rock!\"",
+		"default": true
+	},
+	"clue3": {
+		"content_type": "clue",
+		"content": "\"What is a skipping race anyway?\" Wailed Pete; \"I'm the fastest runner in the class!\"",
+		"default": true
+	},
+	"clue4": {
+		"content_type": "clue",
+		"content": "\"The sack race is just stupid,\" Bella complained. \"The bags feel awful.\"",
+		"default": false
+	},
+	"clue5": {
+		"content_type": "clue",
+		"content": "Maddy was sad when the teacher said she had been picked for the three-legged race. She thought she was good at jumping.",
+		"default": false
+	}
+}

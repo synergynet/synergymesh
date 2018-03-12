@@ -1,0 +1,77 @@
+{
+	"title": {
+		"content_type": "title",
+		"content": "If Judith puts all of her shopping in one bag will it be strong enough?",
+		"default": true
+	},
+	"clue1": {
+		"content_type": "clue",
+		"content": "Judith has a small brown cat that she likes to play with.",
+		"default": true
+	},
+	"clue2": {
+		"content_type": "clue",
+		"content": "The cat is called Candy.",
+		"default": true
+	},
+	"clue3": {
+		"content_type": "clue",
+		"content": "One day, just before it started to rain, Judith goes to Pete’s Pet shop to buy some cat food.",
+		"default": true
+	},
+	"clue4": {
+		"content_type": "clue",
+		"content": "On the way to Pete’s Pet shop Judith passed Bob’s bakery and a train station.",
+		"default": true
+	},
+	"clue5": {
+		"content_type": "clue",
+		"content": "When she got to Pete’s Pet shop there was a long queue at the checkout.",
+		"default": true
+	},
+	"clue6": {
+		"content_type": "clue",
+		"content": "Judith buys 2 packs of chunky rabbit cat food.",
+		"default": true
+	},
+	"clue7": {
+		"content_type": "clue",
+		"content": "There is a special offer this week, dog food tins are 500g for the price of 250g.",
+		"default": true
+	},
+	"clue8": {
+		"content_type": "clue",
+		"content": "A pack of cat food costs £5.",
+		"default": false
+	},
+	"clue9": {
+		"content_type": "clue",
+		"content": "Each pack of cat food has 4 tins.",
+		"default": false
+	},
+	"clue10": {
+		"content_type": "clue",
+		"content": "The tins in the pack are very heavy. Each tin of cat food weighs 250g.",
+		"default": false
+	},
+	"clue11": {
+		"content_type": "clue",
+		"content": "Finally, Judith gets to the front of the queue and pays with the money her mum gave her.",
+		"default": false
+	},
+	"clue12": {
+		"content_type": "clue",
+		"content": "The shop has very thin plastic carrier bags.",
+		"default": false
+	},
+	"clue13": {
+		"content_type": "clue",
+		"content": "Each carrier bag can hold 1kg.",
+		"default": false
+	},
+	"clue14": {
+		"content_type": "clue",
+		"content": "She remembers that there are 1000 grams in a kilogramme",
+		"default": false
+	}
+}
