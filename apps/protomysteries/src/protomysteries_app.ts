@@ -20,8 +20,36 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 	/** The default content for the app. */
 	private static DEFAULT_CONTENT: string[] = ['clue1', 'clue2', 'clue3', 'image1', 'image2', 'image3', 'image4', 'image5'];
 	
+	/** The networking events for this app. */
+	private static EVENTS = {
+		
+		/** The networking event for requesting content. */
+		REQUEST_CONTENT: 'request_content',
+		
+		/** The networking event for sending content. */
+		CONTENT_INFORMATION: 'content_information'
+		
+	}
+	
+	/** The networking message entries for this app. */
+	private static MESSAGES = {
+		
+		/** The id of a client requesting a content list. */
+		REQUESTER: 'requester',
+		
+		/** The array of content items on the client. */
+		CONTENT_LIST: 'content_list',
+		
+		/** The id of the content item being transferred. */
+		CONTENT_NAME: 'content_name'
+		
+	}
+	
 	
 	//// Private Global Variables. ////
+	
+	/** Array for holding the list of content currently in the app. */
+	private currentContent: string[] = [];
 	
 	/** Flag for checking if the app has already checked for partners. */
 	private firstConnect: boolean = true;
@@ -53,9 +81,25 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 			self.establishNetworking(self.onClientListUpdate.bind(self));
 			self.addTeacherControlListeners();
 			
-			// Establish network flick listener.
-			NetworkFlickManager.registerForNetworkFlick(self, function (objectReceived: JSON, ele: d3.Selection<any>, 
-				touchManager: TouchManager, networkflickManager: NetworkFlickManager) {
+			// Establish function to be called when sending network flicked elements.
+			let onSend = function(objectToSend: JSON, ele: d3.Selection<any>) {
+				
+				// Get name of sent content.
+				let name = ele.attr('name');
+				
+				// Remove name from current content.
+				self.currentContent.splice(self.currentContent.indexOf(name), 1);
+				
+				// Include name in transmitted message.
+				objectToSend[ProtomysteriesApp.MESSAGES.CONTENT_NAME] = name;
+				
+				// Return the modfied object to send.
+				return objectToSend;
+			};		
+			
+			// Establish function to be called when receiving network flicked elements.
+			let onReceive = 
+				function (objectReceived: JSON, ele: d3.Selection<any>, touchManager: TouchManager, networkflickManager: NetworkFlickManager) {
 				
 				//  Get if item text or an image.
 				let isText = document.getElementById(ele.attr('id')).classList.contains('is-text');			
@@ -66,7 +110,45 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 				} else {
 					touchManager.applyScaleLimits(0.3, 1.5);
 				}
+				
+				// Add item name to current content list.
+				self.currentContent.push(objectReceived[ProtomysteriesApp.MESSAGES.CONTENT_NAME]);
 					
+			};	
+			
+			// Establish network flick listener.
+			NetworkFlickManager.registerForNetworkFlick(self, onReceive, onSend); 
+			
+			
+			// Add listener for content list request.
+			Networking.listenForMessage(ProtomysteriesApp.EVENTS.REQUEST_CONTENT, function(data) {
+				
+				// Get client making the request.
+				let requester = '/#' + data[ProtomysteriesApp.MESSAGES.REQUESTER];		
+				
+				// Send the current content list.						
+				let messageToSend = <JSON>{};
+				messageToSend[ProtomysteriesApp.MESSAGES.CONTENT_LIST] = self.currentContent;
+				Networking.sendMessageToSpecificClient(ProtomysteriesApp.EVENTS.CONTENT_INFORMATION, requester, messageToSend);
+				
+			});
+			
+			// Add listener for content list.
+			Networking.listenForMessage(ProtomysteriesApp.EVENTS.CONTENT_INFORMATION, function(data) {
+				
+				// Get content not on the other client.
+				let otherContent = <string[]>data[ProtomysteriesApp.MESSAGES.CONTENT_LIST];
+				for (let contentKey in self.content) {
+					if (otherContent.indexOf(contentKey) == -1) {
+						self.currentContent.push(contentKey);
+					}
+				}
+				
+				// Generate the content.
+				for (let contentId of self.currentContent) {
+					self.buildItem(contentId);					
+				}
+				
 			});
 			
 			// Get the title and add it.
@@ -136,12 +218,24 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 			
 				// Establish default content.
 				for (let contentId of ProtomysteriesApp.DEFAULT_CONTENT) {
-					this.buildItem(contentId);					
+					this.buildItem(contentId);			
+					this.currentContent.push(contentId);		
 				}
 				
 			} else {
 			
-				// TODO Request content list from partner.
+				// Get partner.
+				for (let client of Networking.clients[this.role][this.appName]) {
+					if (client != Networking.clientId) {
+						
+						// Request content list from partner.
+						let messageToSend = <JSON>{};
+						messageToSend[ProtomysteriesApp.MESSAGES.REQUESTER] = Networking.clientId;
+						Networking.sendMessageToSpecificClient(ProtomysteriesApp.EVENTS.REQUEST_CONTENT, client, messageToSend);
+						break;
+						
+					}
+				}
 				
 			}
 		
@@ -164,6 +258,7 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		
 		// Create item.
 		let textItem = new TextItem(this.svg, text, width, height, id, 'clue-bg', 'clue-text');
+		textItem.asItem().attr('name', id);
 		
 		// Randomly place.
 		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, this.vizHeight/2);
@@ -193,6 +288,7 @@ export class ProtomysteriesApp extends SynergyMeshApp {
 		// Create root node.
 		let rootNode = this.svg.append('g');
 		rootNode.attr('id', id);
+		rootNode.attr('name', id);
 		
 		// Add Image
 		let imageEle = rootNode.append('image');   

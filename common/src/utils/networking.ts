@@ -61,6 +61,9 @@ export class Networking {
 	
 	//// Public Static Variables. ////
 	
+	/** The Id of this client. */
+	public static clientId: string;
+	
 	/** Multi-dimensional array of clients currently connected to the same session. */
 	public static clients = [];	
 	
@@ -109,6 +112,9 @@ export class Networking {
 			
 			// Listen for the clients list being updated.
 			Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message) {
+				
+				// Update this client's Id.
+				Networking.clientId = Networking.socket.id;
 				
 				// Update client list.
 				Networking.clients = message[Networking.MESSAGE.CLIENTS];
