@@ -10,11 +10,12 @@ Config.getConfigOnServer();
 let server = require('http').createServer();
 
 // Set up Socket.
-let io: SocketIO.Server = require('socket.io')(server);
+let io: SocketIO.Server = require('socket.io').listen(server);
 
 // Start server running on port.
+let host = Config.getConfigValue(Config.SERVER_HOST).replace('http://', '').replace('https://', '');
 let port = Config.getConfigValue(Config.SERVER_PORT);
-server.listen(port, function () {
+server.listen(port, host, function () {
   console.log('Server listening at port ' + port);
 });
 
