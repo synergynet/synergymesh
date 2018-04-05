@@ -15,10 +15,10 @@ export class CommonElements {
 	/** The id of the field to get the session id from for networked apps. */
 	public static SESSION_INPUT: string = 'session_input';
 	
-	/** The id of the div prompting the session input field for networked apps. */
-	public static SESSION_PROMPT: string = 'session_prompt';
-	
 	/** The id of the button to start the app from. */
 	public static START_BUTTON: string = 'start_app_button';
+	
+	/** The id of the div containing the controls for starting a SynergyMesh app. */
+	public static SYNERGYMESH_CONTROLS: string = 'synergymesh_controls';
 
 }  

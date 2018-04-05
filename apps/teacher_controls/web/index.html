@@ -19,13 +19,20 @@
 		<!-- Create the element that the script will place the generated app svg into. -->
 		<div id="synergymesh-app"></div>
 		
-		<!-- Input field for setting text ID. -->
-		<div id='session_prompt'>Session ID: </div>
-		<input id="session_input" type="text" autofocus/>
-
-		<!-- Add button to start the app-->
-		<div class="start_app_button_wrapper">
-			<button id="start_app_button">Start App</button>
+		<!-- Controls container. -->		
+		<div id="synergymesh_controls">
+		
+			<!--  Add controls for getting session ID. -->
+			<div class="synergymesh_prompt">SESSION ID: </div>
+			<input class="synergymesh_text_input" id="session_input" type="text" autofocus/>
+			
+			<!--  Add spacer. -->
+			<div class="synergymesh_spacer"></div>
+			<div class="synergymesh_spacer"></div>
+	
+			<!-- Add button to start the app-->
+			<button class="synergymesh_button" id="start_app_button">START APP</button>
+		
 		</div>
 		
 		<!-- Add script to prepare the app-->

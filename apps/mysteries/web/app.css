@@ -30,30 +30,3 @@
 	font-family: sans-serif;
 	text-align: center;
 }
-
-#mystery_controls {
-	margin-left: auto;
-    position: absolute;
-    top: calc(50% + 75px);
-    left: calc(50% - 225px);
-}
-
-.mystery_prompt {
-	color: #FFFFFF;
-	font-family: sans-serif;
-	font-size: 16pt;
-	width: 175px;
-	height: 50px;
-	display: inline-block;
-	text-align: right;
-}
-
-.mystery_select {
-	width: 325px;
-    border-radius:6px;
-	border:2px solid #FFFFFF;
-	background: #000000;	
-	color: #FFFFFF;
-	font-family: sans-serif;
-	font-size: 16pt;
-}
