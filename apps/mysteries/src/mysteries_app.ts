@@ -86,9 +86,6 @@ export class MysteriesApp extends SynergyMeshApp {
 		localStorage['mystery_selector'] = targetContent;
 		localStorage['mystery_mode'] = mysteryMode;
 		
-		// Hide the mystery controls.
-		document.getElementById('mystery_controls').style.display = 'none';
-		
 		// Get the contents.
 		$.getJSON(this.rootPath + MysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
 			

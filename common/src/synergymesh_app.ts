@@ -10,8 +10,6 @@ import {Roles} from 'common/src/constants/roles';
  */
 export abstract class SynergyMeshApp {	
 
-	// TODO Change to allow zooming initially - then disable zooming and reset to 1 zoom on app start.
-
 	
 	//// Private Constants. ////
 	
@@ -70,10 +68,6 @@ export abstract class SynergyMeshApp {
 	
 		// Run any pre-start functions.
 		this.preStart();
-		
-		// Enable controls.
-		$('#session_input').prop('disabled', false);
-		$('#start_app_button').prop('disabled', false);
 	
 		// Get inital display dimensions.
 		this.vizHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, screen.height|| 0);
@@ -168,14 +162,10 @@ export abstract class SynergyMeshApp {
 			this.sessionId = input;
 			localStorage[SynergyMeshApp.SESSION_ID_STORE_KEY] = input;
 			
-			// Hide session input and prompt.
-			document.getElementById(CommonElements.SESSION_PROMPT).hidden = true;;
-			sessionInput.hidden = true;
-			
 		}
 		
 		// Hide elements.
-		startButton.hidden = true;
+		document.getElementById(CommonElements.SYNERGYMESH_CONTROLS).hidden = true;
 		
 		// Start app.
 		this.startAppEnvironment();	
