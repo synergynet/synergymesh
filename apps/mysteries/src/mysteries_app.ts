@@ -82,14 +82,9 @@ export class MysteriesApp extends SynergyMeshApp {
 		let mysteryModeSelector = <HTMLInputElement>document.getElementById('mystery_mode');
 		let mysteryMode = mysteryModeSelector.value;
 		
-		// Get teacher controls from the selection.
-		let teacherControlsSelector = <HTMLInputElement>document.getElementById('teacher_controls');
-		let teacherControls = teacherControlsSelector.value;		
-		
 		// Store select from local storage.
 		localStorage['mystery_selector'] = targetContent;
 		localStorage['mystery_mode'] = mysteryMode;
-		localStorage['teacher_controls'] = teacherControls;
 		
 		// Hide the mystery controls.
 		document.getElementById('mystery_controls').style.display = 'none';
@@ -100,13 +95,9 @@ export class MysteriesApp extends SynergyMeshApp {
 			// Store content.
 			self.content = json;			
 				
-			// Announce presence to server (if any networking needed).
-			if (teacherControls == 'enabled' || mysteryMode == 'networked') {
+			// Announce presence to server if networked and enable teacher controls.
+			if (mysteryMode == 'networked') {
 				self.establishNetworking(self.onClientListUpdate.bind(self));
-			}
-			
-			// Add teacher controls (if requested)
-			if (teacherControls == 'enabled') {
 				self.addTeacherControlListeners();
 			}
 			
@@ -223,10 +214,6 @@ export class MysteriesApp extends SynergyMeshApp {
 		if (localStorage['mystery_mode'] != null) {
 			let mysteryModeSelector = <HTMLInputElement>(document.getElementById('mystery_mode'));
 			mysteryModeSelector.value = localStorage['mystery_mode'];
-		}
-		if (localStorage['teacher_controls'] != null) {
-			let teachercontrolsSelector = <HTMLInputElement>(document.getElementById('teacher_controls'));
-			teachercontrolsSelector.value = localStorage['teacher_controls'];
 		}
 		
 	}

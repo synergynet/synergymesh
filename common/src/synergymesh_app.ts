@@ -10,6 +10,8 @@ import {Roles} from 'common/src/constants/roles';
  */
 export abstract class SynergyMeshApp {	
 
+	// TODO Change to allow zooming initially - then disable zooming and reset to 1 zoom on app start.
+
 	
 	//// Private Constants. ////
 	
