@@ -1,7 +1,10 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-	"module": "umd",
-	"target": "es5",
-	"sourceMap": true
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "noEmit": false
   }
 }

@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import * as $ from 'jquery';
+
 /**
  * Class with static methods for supporting loading from config.
  */
@@ -5,6 +8,9 @@ export class Config {
 	
 
 	//// Public Constants. ////
+	
+	/** The config key for whether dev mode is enabled. */
+	public static DEV_MODE: string = 'dev-mode';
 	
 	/** The config key for whether network debugging is enabled. */
 	public static NETWORK_DEBUGGING: string = 'debug';
@@ -70,7 +76,6 @@ export class Config {
 	 * Get the config file and read the config values from it on the node server.
 	 */
 	public static getConfigOnServer(): void { 
-		let fs = require('fs');
 		Config.config = JSON.parse(fs.readFileSync(__dirname + Config.CONFIG_ADDRESS_SERVER, 'utf8'));	
 	}
 	

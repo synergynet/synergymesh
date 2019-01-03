@@ -2,19 +2,15 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
+	
 	<head>
 		<!-- Set styles for app -->
 		<link rel="stylesheet" type="text/css" href="../../../common/web/synergymesh.css">
-		<link rel="stylesheet" type="text/css" href="app.css">
+		<link rel="stylesheet" type="text/css" href="../../../apps/mysteries/web/app.css">
 		<title>Mysteries</title>
 	</head>
 	<body>
-	
-		<!-- Load required libraries -->
-		<script src="../../../lib/scripts/requirejs/requirejs-2.1.20.js"></script>
-	
-		<!-- Load report"s script -->
-		<script src="bootstrap.js"></script>
 	
 		<!-- Create the element that the script will place the generated app svg into. -->
 		<div id="synergymesh-app"></div>
@@ -25,6 +21,8 @@
 			<!--  Add mystery selector -->
 			<div class="synergymesh_prompt">MYSTERY:  </div>
 			<select class="synergymesh_select_input" id="mystery_selector">
+				<option value="algorithms">Algorithms</option>
+				<option value="judith">Cat Food Conundrum</option>
 				<option value="charlie">Charlie</option>
 				<option value="dan">Dan</option>
 				<option value="london">Great Fire of London</option>
@@ -43,7 +41,7 @@
 				<option value="waltzer">Waltzer</option>
 				<option value="wilf">Wilf</option>
 			</select>
-			
+
 			<!--  Add spacer. -->
 			<div class="synergymesh_spacer"></div>
 		
@@ -71,9 +69,12 @@
 		</div>
 		
 		<!-- Add script to prepare the app-->
-		<script>		
-			loadApp('../../..');
-		</script>
+		<script src="../../../common/web/touch-emulator.js"></script>
+		<script>
+			TouchEmulator();
+			let appName='mysteries';
+		</script>		
+		<script src="/dist/app.js"></script>
 
 	</body>
-</html>
+</html>;

@@ -1,5 +1,7 @@
 {
 	"server-host": "http://localhost",
 	"server-port": "3000",
-	"debug": true
+	"debug": true,
+	"dev-mode": true,
+	"ssl": false
 }

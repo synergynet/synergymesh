@@ -1,4 +1,4 @@
-import {Transformations} from 'common/src/utils/transformations';
+import {Transformations} from '../../../common/src/utils/transformations';
   
  /**
  * Class which defines an element with text in a box.
@@ -106,7 +106,7 @@ export class TextItem {
 	private wrapText(text: d3.Selection<HTMLElement>, maxWidth: number, textClass: string): void {
 		
 		let words = text.text().split(' ');
-		let line = [];
+		let line: any[] = [];
 		let lineNumber = 1;
 		let y = text.attr('y');
 		let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', (lineNumber * TextItem.LINE_HEIGHT) + 'em');		
