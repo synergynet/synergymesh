@@ -1,6 +1,6 @@
-import {SynergyMeshApp} from 'common/src/synergymesh_app';
-import {TouchManager} from 'common/src/listeners/touch_manager';
-import {Transformations} from 'common/src/utils/transformations'; 
+import {SynergyMeshApp} from '../../../common/src/synergymesh_app';
+import {TouchManager} from '../../../common/src/listeners/touch_manager';
+import {Transformations} from '../../../common/src/utils/transformations'; 
 
 /**
  * A class which manages all the flick events relating to an item.
@@ -138,7 +138,7 @@ export class FlickManager {
 		
 		// Start repeating function called at constant sample rate which logs position object and timestamp.
 		this.move();
-		this.mover = setInterval(this.move.bind(this), FlickManager.MOVE_RATE);
+		this.mover = <any>setInterval(this.move.bind(this), FlickManager.MOVE_RATE);
 
 	}
 	
@@ -222,7 +222,7 @@ export class FlickManager {
 		
 		// Start repeating function called at constant sample rate which logs position object and timestamp.
 		this.sample();
-		this.sampler = setInterval(this.sample.bind(this), FlickManager.SAMPLE_RATE);
+		this.sampler = <any>setInterval(this.sample.bind(this), FlickManager.SAMPLE_RATE);
 		
 	}
 	

@@ -1,7 +1,7 @@
-import {SynergyMeshApp} from 'common/src/synergymesh_app';
-import {TouchManager} from 'common/src/listeners/touch_manager';
-import {TextItem} from 'common/src/items/text_item';
-import {Transformations} from 'common/src/utils/transformations';
+import {SynergyMeshApp} from '../../../common/src/synergymesh_app';
+import {TouchManager} from '../../../common/src/listeners/touch_manager';
+import {TextItem} from '../../../common/src/items/text_item';
+import {Transformations} from '../../../common/src/utils/transformations';
   
  /**
  * App for testing out new SynergyMesh features.

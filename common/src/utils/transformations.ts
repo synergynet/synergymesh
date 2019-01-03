@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 /**
  * Class with static methods for getting and setting various transformations.
  */
@@ -10,7 +12,7 @@ export class Transformations {
 	 */
 	public static getRotation(ele: d3.Selection<HTMLElement>): number {
 		let transform = d3.transform(ele.attr('transform'));
-		return +transform.rotate;;
+		return +transform.rotate;
 	}
 	
 	/**

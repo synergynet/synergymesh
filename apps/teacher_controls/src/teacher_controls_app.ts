@@ -1,9 +1,9 @@
-import {CommonNetworkEvents} from 'common/src/constants/common_network_events'; 
-import {Networking} from 'common/src/utils/networking';
-import {Roles} from 'common/src/constants/roles'; 
-import {SynergyMeshApp} from 'common/src/synergymesh_app';
-import {TextItem} from 'common/src/items/text_item';
-import {Transformations} from 'common/src/utils/transformations';
+import {CommonNetworkEvents} from '../../../common/src/constants/common_network_events'; 
+import {Networking} from '../../../common/src/utils/networking';
+import {Roles} from '../../../common/src/constants/roles'; 
+import {SynergyMeshApp} from '../../../common/src/synergymesh_app';
+import {TextItem} from '../../../common/src/items/text_item';
+import {Transformations} from '../../../common/src/utils/transformations';
   
  /**
  * Protomysteries teacher app.

@@ -1,4 +1,4 @@
-import {Transformations} from 'common/src/utils/transformations'; 
+import {Transformations} from '../../../common/src/utils/transformations'; 
 
 /**
  * A class which manages all the touch events relating to an item.
@@ -290,7 +290,7 @@ export class TouchManager{
 		this.angleCurrent = Math.atan2(yDiff, xDiff) * 180 / Math.PI;
 		
 		// Calculate halfway point.
-		let halfWayPoint = [];
+		let halfWayPoint: any[] = [];
 		halfWayPoint['x'] = this.touchesCurrent[idOne]['x'] - (xDiff/2);
 		halfWayPoint['y'] = this.touchesCurrent[idOne]['y'] - (yDiff/2);
 		

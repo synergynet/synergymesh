@@ -1,3 +1,5 @@
+import * as io from 'socket.io-client';
+
 /**
  * Class with static methods for supporting networking.
  */
@@ -65,13 +67,10 @@ export class Networking {
 	public static clientId: string;
 	
 	/** Multi-dimensional array of clients currently connected to the same session. */
-	public static clients = [];	
+	public static clients: any[] = [];	
 	
 	/** The flag to set if the debugging is shown. */
 	public static debug: boolean = false;
-	
-	/** The static API for accessing Socket.io features set in the bootstrap. */
-	public static io: SocketIOClientStatic;
 	
 	
 	//// Private Static Variables. ////	
@@ -83,8 +82,8 @@ export class Networking {
 	private static session: string;
 	
 	/** Socket io instance. */
-	private static socket;
-	
+	private static socket: any;
+
 	
 	/**
 	 * Initialise the socket io instance connected to the server on the same host.
@@ -104,14 +103,14 @@ export class Networking {
 		if (Networking.enabled) {
 		
 			// Establish socket.
-			Networking.socket = Networking.io.connect(host + ':' + port);
+			Networking.socket = io(host + ':' + port);
 			Networking.debugMessage('Connected to server.');
 			
 			// Store passed values.
 			Networking.session = session;
 			
 			// Listen for the clients list being updated.
-			Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message) {
+			Networking.socket.on(Networking.EVENTS.UPDATE_CLIENTS, function(message: any) {
 				
 				// Update this client's Id.
 				Networking.clientId = Networking.socket.id;
@@ -153,7 +152,7 @@ export class Networking {
 		if (Networking.enabled) {
 		
 			// Establish listener for any messages that calls the passed function.
-			Networking.socket.on(eventName, function(message){
+			Networking.socket.on(eventName, function(message: any){
 				
 					// Call the callback.
 					Networking.debugMessage('Received a message for the following network event: ' + eventName);
