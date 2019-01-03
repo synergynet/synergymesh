@@ -1,0 +1,24 @@
+{
+  "name": "synergymesh-networking",
+  "version": "0.0.1",
+  "description": "Produces a node server which can pass messages between synerymesh apps using websockets.",
+  "main": "server/boostrap.js",
+  "scripts": {
+    "start": "node server/bootstrap.js"
+  },
+  "dependencies": {
+    "socket.io": "1.4.4"
+  },
+  "engines": {
+    "node": "8.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/jamcnaughton/synergymesh/"
+  },
+  "author": "James Andrew McNaughton",
+  "contributors": [
+    ""
+  ],
+  "license": "MIT"
+}

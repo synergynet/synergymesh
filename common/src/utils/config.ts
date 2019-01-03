@@ -1,6 +1,3 @@
-import * as fs from 'fs';
-import * as $ from 'jquery';
-
 /**
  * Class with static methods for supporting loading from config.
  */
@@ -18,8 +15,17 @@ export class Config {
 	/** The config key for the host address of the server. */
 	public static SERVER_HOST: string = 'server-host';
 	
+	/** The config key for setting what the server does (site, networking or both).  */
+	public static SERVER_MODE: string = 'server-mode';
+	
 	/** The config key for the port number of the server. */
 	public static SERVER_PORT: string = 'server-port';
+	
+	/** The config key for the port number of the site. */
+	public static SITE_PORT: string = 'site-port';
+	
+	/** The config key for whether SSL is used. */
+	public static SSL_MODE: string = 'ssl';
 	
 
 	//// Private Constants. ////
@@ -76,6 +82,7 @@ export class Config {
 	 * Get the config file and read the config values from it on the node server.
 	 */
 	public static getConfigOnServer(): void { 
+		let fs = require('fs');
 		Config.config = JSON.parse(fs.readFileSync(__dirname + Config.CONFIG_ADDRESS_SERVER, 'utf8'));	
 	}
 	

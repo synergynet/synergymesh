@@ -1,16 +1,9 @@
-import * as d3 from 'd3';
-import * as $ from 'jquery';
-
-// TODO Module headers for typedoc.
-
-// TODO Re-add unit tests.
-
-import { CommonNetworkEvents } from './constants/common_network_events';
-import { Roles } from './constants/roles';
-import { Config } from './utils/config';
-import { Networking } from './utils/networking';
-import { CommonElements } from './constants/common_elements';
-
+import {CommonElements} from 'common/src/constants/common_elements'; 
+import {CommonNetworkEvents} from 'common/src/constants/common_network_events'; 
+import {Config} from 'common/src/utils/config'; 
+import {Networking} from 'common/src/utils/networking';
+import {Roles} from 'common/src/constants/roles'; 
+  
  /**
  * Abstract class which defines what all SynergyMesh apps should do.
  * (e.g. load contents, connect to other instances, etc.)
@@ -42,13 +35,13 @@ export abstract class SynergyMeshApp {
 	protected appName: string = 'SynergyMesh';
 	
 	/** The URL root of the page. */
-	protected rootPath: string;
+	protected rootPath;
 	
 	/** The role of the intended user of this app. */
 	protected role: string = Roles.STUDENT;
 	
 	/** The ID of the network session to use. */
-	protected sessionId: string;
+	protected sessionId;
 
 	/** The svg which holds all the elements. */
 	protected svg: d3.Selection<any>;
@@ -82,6 +75,9 @@ export abstract class SynergyMeshApp {
 		// Get inital display dimensions.
 		this.vizHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, screen.height|| 0);
 		this.vizWidth = Math.max(document.documentElement.clientWidth, window.innerWidth, screen.width || 0);
+		
+		// Enable touch emulator.
+		TouchEmulator();
 		
 		// Store root.
 		this.rootPath = rootPath;		

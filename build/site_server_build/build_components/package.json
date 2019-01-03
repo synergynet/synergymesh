@@ -1,0 +1,21 @@
+{
+  "name": "synergymesh-site",
+  "version": "0.0.1",
+  "description": "Produces a web site which contains web based apps.",
+  "main": "server/boostrap.js",
+  "scripts": {
+    "start": "node server/bootstrap.js"
+  },
+  "engines": {
+    "node": "8.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/jamcnaughton/synergymesh/"
+  },
+  "author": "James Andrew McNaughton",
+  "contributors": [
+    ""
+  ],
+  "license": "MIT"
+}

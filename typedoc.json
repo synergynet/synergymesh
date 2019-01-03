@@ -1,6 +1,0 @@
-{
-    "out": "doc",
-    "exclude": "**/node_modules/**",
-	"mode": "modules",
-	"theme": "minimal"
-}

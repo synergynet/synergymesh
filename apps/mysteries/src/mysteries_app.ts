@@ -1,12 +1,11 @@
-import * as $ from 'jquery';
-import {TextItem} from '../../../common/src/items/text_item';
-import {NetworkFlickManager} from '../../../common/src/listeners/network_flick_manager';
-import {TouchManager} from '../../../common/src/listeners/touch_manager';
-import {SynergyMeshApp} from '../../../common/src/synergymesh_app';
-import {Networking} from '../../../common/src/utils/networking';
-import {Random} from '../../../common/src/utils/random';
-import {Transformations} from '../../../common/src/utils/transformations';
-
+import {Networking} from 'common/src/utils/networking';
+import {NetworkFlickManager} from 'common/src/listeners/network_flick_manager';
+import {Random} from 'common/src/utils/random';
+import {SynergyMeshApp} from 'common/src/synergymesh_app';
+import {TextItem} from 'common/src/items/text_item';
+import {TouchManager} from 'common/src/listeners/touch_manager';
+import {Transformations} from 'common/src/utils/transformations';
+  
  /**
  * Mysteries student app.
  */
@@ -101,7 +100,7 @@ export class MysteriesApp extends SynergyMeshApp {
 			}
 			
 			// Check whether to run standalone or networked.
-			if (mysteryMode == 'networked') {
+			if (mysteryMode == 'networked') {	
 				
 				// Establish function to be called when sending network flicked elements.
 				let onSend = function(objectToSend: JSON, ele: d3.Selection<any>) {

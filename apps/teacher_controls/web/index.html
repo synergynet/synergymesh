@@ -11,6 +11,12 @@
 	</head>
 	<body>
 	
+		<!-- Load required libraries -->
+		<script src="../../../lib/scripts/requirejs/requirejs-2.1.20.js"></script>
+	
+		<!-- Load report's script -->
+		<script src="../../../apps/teacher_controls/web/bootstrap.js"></script>
+	
 		<!-- Create the element that the script will place the generated app svg into. -->
 		<div id="synergymesh-app"></div>
 		
@@ -31,12 +37,9 @@
 		</div>
 		
 		<!-- Add script to prepare the app-->
-		<script src="../../../common/web/touch-emulator.js"></script>
-		<script>
-			TouchEmulator();
-			let appName='teacher-controls';
-		</script>		
-		<script src="/dist/app.js"></script>
+		<script>		
+			loadApp('../../..');
+		</script>
 
 	</body>
 </html>

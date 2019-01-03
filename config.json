@@ -1,7 +1,9 @@
 {
+	"site-port": "8888",
 	"server-host": "http://localhost",
 	"server-port": "3000",
 	"debug": true,
+	"server-mode": "both",
 	"dev-mode": true,
 	"ssl": false
 }

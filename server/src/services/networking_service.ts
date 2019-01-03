@@ -1,6 +1,4 @@
 import {Networking} from '../../../common/src/utils/networking';
-import * as SocketIO from 'socket.io';
-import * as http from 'http';
 
  /**
  * Class for supporting networking on the server
@@ -14,17 +12,39 @@ export class NetworkingService {
 	 * Start the networking service on the server
 	 * 
 	 * @param {string} port The port to tie to the networking service.
+	 * @param {boolean} sslMode The port to tie to the networking service.
 	 */
-	public constructor (port: string) { 
+	public constructor (port: string, sslMode: boolean) { 
 	
 		// Setup basic server.
 		let server;
-					
-		// Set up regular server.
-		server = http.createServer();
+		
+		// Set up encryption if needed.
+		if (sslMode) {
+			
+			// Get libraries needed for encryption. 
+			let tls = require('tls');
+			let fs = require('fs');
+			
+			// Get private key and certificates.
+			let privateKey = fs.readFileSync('crypto/privatekey.pem').toString();
+			let certificate = fs.readFileSync('crypto/certificate.pem').toString();
+			
+			// Create credentials.
+			let credentials = tls.createSecureContext({key: privateKey, cert: certificate});
+			
+			// Set up secure server.
+			 server = require('https').createServer(credentials);
+			
+		} else {
+				
+			// Set up regular server.
+			 server = require('http').createServer();
+			
+		}
 		
 		// Set up Socket.
-		let io: SocketIO.Server = SocketIO.listen(server);
+		let io: SocketIO.Server = require('socket.io').listen(server);
 		
 		// Start networking server running on port.
 		server.listen(port); 

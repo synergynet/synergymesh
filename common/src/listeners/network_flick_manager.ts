@@ -1,12 +1,10 @@
-import * as d3 from 'd3';
-import * as $ from 'jquery';
-import {CommonElements} from '../../../common/src/constants/common_elements';
-import {Roles} from '../../../common/src/constants/roles';
-import {FlickManager} from '../../../common/src/listeners/flick_manager';
-import {TouchManager} from '../../../common/src/listeners/touch_manager';
-import {SynergyMeshApp} from '../../../common/src/synergymesh_app';
-import {Networking} from '../../../common/src/utils/networking';
-import {Transformations} from '../../../common/src/utils/transformations';
+import {CommonElements} from 'common/src/constants/common_elements';
+import {FlickManager} from 'common/src/listeners/flick_manager';
+import {Networking} from 'common/src/utils/networking';
+import {Roles} from 'common/src/constants/roles'; 
+import {SynergyMeshApp} from 'common/src/synergymesh_app';
+import {TouchManager} from 'common/src/listeners/touch_manager';
+import {Transformations} from 'common/src/utils/transformations'; 
 
 /**
  * A class which manages all the network flick events relating to an item.
@@ -246,7 +244,7 @@ export class NetworkFlickManager extends FlickManager {
 		element.parentNode.removeChild(element);
 		delete this.touchManager;
 		delete this.ele;
-		// delete this;
+		delete this;
 	}
 	
 }

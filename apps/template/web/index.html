@@ -1,0 +1,45 @@
+<html>
+	<meta http-equiv="content-type" content="text/html; charset=UTF8">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
+	<head>
+		<!-- Set styles for app -->
+		<link rel="stylesheet" type="text/css" href="../../../common/web/synergymesh.css">
+		<link rel="stylesheet" type="text/css" href="../../../apps/template/web/app.css">
+		<title>Template App</title>
+	</head>
+	<body>
+	
+		<!-- Load required libraries -->
+		<script src="../../../lib/scripts/requirejs/requirejs-2.1.20.js"></script>
+	
+		<!-- Load report's script -->
+		<script src="../../../apps/template/web/bootstrap.js"></script>
+	
+		<!-- Create the element that the script will place the generated app svg into. -->
+		<div id="synergymesh-app"></div>
+
+		<!-- Controls container. -->		
+		<div id="synergymesh_controls">
+		
+			<!--  Add controls for getting session ID. -->
+			<div class="synergymesh_prompt">SESSION ID: </div>
+			<input class="synergymesh_text_input" id="session_input" type="text" autofocus/>
+			
+			<!--  Add spacer. -->
+			<div class="synergymesh_spacer"></div>
+			<div class="synergymesh_spacer"></div>
+	
+			<!-- Add button to start the app-->
+			<button class="synergymesh_button" id="start_app_button">START APP</button>
+		
+		</div>
+		
+		<!-- Add script to prepare the app-->
+		<script>		
+			loadApp('../../..');
+		</script>
+
+	</body>
+</html>

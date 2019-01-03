@@ -12,6 +12,12 @@
 	</head>
 	<body>
 	
+		<!-- Load required libraries -->
+		<script src="../../../lib/scripts/requirejs/requirejs-2.1.20.js"></script>
+	
+		<!-- Load report"s script -->
+		<script src="../../../apps/mysteries/web/bootstrap.js"></script>
+	
 		<!-- Create the element that the script will place the generated app svg into. -->
 		<div id="synergymesh-app"></div>
 		
@@ -41,7 +47,7 @@
 				<option value="waltzer">Waltzer</option>
 				<option value="wilf">Wilf</option>
 			</select>
-
+			
 			<!--  Add spacer. -->
 			<div class="synergymesh_spacer"></div>
 		
@@ -69,12 +75,9 @@
 		</div>
 		
 		<!-- Add script to prepare the app-->
-		<script src="../../../common/web/touch-emulator.js"></script>
-		<script>
-			TouchEmulator();
-			let appName='mysteries';
-		</script>		
-		<script src="/dist/app.js"></script>
+		<script>		
+			loadApp('../../..');
+		</script>
 
 	</body>
-</html>;
+</html>
