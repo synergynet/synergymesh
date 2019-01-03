@@ -1,11 +1,12 @@
-import {Networking} from 'common/src/utils/networking';
-import {NetworkFlickManager} from 'common/src/listeners/network_flick_manager';
-import {Random} from 'common/src/utils/random';
-import {SynergyMeshApp} from 'common/src/synergymesh_app';
-import {TextItem} from 'common/src/items/text_item';
-import {TouchManager} from 'common/src/listeners/touch_manager';
-import {Transformations} from 'common/src/utils/transformations';
-  
+import * as $ from 'jquery';
+import {TextItem} from '../../../common/src/items/text_item';
+import {NetworkFlickManager} from '../../../common/src/listeners/network_flick_manager';
+import {TouchManager} from '../../../common/src/listeners/touch_manager';
+import {SynergyMeshApp} from '../../../common/src/synergymesh_app';
+import {Networking} from '../../../common/src/utils/networking';
+import {Random} from '../../../common/src/utils/random';
+import {Transformations} from '../../../common/src/utils/transformations';
+
  /**
  * Mysteries student app.
  */
@@ -76,18 +77,19 @@ export class MysteriesApp extends SynergyMeshApp {
 		
 		// Get content from the selection.
 		let targetContentSelector = <HTMLInputElement>document.getElementById('mystery_selector');
-		let targetContent = targetContentSelector.value;
+		let targetContent = this.testMode ? 'charlie' : targetContentSelector.value;
 		
 		// Get mystery mode from the selection.
 		let mysteryModeSelector = <HTMLInputElement>document.getElementById('mystery_mode');
-		let mysteryMode = mysteryModeSelector.value;
+		let mysteryMode = this.testMode ? 'standalone' : mysteryModeSelector.value;
 		
 		// Store select from local storage.
 		localStorage['mystery_selector'] = targetContent;
 		localStorage['mystery_mode'] = mysteryMode;
 		
 		// Get the contents.
-		$.getJSON(this.rootPath + MysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
+		let webDir = this.testMode ? '' : 'web/';
+		$.getJSON(this.rootPath + webDir + MysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
 			
 			// Store content.
 			self.content = json;			
@@ -99,7 +101,7 @@ export class MysteriesApp extends SynergyMeshApp {
 			}
 			
 			// Check whether to run standalone or networked.
-			if (mysteryMode == 'networked') {	
+			if (mysteryMode == 'networked') {
 				
 				// Establish function to be called when sending network flicked elements.
 				let onSend = function(objectToSend: JSON, ele: d3.Selection<any>) {
@@ -204,11 +206,11 @@ export class MysteriesApp extends SynergyMeshApp {
 	protected preStart() {
 			
 		// Apply selects from local storage.
-		if (localStorage['mystery_selector'] != null) {
+		if (localStorage['mystery_selector'] != null && !this.testMode) {
 			let mysterySelector = <HTMLInputElement>(document.getElementById('mystery_selector'));
 			mysterySelector.value = localStorage['mystery_selector'];
 		}
-		if (localStorage['mystery_mode'] != null) {
+		if (localStorage['mystery_mode'] != null&& !this.testMode) {
 			let mysteryModeSelector = <HTMLInputElement>(document.getElementById('mystery_mode'));
 			mysteryModeSelector.value = localStorage['mystery_mode'];
 		}
@@ -335,7 +337,8 @@ export class MysteriesApp extends SynergyMeshApp {
 		
 		// Add Image
 		let imageEle = rootNode.append('image');   
-		imageEle.attr('xlink:href', this.rootPath + 'images/' + imageUrl);
+		let webDir = this.testMode ? '' : 'web/';
+		imageEle.attr('xlink:href', this.rootPath + webDir + 'images/' + imageUrl);
 		imageEle.attr('width', width);
 		imageEle.attr('height', height);
 		Transformations.setTranslation(imageEle, -width/2, -height/2);;
