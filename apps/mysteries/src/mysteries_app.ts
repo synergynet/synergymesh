@@ -7,6 +7,87 @@ import {Networking} from '../../../common/src/utils/networking';
 import {Random} from '../../../common/src/utils/random';
 import {Transformations} from '../../../common/src/utils/transformations';
 
+/**
+ * Interface for objects representing the imported mysteries JSON.
+ */
+export interface IMystery {
+
+	/**
+	 * The titles to use in the mystery.
+	 */
+	titles: string[];
+
+	/**
+	 * The clues to use in the mystery.
+	 */
+	clues: string[];
+
+	/**
+	 * The images to use in the mystery.
+	 */
+	images: IMysteryImage[];
+
+}
+
+/**
+ * Interface for objects representing the various content items in a mystery task.
+ */
+export interface IMysteryContent {
+
+	/**
+	 * The unique ID of the content item.
+	 */
+	id: string;
+
+	/**
+	 * The type of the content item.
+	 */
+	type: string;
+
+	/**
+	 * The content.
+	 */
+	content: string;
+
+	/**
+	 * Flag indicating whether the content should be shown on the first connected device if networked.
+	 */
+	default: boolean;
+
+	/**
+	 * The width of the content item (if required).
+	 */
+	width?: number;
+
+	/**
+	 * The height of the content item (if required).
+	 */
+	height?: number;
+
+}
+
+/**
+ * Interface for objects representing the various content items in a mystery task.
+ */
+export interface IMysteryImage {
+
+	/**
+	 * The name of the image file.
+	 */
+	fileName: string;
+
+	/**
+	 * The width of the image.
+	 */
+	width: number;
+
+	/**
+	 * The height of the image.
+	 */
+	height: number;
+
+}
+
  /**
  * Mysteries student app.
  */
@@ -59,7 +140,7 @@ export class MysteriesApp extends SynergyMeshApp {
 	private firstConnect: boolean = true;
 	
 	/** Object for storing all content definitions. */
-	private content: JSON;
+	private content: IMysteryContent[] = [];
 	
 	
 	//// Protected Methods. ////
@@ -89,10 +170,53 @@ export class MysteriesApp extends SynergyMeshApp {
 		
 		// Get the contents.
 		let webDir = this.testMode ? '' : 'web/';
-		$.getJSON(this.rootPath + webDir + MysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json) {
+		$.getJSON(this.rootPath + webDir + MysteriesApp.CONTENTS_DIR_NAME + targetContent + '.json', function(json: IMystery) {
+
+			// Ensure there is an appropriate number of titles.
+			if (mysteryMode == 'networked') {
+				if (json.titles.length < 2) {
+					json.titles.push(json.titles[0]);
+				}
+			} else {
+				if (json.titles.length > 1) {
+					json.titles = [json.titles[0]];
+				}
+			}
 			
-			// Store content.
-			self.content = json;			
+			// Store title content.
+			for (let contentKey in json.titles) {
+				let contentItem = <IMysteryContent>{
+					content: json.titles[contentKey],
+					default: +contentKey % 2 == 0,
+					id: 'title' + contentKey,
+					type: 'title'
+				};
+				self.content.push(contentItem);
+			}	
+
+			// Store clue contents.
+			for (let contentKey in json.clues) {
+				let contentItem = <IMysteryContent>{
+					content: json.clues[contentKey],
+					default: +contentKey % 2 == 0,
+					id: 'clue' + contentKey,
+					type: 'clue'
+				};
+				self.content.push(contentItem);
+			}	
+
+			// Store image contents
+			for (let contentKey in json.images) {
+				let contentItem = <IMysteryContent>{
+					content: json.images[contentKey].fileName,
+					default: +contentKey % 2 == 0,
+					height: json.images[contentKey].height,
+					id: 'image' + contentKey,
+					type: 'image',
+					width: json.images[contentKey].width
+				};
+				self.content.push(contentItem);
+			}			
 				
 			// Announce presence to server if networked and enable teacher controls.
 			if (mysteryMode == 'networked') {
@@ -160,9 +284,16 @@ export class MysteriesApp extends SynergyMeshApp {
 					
 					// Get content not on the other client.
 					let otherContent = <string[]>data[MysteriesApp.MESSAGES.CONTENT_LIST];
-					for (let contentKey in self.content) {
-						if (otherContent.indexOf(contentKey) == -1) {
-							self.currentContent.push(contentKey);
+					for (let contentItem of self.content) {
+						let isPresent = false;
+						for (let otherContentId of otherContent) {
+							if (contentItem.id == otherContentId) {
+								isPresent = true;
+								break;
+							}
+						}
+						if (!isPresent) {
+							self.currentContent.push(contentItem.id);
 						}
 					}
 					
@@ -176,21 +307,10 @@ export class MysteriesApp extends SynergyMeshApp {
 			} else {
 				
 				// Loop through and add all contents.
-				for (let contentKey of Object.keys(self.content)) {
-					self.buildItem(contentKey);
+				for (let contentItem of self.content) {
+					self.buildItem(contentItem.id);
 				}
 				
-			}
-				
-			// Get the title and add it.
-			for (let definitionKey in self.content) {
-				let def = self.content[definitionKey];
-				if (def['content_type'] == 'title') {
-					let textItem = new TextItem(self.svg, def['content'], MysteriesApp.MAX_WIDTH_TITLE, 'title', 'title-bg', 'title-text');
-					Transformations.setTranslation(textItem.asItem(), self.vizWidth/2, (textItem.getHeight() * 2) + 5);
-					Transformations.setScale(textItem.asItem(), 1.2);
-					break;
-				}
 			}
 				
 		});
@@ -225,24 +345,37 @@ export class MysteriesApp extends SynergyMeshApp {
 	 * 
 	 * @param {string} id The id of the definition.
 	 */
-	private buildItem (id: string): void {		
+	private buildItem (id: string): void {	
 		
 		// Get definition.
-		let definition = this.content[id];
+		let contentItem: IMysteryContent = null;
+		for (let content of this.content) {
+			if (id == content.id) {
+				contentItem = content;
+				break;
+			}
+		}
 		
 		// Check object type.
-		switch (definition['content_type']) {
+		switch (contentItem.type) {
 			case 'clue': {
 			
 				// Add a clue.
-				this.addClue(id, definition['content']);
+				this.addClue(id, contentItem.content);
 				break;
 			
 			} 
 			case 'image': {
 			
 				// Add an image.
-				this.addImage(id, definition['content'], definition['width'], definition['height']);
+				this.addImage(id, contentItem.content, contentItem.width, contentItem.height);
+				break;
+			
+			}
+			case 'title': {
+			
+				// Add a title.
+				this.addTitle(contentItem['content']);
 				break;
 			
 			}
@@ -251,21 +384,21 @@ export class MysteriesApp extends SynergyMeshApp {
 	}
 	
 	/**
-	 * Function to be called when the client list is update to determine the content.
+	 * Function to be called when the client list is updated to determine the content.
 	 */
 	private onClientListUpdate() {
 		
-		// Check that this the first client update.
+		// Check that this is the first client update.
 		if (this.firstConnect) {
 			
 			// Check number of partners.
 			if (Networking.clients[this.role][this.appName].length < 2) {
 			
 				// Establish default content.
-				for (let contentKey in this.content) {
-					if (this.content[contentKey]['default']) {
-						this.buildItem(contentKey);			
-						this.currentContent.push(contentKey);	
+				for (let contentItem of this.content) {
+					if (contentItem.default) {
+						this.buildItem(contentItem.id);			
+						this.currentContent.push(contentItem.id);	
 					}	
 				}
 				
@@ -353,6 +486,23 @@ export class MysteriesApp extends SynergyMeshApp {
 		let tm = new TouchManager(rootNode);
 		tm.applyScaleLimits(0.3, 1.5);
 		new NetworkFlickManager(rootNode, this, tm);
+		
+	}
+	
+	/**
+	 * Add a title item at top of the screen.
+	 * 
+	 * @param {string} text The text to show in the title.
+	 */
+	private addTitle(text: string): void {
+		
+		// Create item.
+		let textItem = new TextItem(this.svg, text, MysteriesApp.MAX_WIDTH_TITLE, 'title', 'title-bg', 'title-text');
+		
+		// Place at the top.
+		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, (textItem.getHeight() * 2) + 5);
+		Transformations.setScale(textItem.asItem(), 1.2);
+
 		
 	}
 	

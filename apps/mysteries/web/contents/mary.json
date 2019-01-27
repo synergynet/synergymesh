@@ -1,97 +1,25 @@
 {
-	"title": {
-		"content_type": "title",
-		"content": "What should the Warden do?",
-		"default": true
-	},
-	"clue1": {
-		"content_type": "clue",
-		"content": "The English and Scots often fought each other in battles such as Flodden.",
-		"default": true
-	},
-	"clue2": {
-		"content_type": "clue",
-		"content": "Mary Fenwick was English.",
-		"default": true
-	},
-	"clue3": {
-		"content_type": "clue",
-		"content": "Edward Fenwick, Mary's father, was a very busy, hard working man. He had many sheep and cattle to look after. His stock had often been raided by other reiver families.",
-		"default": true
-	},
-	"clue4": {
-		"content_type": "clue",
-		"content": "Most people who lived in the borders did not care about whether they were English or Scots. They cared more about looking after their own family and feuding with their enemies.",
-		"default": true
-	},
-	"clue5": {
-		"content_type": "clue",
-		"content": "Archie Graham was Scottish.",
-		"default": true
-	},
-	"clue6": {
-		"content_type": "clue",
-		"content": "Mary Fenwick was very attractive. She was very fond of her father.",
-		"default": true
-	},
-	"clue7": {
-		"content_type": "clue",
-		"content": "The laws of both England and Scotland banned cross - border marriages. They thought that people would get confused about which side they were on.",
-		"default": true
-	},
-	"clue8": {
-		"content_type": "clue",
-		"content": "Edward Fenwick's other children had all died before they reached five years of age.",
-		"default": true
-	},
-	"clue9": {
-		"content_type": "clue",
-		"content": "Mary's mother, Edward Fenwick's wife had died.",
-		"default": true
-	},
-	"clue10": {
-		"content_type": "clue",
-		"content": "Archie Graham was a strong, healthy lad who would be useful as a soldier.",
-		"default": false
-	},
-	"clue11": {
-		"content_type": "clue",
-		"content": "Mary and Archie got married and had a baby.",
-		"default": false
-	},
-	"clue12": {
-		"content_type": "clue",
-		"content": "Hangings were often seen as public entertainment.  Many people came to watch the gruesome sight.",
-		"default": false
-	},
-	"clue13": {
-		"content_type": "clue",
-		"content": "Sometimes, permission for cross - border marriages was given by the English or Scottish wardens. But this did not often happen.",
-		"default": false
-	},
-	"clue14": {
-		"content_type": "clue",
-		"content": "The law was very strict and there were harsh punishments for those who broke it.",
-		"default": false
-	},
-	"clue15": {
-		"content_type": "clue",
-		"content": "Both Graham and Fenwick families were large and powerful. They had many supporters on both sides of the border.",
-		"default": false
-	},
-	"clue16": {
-		"content_type": "clue",
-		"content": "Mary and Archie fled to Scotland after the wedding.",
-		"default": false
-	},
-	"clue17": {
-		"content_type": "clue",
-		"content": "The Graham family were notorious trouble-makers. They were involved in many raids and illegal activities.",
-		"default": false
-	},
-	"clue18": {
-		"content_type": "clue",
-		"content": "Being a Warden of the March brought many advantages - Wardens could become rich.",
-		"default": false
-	}
+	"titles": [
+		"What should the Warden do?"
+	],
+	"clues": [
+		"The English and Scots often fought each other in battles such as Flodden.",
+		"Mary Fenwick was English.",
+		"Edward Fenwick, Mary's father, was a very busy, hard working man. He had many sheep and cattle to look after. His stock had often been raided by other reiver families.",
+		"Most people who lived in the borders did not care about whether they were English or Scots. They cared more about looking after their own family and feuding with their enemies.",
+		"Archie Graham was Scottish.",
+		"Mary Fenwick was very attractive. She was very fond of her father.",
+		"The laws of both England and Scotland banned cross - border marriages. They thought that people would get confused about which side they were on.",
+		"Edward Fenwick's other children had all died before they reached five years of age.",
+		"Mary's mother, Edward Fenwick's wife had died.",
+		"Archie Graham was a strong, healthy lad who would be useful as a soldier.",
+		"Mary and Archie got married and had a baby.",
+		"Hangings were often seen as public entertainment.  Many people came to watch the gruesome sight.",
+		"Sometimes, permission for cross - border marriages was given by the English or Scottish wardens. But this did not often happen.",
+		"The law was very strict and there were harsh punishments for those who broke it.",
+		"Both Graham and Fenwick families were large and powerful. They had many supporters on both sides of the border.",
+		"Mary and Archie fled to Scotland after the wedding.",
+		"The Graham family were notorious trouble-makers. They were involved in many raids and illegal activities.",
+		"Being a Warden of the March brought many advantages - Wardens could become rich."
+	]
 }
