@@ -1,62 +1,18 @@
 {
-	"title": {
-		"content_type": "title",
-		"content": "How much will it cost the Waltzer owner for enough cuddly monkeys for a day?",
-		"default": true
-	},
-	"clue1": {
-		"content_type": "clue",
-		"content": "There are 5 rides every hour.",
-		"default": true
-	},
-	"clue2": {
-		"content_type": "clue",
-		"content": "The owner decides that every 10th person will be given a cuddly toy monkey.",
-		"default": true
-	},
-	"clue3": {
-		"content_type": "clue",
-		"content": "To get people to go on the Waltzer the owner offers a free prize.",
-		"default": true
-	},
-	"clue4": {
-		"content_type": "clue",
-		"content": "The fair is open for 6 hours a day.",
-		"default": true
-	},
-	"clue5": {
-		"content_type": "clue",
-		"content": "The music on the Waltzer is played very loud all day.",
-		"default": true
-	},
-	"clue6": {
-		"content_type": "clue",
-		"content": "At the fair there is a Waltzer.",
-		"default": true
-	},
-	"clue7": {
-		"content_type": "clue",
-		"content": "The monkeys look very happy.",
-		"default": false
-	},
-	"clue8": {
-		"content_type": "clue",
-		"content": "Two people can sit together in a car on the Waltzer.",
-		"default": false
-	},
-	"clue9": {
-		"content_type": "clue",
-		"content": "There are 5 cars altogether on the Waltzer.",
-		"default": false
-	},
-	"clue10": {
-		"content_type": "clue",
-		"content": "It costs the owner £3 for one monkey.",
-		"default": false
-	},
-	"clue11": {
-		"content_type": "clue",
-		"content": "You must be at least 9 years old to ride the Waltzer.",
-		"default": false
-	}
+	"titles": [
+		"How much will it cost the Waltzer owner for enough cuddly monkeys for a day?"
+	],
+	"clues": [
+		"There are 5 rides every hour.",
+		"The owner decides that every 10th person will be given a cuddly toy monkey.",
+		"To get people to go on the Waltzer the owner offers a free prize.",
+		"The fair is open for 6 hours a day.",
+		"The music on the Waltzer is played very loud all day.",
+		"At the fair there is a Waltzer.",
+		"The monkeys look very happy.",
+		"Two people can sit together in a car on the Waltzer.",
+		"There are 5 cars altogether on the Waltzer.",
+		"It costs the owner £3 for one monkey.",
+		"You must be at least 9 years old to ride the Waltzer."
+	]
 }

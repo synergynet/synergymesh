@@ -1,117 +1,29 @@
 {
-	"title": {
-		"content_type": "title",
-		"content": "How did miners die in the Universal Colliery and whose fault was it?",
-		"default": true
-	},
-	"clue1": {
-		"content_type": "clue",
-		"content": "The Universal mine was the biggest employer in Senghenydd.",
-		"default": true
-	},
-	"clue2": {
-		"content_type": "clue",
-		"content": "The kind of coal mined at the pit contained a lot of firedamp – explosive methane gas. There was also a lot of coal dust in the mine which could also explode. ",
-		"default": true
-	},
-	"clue3": {
-		"content_type": "clue",
-		"content": "Before the Universal colliery was built, Senghenydd had a population of less than 100. In 1913 there were more than 6000 people living there. ",
-		"default": true
-	},
-	"clue4": {
-		"content_type": "clue",
-		"content": "The miners there dislike William Lewis due to his history of poor treatment to staff.",
-		"default": true
-	},
-	"clue5": {
-		"content_type": "clue",
-		"content": "The miners there dislike William Lewis due to his history of poor treatment to staff.",
-		"default": true
-	},
-	"clue6": {
-		"content_type": "clue",
-		"content": "The disaster started at 8.10 am. An electrical spark from electrical equipment ignited the firedamp.",
-		"default": true
-	},
-	"clue7": {
-		"content_type": "clue",
-		"content": "The explosions were so violent that the cage of the Lancaster shaft was blown back up to wedge in the pithead winding gear. Someone standing close by was decapitated by a piece of flying wood.",
-		"default": true
-	},
-	"clue8": {
-		"content_type": "clue",
-		"content": "Miners breathing afterdamp suffocated for lack of oxygen despite not being hurt by the explosion.",
-		"default": true
-	},
-	"clue9": {
-		"content_type": "clue",
-		"content": "935 miners were down the pit on Tuesday 14th October 1913.",
-		"default": true
-	},
-	"clue10": {
-		"content_type": "clue",
-		"content": "Edward Shaw, the manager, blamed the designers of the mine. He said the intake airway acted as a fan to the flames.",
-		"default": true
-	},
-	"clue11": {
-		"content_type": "clue",
-		"content": "In 1914 a court case found that William Lewis should pay 25 pounds in fines for the disaster.",
-		"default": true
-	},
-	"clue12": {
-		"content_type": "clue",
-		"content": "Lewis blamed the site manager Edward Shaw for the disaster due to the electrical fault.",
-		"default": true
-	},
-	"clue13": {
-		"content_type": "clue",
-		"content": "In 1864 William Lewis marries Anne Rees and becomes wealthy.",
-		"default": false
-	},
-	"clue14": {
-		"content_type": "clue",
-		"content": "The shock wave from the firedamp explosion caused coal dust to rise into the air which also ignited.",
-		"default": false
-	},
-	"clue15": {
-		"content_type": "clue",
-		"content": "1896 William Lewis opens the Universal Colliery in Senghenydd.",
-		"default": false
-	},
-	"clue16": {
-		"content_type": "clue",
-		"content": "The fires spread through most of the underground workings, quickly followed by afterdamp – poisonous gasses from the explosion like carbon monoxide and carbon dioxide.",
-		"default": false
-	},
-	"clue17": {
-		"content_type": "clue",
-		"content": "In 1901 an explosion at the mine killed 81 people. Safety issues were brought up and coal dust was supposed to be removed.",
-		"default": false
-	},
-	"clue18": {
-		"content_type": "clue",
-		"content": "Rescue teams rushed to the scene were hampered by fallen debris, roof falls and raging fires.",
-		"default": false
-	},
-	"clue19": {
-		"content_type": "clue",
-		"content": "Edward Shaw and William Lewis did not follow the safety recommendations of the 1901 report and there was still coal dust in the mine.",
-		"default": false
-	},
-	"clue20": {
-		"content_type": "clue",
-		"content": "In total 489 miners were rescued.",
-		"default": false
-	},
-	"clue21": {
-		"content_type": "clue",
-		"content": "Miners got paid less because the price of coal was low so they had to work harder. ",
-		"default": false
-	},
-	"clue22": {
-		"content_type": "clue",
-		"content": "By 1913 William Lewis was in his 70 and visited his Senghenydd coal mine less and less.",
-		"default": false
-	}
+	"titles": [
+		"How did miners die in the Universal Colliery and whose fault was it?"
+	],
+	"clues": [
+		"The Universal mine was the biggest employer in Senghenydd.",
+		"The kind of coal mined at the pit contained a lot of firedamp – explosive methane gas. There was also a lot of coal dust in the mine which could also explode. ",
+		"Before the Universal colliery was built, Senghenydd had a population of less than 100. In 1913 there were more than 6000 people living there. ",
+		"The miners there dislike William Lewis due to his history of poor treatment to staff.",
+		"The miners there dislike William Lewis due to his history of poor treatment to staff.",
+		"The disaster started at 8.10 am. An electrical spark from electrical equipment ignited the firedamp.",
+		"The explosions were so violent that the cage of the Lancaster shaft was blown back up to wedge in the pithead winding gear. Someone standing close by was decapitated by a piece of flying wood.",
+		"Miners breathing afterdamp suffocated for lack of oxygen despite not being hurt by the explosion.",
+		"935 miners were down the pit on Tuesday 14th October 1913.",
+		"Edward Shaw, the manager, blamed the designers of the mine. He said the intake airway acted as a fan to the flames.",
+		"In 1914 a court case found that William Lewis should pay 25 pounds in fines for the disaster.",
+		"Lewis blamed the site manager Edward Shaw for the disaster due to the electrical fault.",
+		"In 1864 William Lewis marries Anne Rees and becomes wealthy.",
+		"The shock wave from the firedamp explosion caused coal dust to rise into the air which also ignited.",
+		"1896 William Lewis opens the Universal Colliery in Senghenydd.",
+		"The fires spread through most of the underground workings, quickly followed by afterdamp – poisonous gasses from the explosion like carbon monoxide and carbon dioxide.",
+		"In 1901 an explosion at the mine killed 81 people. Safety issues were brought up and coal dust was supposed to be removed.",
+		"Rescue teams rushed to the scene were hampered by fallen debris, roof falls and raging fires.",
+		"Edward Shaw and William Lewis did not follow the safety recommendations of the 1901 report and there was still coal dust in the mine.",
+		"In total 489 miners were rescued.",
+		"Miners got paid less because the price of coal was low so they had to work harder. ",
+		"By 1913 William Lewis was in his 70 and visited his Senghenydd coal mine less and less."
+	]
 }
