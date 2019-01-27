@@ -1,37 +1,13 @@
 {
-	"title": {
-		"content_type": "title",
-		"content": "When can they meet?",
-		"default": true
-	},
-	"clue1": {
-		"content_type": "clue",
-		"content": "Ben, Amy, Carl and Donna all want to meet up for lunch one day in the holidays, but they have not been able to all meet on the same day.",
-		"default": true
-	},
-	"clue2": {
-		"content_type": "clue",
-		"content": "Amy is free to meet on Mondays, Wednesdays and Thursdays.",
-		"default": true
-	},
-	"clue3": {
-		"content_type": "clue",
-		"content": "Carl has to go to work on Mondays and Thursdays.",
-		"default": true
-	},
-	"clue4": {
-		"content_type": "clue",
-		"content": "Ben can’t make Tuesdays, Wednesdays or Saturdays.",
-		"default": false
-	},
-	"clue5": {
-		"content_type": "clue",
-		"content": "Donna can be available on Mondays, Tuesdays and Fridays.",
-		"default": false
-	},
-	"clue6": {
-		"content_type": "clue",
-		"content": "They all want to spend time at home on Sundays.",
-		"default": false
-	}
+	"titles": [
+		"When can they meet?"
+	],
+	"clues": [
+		"Ben, Amy, Carl and Donna all want to meet up for lunch one day in the holidays, but they have not been able to all meet on the same day.",
+		"Amy is free to meet on Mondays, Wednesdays and Thursdays.",
+		"Carl has to go to work on Mondays and Thursdays.",
+		"Ben can’t make Tuesdays, Wednesdays or Saturdays.",
+		"Donna can be available on Mondays, Tuesdays and Fridays.",
+		"They all want to spend time at home on Sundays."
+	]
 }

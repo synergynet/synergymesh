@@ -1,37 +1,13 @@
 {
-	"title": {
-		"content_type": "title",
-		"content": "Can you find out the final position of each swimmer in the swimming race?",
-		"default": false
-	},
-	"clue1": {
-		"content_type": "clue",
-		"content": "Alice crossed the finishing line immediately after Austin",
-		"default": true
-	},
-	"clue2": {
-		"content_type": "clue",
-		"content": "Aaron finished right between Allen and Abby",
-		"default": true
-	},
-	"clue3": {
-		"content_type": "clue",
-		"content": "Adam won the race",
-		"default": true
-	},
-	"clue4": {
-		"content_type": "clue",
-		"content": "Aaron came in right after the boy who finished second",
-		"default": false
-	},
-	"clue5": {
-		"content_type": "clue",
-		"content": "Austin saw four people finish before him",
-		"default": false
-	},
-	"clue6": {
-		"content_type": "clue",
-		"content": "Allen did not finish fourth",
-		"default": false
-	}
+	"titles": [
+		"Can you find out the final position of each swimmer in the swimming race?"
+	],
+	"clues": [
+		"Alice crossed the finishing line immediately after Austin",
+		"Aaron finished right between Allen and Abby",
+		"Adam won the race",
+		"Aaron came in right after the boy who finished second",
+		"Austin saw four people finish before him",
+		"Allen did not finish fourth"
+	]
 }

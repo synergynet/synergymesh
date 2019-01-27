@@ -1,102 +1,26 @@
 {
-	"title": {
-		"content_type": "title",
-		"content": "Why did Wilf Smith join the Durham Light Infantry (the DLI)?",
-		"default": true
-	},
-	"clue1": {
-		"content_type": "clue",
-		"content": "In 1914 Wilf was 17 years old. Wilf worked on a farm outside Stanley, County Durham.",
-		"default": true
-	},
-	"clue2": {
-		"content_type": "clue",
-		"content": "He had lived in the same house in Stanley all his life with his parents and his two sisters.",
-		"default": true
-	},
-	"clue3": {
-		"content_type": "clue",
-		"content": "Wilf wanted to be a footballer but he was too small. He was an excellent swimmer.",
-		"default": true
-	},
-	"clue4": {
-		"content_type": "clue",
-		"content": "Wilf had a girlfriend, Agnes. Other lads thought she was very pretty. Agnes had been considered clever at school.",
-		"default": true
-	},
-	"clue5": {
-		"content_type": "clue",
-		"content": "In 1913 Agnes got a job as a 'live-in' servant for a 'posh' house in Newcastle.",
-		"default": true
-	},
-	"clue6": {
-		"content_type": "clue",
-		"content": "The 19th Battalion of the DLI were called the 'bantams' for men under 5ft 3ins tall.",
-		"default": true
-	},
-	"clue7": {
-		"content_type": "clue",
-		"content": "Wilf's mother had wanted more children, especially boys. Maisie, Wilf's 19 year-old sister was planning to get married.",
-		"default": true
-	},
-	"clue8": {
-		"content_type": "clue",
-		"content": "The son of Agnes' employer had signed up to be an officer instead of going to Cambridge University.",
-		"default": true
-	},
-	"clue9": {
-		"content_type": "clue",
-		"content": "Wilf's home was a crowded 'two up and two down' in Stanley. A picture of Edward VII was hung on the wall over the mantelpiece.",
-		"default": true
-	},
-	"clue10": {
-		"content_type": "clue",
-		"content": "Wilf was only 5ft 2ins tall. He wasn't very good at reading and writing.",
-		"default": true
-	},
-	"clue11": {
-		"content_type": "clue",
-		"content": "A private in the DLI got one shilling per day.",
-		"default": false
-	},
-	"clue12": {
-		"content_type": "clue",
-		"content": "There were lots of 'Kitchener' posters in Stanley in 1914.",
-		"default": false
-	},
-	"clue13": {
-		"content_type": "clue",
-		"content": "Wilf paid his mother 2 shillings a week.",
-		"default": false
-	},
-	"clue14": {
-		"content_type": "clue",
-		"content": "Tommy told Wilf that the 19th Battalion was stationed in Gateshead.",
-		"default": false
-	},
-	"clue15": {
-		"content_type": "clue",
-		"content": "Wilf looked after the horses on the farm. Wilf was paid 3 shillings a week.",
-		"default": false
-	},
-	"clue16": {
-		"content_type": "clue",
-		"content": "During the war Wilf wrote many letters home.",
-		"default": false
-	},
-	"clue17": {
-		"content_type": "clue",
-		"content": "The furthest Wilf had ever travelled as to see Newcastle United (at home) with Tommy. He had to save up to do this.",
-		"default": false
-	},
-	"clue18": {
-		"content_type": "clue",
-		"content": "Wilf's father had fought in the Boer War. He had caught TB and never worked after he came home.",
-		"default": false
-	},
-	"clue19": {
-		"content_type": "clue",
-		"content": "Tommy Fishburn boasted that he was the first solider to 'sign up' in Stanley.",
-		"default": false
-	}
+	"titles": [
+		"Why did Wilf Smith join the Durham Light Infantry (the DLI)?"
+	],
+	"clues": [
+		"In 1914 Wilf was 17 years old. Wilf worked on a farm outside Stanley, County Durham.",
+		"He had lived in the same house in Stanley all his life with his parents and his two sisters.",
+		"Wilf wanted to be a footballer but he was too small. He was an excellent swimmer.",
+		"Wilf had a girlfriend, Agnes. Other lads thought she was very pretty. Agnes had been considered clever at school.",
+		"In 1913 Agnes got a job as a 'live-in' servant for a 'posh' house in Newcastle.",
+		"The 19th Battalion of the DLI were called the 'bantams' for men under 5ft 3ins tall.",
+		"Wilf's mother had wanted more children, especially boys. Maisie, Wilf's 19 year-old sister was planning to get married.",
+		"The son of Agnes' employer had signed up to be an officer instead of going to Cambridge University.",
+		"Wilf's home was a crowded 'two up and two down' in Stanley. A picture of Edward VII was hung on the wall over the mantelpiece.",
+		"Wilf was only 5ft 2ins tall. He wasn't very good at reading and writing.",
+		"A private in the DLI got one shilling per day.",
+		"There were lots of 'Kitchener' posters in Stanley in 1914.",
+		"Wilf paid his mother 2 shillings a week.",
+		"Tommy told Wilf that the 19th Battalion was stationed in Gateshead.",
+		"Wilf looked after the horses on the farm. Wilf was paid 3 shillings a week.",
+		"During the war Wilf wrote many letters home.",
+		"The furthest Wilf had ever travelled as to see Newcastle United (at home) with Tommy. He had to save up to do this.",
+		"Wilf's father had fought in the Boer War. He had caught TB and never worked after he came home.",
+		"Tommy Fishburn boasted that he was the first solider to 'sign up' in Stanley."
+	]
 }

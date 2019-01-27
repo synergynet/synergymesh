@@ -1,107 +1,65 @@
 {
-	"title": {
-		"content_type": "title",
-		"content": "Can you work out what Mike should have to eat?",
-		"default": true
-	},
-	"clue1": {
-		"content_type": "clue",
-		"content": "The new cook at school, Mrs Baker, has mixed up the trays with the children’s school dinners on.",
-		"default": true
-	},
-	"clue2": {
-		"content_type": "clue",
-		"content": "\"YUCK!\" cried Ruby, making a face at the slice of pizza in front of her. \"I can''t stand pepperoni!\"",
-		"default": true
-	},
-	"clue3": {
-		"content_type": "clue",
-		"content": "\"Don't look at me,\" moaned Jack. \"I hate any food with cheese on it.\" At that, he pushed away his cheeseburger.",
-		"default": true
-	},
-	"clue4": {
-		"content_type": "clue",
-		"content": "\"Hey, anybody want these chicken wings?\" asked Grace. \"I don't like anything with meat in it.\"",
-		"default": false
-	},
-	"clue5": {
-		"content_type": "clue",
-		"content": "Mike scooped up a spoonful of his yogurt and grumbled, \"Everybody knows I'm allergic to this stuff.\"",
-		"default": false
-	},
-	"clue6": {
-		"content_type": "clue",
-		"content": "\"Well, yogurt is the only thing I like on the menu,\" replied Tanya. And there's no way I'm going to eat THIS!\" At that, she poked her salad with a fork.",
-		"default": false
-	},
-	"image1": {
-		"content_type": "image",
-		"content": "burger.png",
-		"width": 313,
-		"height": 201,
-		"default": true
-	},
-	"image2": {
-		"content_type": "image",
-		"content": "fries.png",
-		"width": 242,
-		"height": 247,
-		"default": true
-	},
-	"image3": {
-		"content_type": "image",
-		"content": "grace.png",
-		"width": 176,
-		"height": 180,
-		"default": true
-	},
-	"image4": {
-		"content_type": "image",
-		"content": "jack.png",
-		"width": 158,
-		"height": 190,
-		"default": true
-	},
-	"image5": {
-		"content_type": "image",
-		"content": "mike.png",
-		"width": 181,
-		"height": 210,
-		"default": true
-	},
-	"image6": {
-		"content_type": "image",
-		"content": "pizza.png",
-		"width": 232,
-		"height": 204,
-		"default": false
-	},
-	"image7": {
-		"content_type": "image",
-		"content": "ruby.png",
-		"width": 180,
-		"height": 200,
-		"default": false
-	},
-	"image8": {
-		"content_type": "image",
-		"content": "salad.png",
-		"width": 319,
-		"height": 207,
-		"default": false
-	},
-	"image9": {
-		"content_type": "image",
-		"content": "tanya.png",
-		"width": 180,
-		"height": 208,
-		"default": false
-	},
-	"image10": {
-		"content_type": "image",
-		"content": "yogurt.png",
-		"width": 260,
-		"height": 278,
-		"default": false
-	}
+	"titles": [
+		"Can you work out what Mike should have to eat?"
+	],
+	"clues": [
+		"The new cook at school, Mrs Baker, has mixed up the trays with the children’s school dinners on.",
+		"\"YUCK!\" cried Ruby, making a face at the slice of pizza in front of her. \"I can''t stand pepperoni!\"",
+		"\"Don't look at me,\" moaned Jack. \"I hate any food with cheese on it.\" At that, he pushed away his cheeseburger.",
+		"\"Hey, anybody want these chicken wings?\" asked Grace. \"I don't like anything with meat in it.\"",
+		"Mike scooped up a spoonful of his yogurt and grumbled, \"Everybody knows I'm allergic to this stuff.\"",
+		"\"Well, yogurt is the only thing I like on the menu,\" replied Tanya. And there's no way I'm going to eat THIS!\" At that, she poked her salad with a fork."
+	],
+	"images": [
+		{
+			"fileName": "burger.png",
+			"width": 313,
+			"height": 201
+		},
+		{
+			"fileName": "fries.png",
+			"width": 242,
+			"height": 247
+		},
+		{
+			"fileName": "grace.png",
+			"width": 176,
+			"height": 180
+		},
+		{
+			"fileName": "jack.png",
+			"width": 158,
+			"height": 190
+		},
+		{
+			"fileName": "mike.png",
+			"width": 181,
+			"height": 210
+		},
+		{
+			"fileName": "pizza.png",
+			"width": 232,
+			"height": 204
+		},
+		{
+			"fileName": "ruby.png",
+			"width": 180,
+			"height": 200
+		},
+		{
+			"fileName": "salad.png",
+			"width": 319,
+			"height": 207
+		},
+		{
+			"fileName": "tanya.png",
+			"width": 180,
+			"height": 208
+		},
+		{
+			"fileName": "yogurt.png",
+			"width": 260,
+			"height": 278
+		}
+	]
 }

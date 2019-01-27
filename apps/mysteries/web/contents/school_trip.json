@@ -1,67 +1,19 @@
 {
-	"title": {
-		"content_type": "title",
-		"content": "Does Nathan miss the bus for the school trip?",
-		"default": true
-	},
-	"clue1": {
-		"content_type": "clue",
-		"content": "Nathan sets off walking to school at 8:20 am.",
-		"default": true
-	},
-	"clue2": {
-		"content_type": "clue",
-		"content": "It takes 15 minutes to walk to the park from Nathan's home.",
-		"default": true
-	},
-	"clue3": {
-		"content_type": "clue",
-		"content": "Running is twice as fast as walking.",
-		"default": true
-	},
-	"clue4": {
-		"content_type": "clue",
-		"content": "The bus leaves the school at 9:20 am.",
-		"default": true
-	},
-	"clue5": {
-		"content_type": "clue",
-		"content": "The shops next to the park are busy with people buying newspapers and children getting sweets.",
-		"default": true
-	},
-	"clue6": {
-		"content_type": "clue",
-		"content": "Nathan runs back home to get his packed lunch and runs all the way back to the park.",
-		"default": true
-	},
-	"clue7": {
-		"content_type": "clue",
-		"content": "When Nathan gets to the park he realizes he has left his packed lunch behind.",
-		"default": false
-	},
-	"clue8": {
-		"content_type": "clue",
-		"content": "It takes 15 minutes to walk from the end of the park to school.",
-		"default": false
-	},
-	"clue9": {
-		"content_type": "clue",
-		"content": "It takes 10 minutes to walk across park or 15 minutes to walk round it. His mother doesn't like him going through the park. He takes a minute to decide what to do.",
-		"default": false
-	},
-	"clue10": {
-		"content_type": "clue",
-		"content": "Nathan is a good boy and always does what his mother tells him.",
-		"default": false
-	},
-	"clue11": {
-		"content_type": "clue",
-		"content": "On the other side of the park Nathan has to wait 4 minutes for the traffic lights to change so he can cross the road safely.",
-		"default": false
-	},
-	"clue12": {
-		"content_type": "clue",
-		"content": "Nathan was really looking forward to this school trip.",
-		"default": false
-	}
+	"titles": [
+		"Does Nathan miss the bus for the school trip?"
+	],
+	"clues": [
+		"Nathan sets off walking to school at 8:20 am.",
+		"It takes 15 minutes to walk to the park from Nathan's home.",
+		"Running is twice as fast as walking.",
+		"The bus leaves the school at 9:20 am.",
+		"The shops next to the park are busy with people buying newspapers and children getting sweets.",
+		"Nathan runs back home to get his packed lunch and runs all the way back to the park.",
+		"When Nathan gets to the park he realizes he has left his packed lunch behind.",
+		"It takes 15 minutes to walk from the end of the park to school.",
+		"It takes 10 minutes to walk across park or 15 minutes to walk round it. His mother doesn't like him going through the park. He takes a minute to decide what to do.",
+		"Nathan is a good boy and always does what his mother tells him.",
+		"On the other side of the park Nathan has to wait 4 minutes for the traffic lights to change so he can cross the road safely.",
+		"Nathan was really looking forward to this school trip."
+	]
 }
