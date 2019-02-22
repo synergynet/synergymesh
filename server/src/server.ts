@@ -1,3 +1,6 @@
+/**
+ * @module server
+ */
 import {Config} from '../../common/src/utils/config';
 import {NetworkingService} from '../../server/src/services/networking_service';
 

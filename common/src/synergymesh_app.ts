@@ -1,10 +1,8 @@
+/**
+ * @module common
+ */
 import * as d3 from 'd3';
 import * as $ from 'jquery';
-
-// TODO Module headers for typedoc.
-
-// TODO Re-add unit tests.
-
 import { CommonNetworkEvents } from './constants/common_network_events';
 import { Roles } from './constants/roles';
 import { Config } from './utils/config';

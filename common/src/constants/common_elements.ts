@@ -1,4 +1,8 @@
 /**
+ * @module constants
+ */
+
+ /**
  * Typical constants relating to the config item passed to export requests.
  */
 export class CommonElements {

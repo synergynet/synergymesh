@@ -1,3 +1,6 @@
+/**
+ * @module app/teacher-controls
+ */
 import {CommonNetworkEvents} from '../../../common/src/constants/common_network_events'; 
 import {Networking} from '../../../common/src/utils/networking';
 import {Roles} from '../../../common/src/constants/roles'; 
