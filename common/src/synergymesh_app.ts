@@ -72,6 +72,10 @@ export abstract class SynergyMeshApp {
 	 * @param {boolean} testMode Flag to indicate if the app is in test mode.
 	 */
 	public constructor(rootPath: string = '', testMode: boolean = false) {	
+
+		document.addEventListener('dragstart', function (e) {
+			e.preventDefault();
+		});
 			
 		// Store test mode.
 		this.testMode = testMode;
