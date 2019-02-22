@@ -1,3 +1,6 @@
+/**
+ * @module server
+ */
 import {Networking} from '../../../common/src/utils/networking';
 import * as SocketIO from 'socket.io';
 import * as http from 'http';

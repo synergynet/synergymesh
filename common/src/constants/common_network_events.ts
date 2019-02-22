@@ -1,4 +1,8 @@
 /**
+ * @module constants
+ */
+
+ /**
  * Typical constants relating to common networking events.
  */
 export class CommonNetworkEvents {

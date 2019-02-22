@@ -1,4 +1,8 @@
-import {Transformations} from '../../../common/src/utils/transformations';
+/**
+ * @module items
+ */
+
+ import {Transformations} from '../../../common/src/utils/transformations';
   
  /**
  * Class which defines an element with text in a box.

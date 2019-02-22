@@ -1,4 +1,8 @@
 /**
+ * @module utilities
+ */
+
+ /**
  * Class with static methods for getting random values in ranges.
  */
 export class Random {

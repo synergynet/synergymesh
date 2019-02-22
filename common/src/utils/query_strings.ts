@@ -1,4 +1,8 @@
 /**
+ * @module utilities
+ */
+
+ /**
  * Class with static methods for supporting working with query strings in urls.
  */
 export class QueryStrings {

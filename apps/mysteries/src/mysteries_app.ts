@@ -1,3 +1,6 @@
+/**
+ * @module app/mysteries
+ */
 import * as $ from 'jquery';
 import {TextItem} from '../../../common/src/items/text_item';
 import {NetworkFlickManager} from '../../../common/src/listeners/network_flick_manager';
