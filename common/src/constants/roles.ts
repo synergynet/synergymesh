@@ -1,4 +1,8 @@
 /**
+ * @module constants
+ */
+
+ /**
  * Typical constants relating to the roles of users of apps.
  */
 export class Roles {

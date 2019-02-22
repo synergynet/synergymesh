@@ -1,3 +1,6 @@
+/**
+ * @module common
+ */
 import {MysteriesApp} from '../../apps/mysteries/src/mysteries_app';
 import {PrototypeApp} from '../../apps/prototype/src/prototype_app';
 import {TeacherControlsApp} from '../../apps/teacher_controls/src/teacher_controls_app';

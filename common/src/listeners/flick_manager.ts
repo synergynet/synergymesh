@@ -1,3 +1,7 @@
+/**
+ * @module listeners
+ */
+
 import {SynergyMeshApp} from '../../../common/src/synergymesh_app';
 import {TouchManager} from '../../../common/src/listeners/touch_manager';
 import {Transformations} from '../../../common/src/utils/transformations'; 

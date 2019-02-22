@@ -1,3 +1,7 @@
+/**
+ * @module listeners
+ */
+
 import {Transformations} from '../../../common/src/utils/transformations'; 
 
 /**

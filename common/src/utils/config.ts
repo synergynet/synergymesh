@@ -1,3 +1,6 @@
+/**
+ * @module utilities
+ */
 import * as fs from 'fs';
 import * as $ from 'jquery';
 

@@ -1,4 +1,8 @@
-import * as d3 from 'd3';
+/**
+ * @module listeners
+ */
+
+ import * as d3 from 'd3';
 import * as $ from 'jquery';
 import {CommonElements} from '../../../common/src/constants/common_elements';
 import {Roles} from '../../../common/src/constants/roles';
