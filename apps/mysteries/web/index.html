@@ -8,6 +8,9 @@
 		<!-- Set styles for app -->
 		<link rel="stylesheet" type="text/css" href="../../../common/web/synergymesh.css">
 		<link rel="stylesheet" type="text/css" href="../../../apps/mysteries/web/app.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
 		<title>Mysteries</title>
 	</head>
 	<body>
@@ -20,6 +23,7 @@
 		
 			<!--  Add mystery selector -->
 			<div class="synergymesh_prompt">MYSTERY:  </div>
+            <p></p>
 			<select class="synergymesh_select_input" id="mystery_selector">
 				<option value="algorithms-jam">Algorithms - Jam</option>
 				<option value="algorithms-egg">Algorithms - Egg</option>
@@ -48,6 +52,7 @@
 		
 			<!-- Add mystery mode controls  -->
 			<div class="synergymesh_prompt">MODE:  </div>
+            <p></p>
 			<select class="synergymesh_select_input" id="mystery_mode">
 				<option value="standalone">Standalone</option>
 				<option value="networked">Networked</option>		
@@ -58,10 +63,10 @@
 		
 			<!--  Add controls for getting session ID. -->
 			<div class="synergymesh_prompt">SESSION ID: </div>
+             <p></p>
 			<input class="synergymesh_text_input" id="session_input" type="text" autofocus/>
 			
 			<!--  Add spacer. -->
-			<div class="synergymesh_spacer"></div>
 			<div class="synergymesh_spacer"></div>
 	
 			<!-- Add button to start the app-->

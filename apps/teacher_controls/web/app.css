@@ -1,17 +1,16 @@
 #viz-bg {
-	fill: #000000; 
+	fill: #29313F; 
 }
 
 .freeze-bg {
-	fill: #000000;
-	stroke: #FFFFFF;
-	stroke-width: 2;
-	rx: 3; 
-	ry: 3; 
+	fill: #3D495E;
+    y: -5px;
+    x: -2px;
+    filter: drop-shadow(5px 5px 5px #252525);
 }
 
 .freeze-text {
 	fill: #FFFFFF;
-	font-family: sans-serif;
+	font-family: 'Lato', sans-serif;
 	text-align: center;
 }

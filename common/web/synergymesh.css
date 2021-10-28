@@ -1,7 +1,8 @@
 /* General */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 body {
-	background: #000000;
+	background: #29313F;
 	touch-action: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -9,28 +10,30 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-	font-family: sans-serif;
+	font-family: 'Lato', sans-serif;
 }
 
 
 /* Homepage */
 
+
 .apps {
-	font-family: sans-serif;
+	font-family: 'Lato', sans-serif;
 	font-size: large;
 	color: #FFFFFF;
 	text-align: center;
 	padding: 20px;
+    
 }
 
 .app-boxes a {
-	color: orange;
+	color: #8A9DB5;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 .app-boxes a:hover {
-	color: #ce5c00;
+	color: #252525;
 }
 
 .app-boxes {
@@ -38,8 +41,8 @@ body {
 	margin-right: auto;
 	padding: 5px;
 	padding-bottom: 15px;
-	width: 50%;
-	background: #222222;
+	width: 60%;
+	background: #3D495E;
 	line-height: 25px;
 }
 
@@ -47,14 +50,20 @@ body {
 /* App UI */
 
 #synergymesh_controls {
+    
+    font-family: 'Lato', sans-serif;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	width: 400px;
-	padding: 15px;
+	padding: 20px;
 	-ms-transform: translateX(-50%) translateY(-50%);
 	-webkit-transform: translate(-50%,-50%);
 	transform: translate(-50%,-50%);
+}
+
+#synergymesh_controls h2{
+    font-size: 30px;
 }
 
 .synergymesh_prompt {
@@ -62,42 +71,58 @@ body {
 	width: 100%;
 	height: 45px;
 	font-size: 24pt;
-	font-weight: 600;
+    border: none;
 }
 
 .synergymesh_select_input {
+    font-family: 'Lato', sans-serif;
 	height: 75px;
 	width: 100%;
 	background: #252525;	
 	font-size: 20pt;
 	padding: 10px;
-    border-radius:6px;
-	border:2px solid #FFFFFF;
+	border: none;
 	color: #FFFFFF;
 }
 
 .synergymesh_text_input {
+    font-family: 'Lato', sans-serif;
 	height: 75px;
 	width: 100%;
 	background: #252525;	
 	font-size: 20pt;
 	padding: 10px;
 	color: #FFFFFF;
+    border: none;
 }
 
 .synergymesh_button {
-	height: 100px;
-	width: 100%;
-	background: #252525;	
+    font-family: 'Lato', sans-serif;
+	height: 80px;
+	width: 90%;
+	background: #3D495E;	
 	font-size: 26pt;
-    border-radius:6px;
-	border:2px solid #FFFFFF;
 	color: #FFFFFF;
 	font-weight: bold;
+    border: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.5), 0 3px 3px 0 rgba(0,0,0,0.5);
+    cursor: grab;
+}
+
+#start_app_button{
+    font-family: 'Lato', sans-serif;
+}
+
+.synergymesh_button:hover{
+    box-shadow: none;
+    cursor: grabbing;
 }
 
 .synergymesh_spacer {
-	height: 30px;
+	height: 40px;
 }
 
 
