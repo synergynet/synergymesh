@@ -20,39 +20,26 @@
 		
 		<!-- Controls container. -->		
 		<div id="synergymesh_controls">
+            
+            <!--  Add mystery category -->
+			<div class="synergymesh_prompt">CATEGORY:  </div>
+            <p></p>
+			<select required class="synergymesh_select_input" id="mystery_category">
+                <option selected disabled hidden value="">-- Select Category --</option>
+                <option value="algorithms">Algorithms</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="logic">Logical Reasoning</option>
+                <option value="History">Waltzer</option>
+			</select>
+
+            <!--  Add spacer. -->
+			<div class="synergymesh_spacer"></div>
 		
 			<!--  Add mystery selector -->
 			<div class="synergymesh_prompt">MYSTERY:  </div>
             <p></p>
-			<select required class="synergymesh_select_input" id="mystery_selector">
-                <option selected disabled hidden value="">-- Select Mystery --</option>
-                <optgroup label="Algorithms">
-                    <option value="algorithms-jam">Algorithms - Jam</option>
-                    <option value="algorithms-egg">Algorithms - Egg</option>
-                </optgroup>  
-                <optgroup label="Mathematics">
-                    <option value="judith">Cat Food Conundrum</option>
-                    <option value="waltzer">Waltzer</option>
-                    <option value="charlie">Charlie</option>
-                    <option value="dan">Dan</option>
-                    <option value="school_trip">School Trip</option>
-                    <option value="money_trail">Money Trail</option>
-                    <option value="triplets">Triplets</option>
-                </optgroup>  
-                <optgroup label="Logical Reasoning">
-				    <option value="dinner_disaster">Dinner Disaster</option>
-                    <option value="meet_up">Meet Up</option>
-                    <option value="sports_day">Sports Day</option>
-				    <option value="swimmer">Swimming</option>
-                </optgroup> 
-                <optgroup label="History">
-                    <option value="mary">Mary and Archie</option>
-                    <option value="london">Great Fire of London</option>
-                    <option value="robert_dixon">Robert Dixon</option>
-                    <option value="senghenydd">Senghenydd Colliery Disaster</option>
-                    <option value="sneaky_sydney">Sneaky Sydney</option>
-                    <option value="wilf">Wilf</option>
-                </optgroup>
+			<select required disabled=true class="synergymesh_select_input" id="mystery_selector">
+                <option selected disabled hidden value="">-- Select Category First --</option>
 			</select>
 
 			<!--  Add spacer. -->
@@ -84,11 +71,11 @@
 		
 		<!-- Add script to prepare the app-->
 		<script src="../../../common/web/touch-emulator.js"></script>
+        <script src="../src/ui.js"></script>
 		<script>
 			TouchEmulator();
 			let appName='mysteries';
 		</script>		
 		<script src="/dist/app.js"></script>
-
 	</body>
 </html>;
