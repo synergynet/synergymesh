@@ -3,6 +3,13 @@ categories.selectedIndex = 0;
 var mystery = document.getElementById('mystery_selector');
 var items = [];
 var values = [];
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    var idInput = document.getElementById('session_input');
+    idInput.value = Math.random().toString(36).substr(2, 9);
+});
+
+
 var setFilters = function (event) {
     var val = categories.options[categories.selectedIndex].value;
     if(val == ""){
@@ -39,6 +46,8 @@ var setFilters = function (event) {
     }
     mystery.innerHTML = str;
 };
+
+
 
 document.addEventListener("DOMContentLoaded", setFilters, false);
 document.getElementById('mystery_category').addEventListener('change',setFilters, false);
