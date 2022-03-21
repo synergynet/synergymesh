@@ -32,8 +32,8 @@ var setFilters = function (event) {
                 values = ["dinner_disaster", "meet_up", "sports_day", "swimmer"];
             break;
             case 'history':
-                items = ["Mary and Archie", "Great Fire of London", "Robert Dixon", "Senghenydd Colliery Disaster", "Sneaky Sydney", "Wilf"];
-                values = ["mary", "london", "robert_dixon", "senghenydd", "sneaky_sydney", "wilf"];
+                items = ["Mary and Archie", "Great Fire of London", "Robert Dixon", "Senghenydd Colliery Disaster", "Sneaky Sydney", "Wilf", "Bastidas", "Tsuchiya", "Medieval Castles"];
+                values = ["mary", "london", "robert_dixon", "senghenydd", "sneaky_sydney", "wilf", "bastidas", "tsuchiya", "castles"];
             break;
         }
         
