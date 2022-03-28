@@ -1,24 +1,24 @@
 #viz-bg {
-	fill: #29313F; 
+	fill: #002A32; 
 }
 
 
 .title-bg {
-	fill: #3D495E;
-    stroke: #333333;
-	stroke-width: 2;
+	fill: none;
+    stroke: none;
     y: -5px;
     x: -5px;
 }
 
 .title-text {
-	fill: #8A9DB5;
+	fill: #E4DFDA;
 	stroke: none;
 	font-size: .97em;
-	font-family: 'Lato', sans-serif;
+	font-family: 'Work Sans', sans-serif;
 	text-align: center;
     font-weight: 700;
-    
+    border-bottom: #000000;
+	border-bottom: 4px solid #48A9A6;
 }
 
 .clue-bg {
@@ -29,12 +29,10 @@
 
 image {
     filter: drop-shadow(5px 5px 5px #252525);
-    stroke: none !important;
-    stroke-width: 0 !important;
 }
 
 .clue-text {
-	fill: #000000;
+	fill: #002A32;
 	stroke: none;
 	font-family: 'Lato', sans-serif;
 	text-align: center;

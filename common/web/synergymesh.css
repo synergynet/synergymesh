@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 body {
-	background: #29313F;
+	background: #002A32;
 	touch-action: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -20,30 +20,43 @@ body {
 .apps {
 	font-family: 'Lato', sans-serif;
 	font-size: large;
-	color: #FFFFFF;
+	color: #002A32;
 	text-align: center;
 	padding: 20px;
     
 }
 
+h1{
+	font-size: 72px;
+	color: #E4DFDA;
+}
+
+h1, h2{
+	font-family: 'Work Sans', sans-serif;
+}
+
 .app-boxes a {
-	color: #8A9DB5;
+	color: #002A32;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 .app-boxes a:hover {
-	color: #252525;
+	color: #48A9A6;
 }
 
 .app-boxes {
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 25px;
 	padding: 5px;
 	padding-bottom: 15px;
-	width: 60%;
-	background: #3D495E;
+	width: 50vw;
+	max-width: 400px;
+	background: #E4DFDA;
 	line-height: 25px;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	border-radius: 10px;
 }
 
 
@@ -63,52 +76,72 @@ body {
 }
 
 #synergymesh_controls h2{
+	font-family: 'Work Sans', sans-serif;
     font-size: 30px;
+	
 }
 
 .synergymesh_prompt {
-	color: #FFFFFF;
+	font-family: 'Work Sans', sans-serif;
+	color: #E4DFDA;
 	width: 100%;
 	height: 45px;
 	font-size: 24pt;
     border: none;
 }
 
-.synergymesh_select_input {
+.synergymesh_select_input, .synergymesh_text_input {
     font-family: 'Lato', sans-serif;
 	height: 75px;
 	width: 100%;
-	background: #252525;	
+	margin: 10px;
+	background-color: rgba(228, 223, 218, 1);
 	font-size: 20pt;
-	padding: 10px;
-	border: none;
-	color: #FFFFFF;
+	padding: 0.5em 3.5em 0.5em 1em;
+	color: #002A32;
+	border: 0px;
+	border-bottom: 4px solid #4281A4;
+	border-radius: 10px 10px 0px 0px;
+
+	/* reset */
+
+	margin: 0;      
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-appearance: none;
+	-moz-appearance: none;
 }
 
-.synergymesh_text_input {
-    font-family: 'Lato', sans-serif;
-	height: 75px;
-	width: 100%;
-	background: #252525;	
-	font-size: 20pt;
-	padding: 10px;
-	color: #FFFFFF;
-    border: none;
+.synergymesh_select_input{
+	background: url(../img/down.png) no-repeat right;
+	background-color: rgba(228, 223, 218, 1);
+    background-position-x: 95%;
+}
+
+
+
+.synergymesh_select_input:focus, .synergymesh_text_input:focus{
+	outline: none;
+	border-bottom: 5px solid #48A9A6;
+	background-color: rgba(228, 223, 218, 0.85);
 }
 
 .synergymesh_button {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Work Sans', sans-serif;
 	height: 80px;
-	width: 90%;
-	background: #3D495E;	
+	width: 100%;
+	background: #48A9A6;	
 	font-size: 26pt;
 	color: #FFFFFF;
 	font-weight: bold;
     border: none;
+	border-radius: 10px;
+	margin-top: 25px;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.5), 0 3px 3px 0 rgba(0,0,0,0.5);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     cursor: grab;
 }
 
@@ -117,8 +150,8 @@ body {
 }
 
 .synergymesh_button:hover{
-    box-shadow: none;
     cursor: grabbing;
+	background: #3C8C89;
 }
 
 .synergymesh_spacer {
