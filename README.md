@@ -1,11 +1,11 @@
-# SynergyMesh
+# Haymay
 
 A library for supporting web-based multi-user apps for natural user interfaces. The library supports many features which can be made use of by apps implemented with it, such as: multi-touch gesture support and networking.
 
  - [Using SynergyMesh](https://github.com/jamcnaughton/synergymesh/wiki/using-synergymesh)
  - [Developing with SynergyMesh](https://github.com/jamcnaughton/synergymesh/wiki/developing-with-synergymesh)
 
-# Set up
+## Set up
 
 To be publicly available, the app needs two virtual hosts. One for the socket server, and one for the front-end application.
 
@@ -27,7 +27,7 @@ To be publicly available, the app needs two virtual hosts. One for the socket se
 </VirtualHost>
 ```
 
-# Starting the apps
+## Starting the front / back-ends
 
 The front-end should run on the port specified in the vhost (8888 if using the above example).
 
@@ -40,6 +40,8 @@ The back-end takes it's config from `config.json`, so the values here need to be
 ```sh
 nohup npm run start:networking:dev &
 ```
+
+## Stopping the front / back-ends
 
 The front-end and back-end can be killed with:
 
