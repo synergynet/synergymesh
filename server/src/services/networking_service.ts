@@ -19,7 +19,8 @@ export class NetworkingService {
 	 * @param {string} port The port to tie to the networking service.
 	 */
 	public constructor (port: string) { 
-	
+		let self = this;
+
 		// Setup basic server.
 		let server;
 					
@@ -71,7 +72,7 @@ export class NetworkingService {
 			  
 				// Add client id to the appropriate list.
 				clients[session][role][app].push(socket.id);
-				console.log(socket.id + ' joined ' + session + ' as a ' + role + ' in the app ' + app + '.');
+				console.log(self.currentDate() + ': ' + socket.id + ' joined ' + session + ' as a ' + role + ' in the app ' + app + '.');
 			  
 				// Establish data to send (i.e. client list).
 				let clientsJson = {};
@@ -86,17 +87,15 @@ export class NetworkingService {
 						}
 					}
 				}
-				console.log('Announced clients list to all in session.');	
+
+				console.log(self.currentDate() + ': ' + 'Announced clients list to all in session.');
 				
 				// Record that this user is now added to the client lists.
 				addedClient = true;
-			  
-			});	
-				
+			});
 			
 			// Listen for a message to all clients in a session.
 			socket.on(Networking.EVENTS.TO_ALL, function (data: JSON) {
-				
 				// Get event name from data.
 				let eventName = data[Networking.MESSAGE.EVENT_NAME];
 				
@@ -113,14 +112,12 @@ export class NetworkingService {
 						}
 					}
 				}
-				console.log(socket.id + ' sent a message to all in session ' + session + '.');	
-				
+
+				console.log(self.currentDate() + ': ' + socket.id + ' sent a message to all in session ' + session + '.');
 			});
 				
-			
 			// Listen for a message to all clients with a s specific role in a session.
 			socket.on(Networking.EVENTS.TO_ROLE, function (data: JSON) {
-				
 				// Get event name from data.
 				let eventName = data[Networking.MESSAGE.EVENT_NAME];
 				
@@ -297,6 +294,10 @@ export class NetworkingService {
 		// Output status.
 		console.log('Server listening on port ' + port);
 
+	}
+
+	private currentDate() : string {
+		return new Date().toISOString().slice(0, 19).replace('T', ' ');
 	}
 	
 }
