@@ -1,5 +1,5 @@
 #viz-bg {
-	fill: #000000; 
+	fill: #29313F; 
 }
 
 #circle-one {
@@ -20,12 +20,12 @@
 
 .demo-text-bg {
 	fill: #FFFFFF;
-	stroke: #AEAEAE;
-	stroke-width: 2;
+    filter: drop-shadow(5px 5px 5px #252525);
+    y: -5px;
 }
 
 .demo-text-text {
 	color: #000000;
-	font-family: sans-serif;
+	font-family: 'Lato', sans-serif;
 	text-align: center;
 }

@@ -8,6 +8,11 @@
 		<!-- Set styles for app -->
 		<link rel="stylesheet" type="text/css" href="../../../common/web/synergymesh.css">
 		<link rel="stylesheet" type="text/css" href="../../../apps/mysteries/web/app.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap" rel="stylesheet">
+
 		<title>Mysteries</title>
 	</head>
 	<body>
@@ -19,36 +24,49 @@
 		<div id="synergymesh_controls">
 		
 			<!--  Add mystery selector -->
-			<div class="synergymesh_prompt">MYSTERY:  </div>
-			<select class="synergymesh_select_input" id="mystery_selector">
-				<option value="algorithms-jam">Algorithms - Jam</option>
-				<option value="algorithms-egg">Algorithms - Egg</option>
-				<option value="judith">Cat Food Conundrum</option>
-				<option value="charlie">Charlie</option>
-				<option value="dan">Dan</option>
-				<option value="london">Great Fire of London</option>
-				<option value="dinner_disaster">Dinner Disaster</option>
-				<option value="judith">Cat Food Conundrum</option>
-				<option value="mary">Mary and Archie</option>
-				<option value="meet_up">Meet Up</option>
-				<option value="money_trail">Money Trail</option>
-				<option value="robert_dixon">Robert Dixon</option>
-				<option value="school_trip">School Trip</option>
-				<option value="senghenydd">Senghenydd Colliery Disaster</option>
-				<option value="sneaky_sydney">Sneaky Sydney</option>
-				<option value="sports_day">Sports Day</option>
-				<option value="swimmer">Swimming</option>
-				<option value="triplets">Triplets</option>
-				<option value="waltzer">Waltzer</option>
-				<option value="wilf">Wilf</option>
+			<div class="synergymesh_prompt">Mystery:  </div>
+            <p></p>
+			<select required class="synergymesh_select_input" id="mystery_selector">
+                <option selected disabled hidden value="">-- Select Mystery --</option>
+                <optgroup label="Algorithms">
+                    <option value="algorithms-jam">Algorithms - Jam</option>
+                    <option value="algorithms-egg">Algorithms - Egg</option>
+                </optgroup>  
+                <optgroup label="Mathematics">
+                    <option value="judith">Cat Food Conundrum</option>
+                    <option value="waltzer">Waltzer</option>
+                    <option value="charlie">Charlie</option>
+                    <option value="dan">Dan</option>
+                    <option value="school_trip">School Trip</option>
+                    <option value="money_trail">Money Trail</option>
+                    <option value="triplets">Triplets</option>
+                </optgroup>  
+                <optgroup label="Logical Reasoning">
+				    <option value="dinner_disaster">Dinner Disaster</option>
+                    <option value="meet_up">Meet Up</option>
+                    <option value="sports_day">Sports Day</option>
+				    <option value="swimmer">Swimming</option>
+                </optgroup> 
+                <optgroup label="History">
+                    <option value="mary">Mary and Archie</option>
+                    <option value="london">Great Fire of London</option>
+                    <option value="robert_dixon">Robert Dixon</option>
+                    <option value="senghenydd">Senghenydd Colliery Disaster</option>
+                    <option value="sneaky_sydney">Sneaky Sydney</option>
+                    <option value="wilf">Wilf</option>
+					<option value="bastidas">Bastidas</option>
+					<option value="tsuchiya">Tsuchiya</option>
+					<option value="castles">Medieval Castles</option>
+                </optgroup>
 			</select>
 
 			<!--  Add spacer. -->
 			<div class="synergymesh_spacer"></div>
 		
 			<!-- Add mystery mode controls  -->
-			<div class="synergymesh_prompt">MODE:  </div>
-			<select class="synergymesh_select_input" id="mystery_mode">
+			<div class="synergymesh_prompt">Mode:  </div>
+            <p></p>
+			<select required class="synergymesh_select_input" id="mystery_mode">
 				<option value="standalone">Standalone</option>
 				<option value="networked">Networked</option>		
 			</select>
@@ -57,15 +75,15 @@
 			<div class="synergymesh_spacer"></div>
 		
 			<!--  Add controls for getting session ID. -->
-			<div class="synergymesh_prompt">SESSION ID: </div>
-			<input class="synergymesh_text_input" id="session_input" type="text" autofocus/>
+			<div class="synergymesh_prompt">Session ID: </div>
+             <p></p>
+			<input class="synergymesh_text_input" id="session_input" type="text" autocomplete="off" autofocus/>
 			
 			<!--  Add spacer. -->
 			<div class="synergymesh_spacer"></div>
-			<div class="synergymesh_spacer"></div>
 	
 			<!-- Add button to start the app-->
-			<button class="synergymesh_button" id="start_app_button">START APP</button>
+			<button class="synergymesh_button" id="start_app_button">Start App</button>
 		
 		</div>
 		

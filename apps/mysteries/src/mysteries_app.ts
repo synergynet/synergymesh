@@ -503,8 +503,8 @@ export class MysteriesApp extends SynergyMeshApp {
 		let textItem = new TextItem(this.svg, text, MysteriesApp.MAX_WIDTH_TITLE, 'title', 'title-bg', 'title-text');
 		
 		// Place at the top.
-		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, (textItem.getHeight() * 2) + 5);
-		Transformations.setScale(textItem.asItem(), 1.2);
+		Transformations.setTranslation(textItem.asItem(), this.vizWidth/2, (textItem.getHeight() * 2) + 50);
+		Transformations.setScale(textItem.asItem(), 1.5);
 
 		
 	}

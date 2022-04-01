@@ -12,52 +12,52 @@
 	],
 	"images": [
 		{
-			"fileName": "burger.png",
+			"fileName": "dinner/burger.png",
 			"width": 313,
 			"height": 201
 		},
 		{
-			"fileName": "fries.png",
+			"fileName": "dinner/fries.png",
 			"width": 242,
 			"height": 247
 		},
 		{
-			"fileName": "grace.png",
+			"fileName": "dinner/grace.png",
 			"width": 176,
 			"height": 180
 		},
 		{
-			"fileName": "jack.png",
+			"fileName": "dinner/jack.png",
 			"width": 158,
 			"height": 190
 		},
 		{
-			"fileName": "mike.png",
+			"fileName": "dinner/mike.png",
 			"width": 181,
 			"height": 210
 		},
 		{
-			"fileName": "pizza.png",
+			"fileName": "dinner/pizza.png",
 			"width": 232,
 			"height": 204
 		},
 		{
-			"fileName": "ruby.png",
+			"fileName": "dinner/ruby.png",
 			"width": 180,
 			"height": 200
 		},
 		{
-			"fileName": "salad.png",
+			"fileName": "dinner/salad.png",
 			"width": 319,
 			"height": 207
 		},
 		{
-			"fileName": "tanya.png",
+			"fileName": "dinner/tanya.png",
 			"width": 180,
 			"height": 208
 		},
 		{
-			"fileName": "yogurt.png",
+			"fileName": "dinner/yogurt.png",
 			"width": 260,
 			"height": 278
 		}

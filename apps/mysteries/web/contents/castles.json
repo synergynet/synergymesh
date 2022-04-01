@@ -1,0 +1,60 @@
+{
+	"titles": [
+		"Pick your castle and category. Lowest score surrenders their castle."
+	],
+	"clues": [
+
+	],
+	"images": [
+		{
+			"fileName": "castles/alnwick.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/cadbury.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/caerleon.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/carlisle.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/chester.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/dumbarton.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/harlech.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/roxburgh.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/tintagel.png",
+			"width": 400,
+			"height": 530
+		},
+		{
+			"fileName": "castles/warwick.png",
+			"width": 400,
+			"height": 530
+		}
+	]
+}

@@ -9,17 +9,14 @@ import * as http from 'http';
  * Class for supporting networking on the server
  */
 export class NetworkingService {
-	
-
-	//// Constructor ////
-	
 	/**
 	 * Start the networking service on the server
 	 * 
 	 * @param {string} port The port to tie to the networking service.
 	 */
 	public constructor (port: string) { 
-	
+		let self = this;
+
 		// Setup basic server.
 		let server;
 					
@@ -34,7 +31,7 @@ export class NetworkingService {
 		
 		// Establish client lists.
 		let clients = {};
-		
+
 		// Set up connection environment.
 		io.on('connection', function (socket: SocketIO.Socket) {
 			
@@ -43,7 +40,6 @@ export class NetworkingService {
 			
 			// Listen for a client joining.
 			socket.on(Networking.EVENTS.JOIN, function (data: JSON) {
-				
 				// Don't continue if this user has already been added.
 				if (addedClient){
 					return;
@@ -71,7 +67,7 @@ export class NetworkingService {
 			  
 				// Add client id to the appropriate list.
 				clients[session][role][app].push(socket.id);
-				console.log(socket.id + ' joined ' + session + ' as a ' + role + ' in the app ' + app + '.');
+				console.log(self.currentDate() + ': ' + socket.id + ' joined ' + session + ' as a ' + role + ' in the app ' + app + '.');
 			  
 				// Establish data to send (i.e. client list).
 				let clientsJson = {};
@@ -86,17 +82,15 @@ export class NetworkingService {
 						}
 					}
 				}
-				console.log('Announced clients list to all in session.');	
+
+				console.log(self.currentDate() + ': Announced clients list to all in session.');
 				
 				// Record that this user is now added to the client lists.
 				addedClient = true;
-			  
-			});	
-				
+			});
 			
 			// Listen for a message to all clients in a session.
 			socket.on(Networking.EVENTS.TO_ALL, function (data: JSON) {
-				
 				// Get event name from data.
 				let eventName = data[Networking.MESSAGE.EVENT_NAME];
 				
@@ -113,14 +107,12 @@ export class NetworkingService {
 						}
 					}
 				}
-				console.log(socket.id + ' sent a message to all in session ' + session + '.');	
-				
+
+				console.log(self.currentDate() + ': ' + socket.id + ' sent a message to all in session ' + session + '.');
 			});
 				
-			
 			// Listen for a message to all clients with a s specific role in a session.
 			socket.on(Networking.EVENTS.TO_ROLE, function (data: JSON) {
-				
 				// Get event name from data.
 				let eventName = data[Networking.MESSAGE.EVENT_NAME];
 				
@@ -140,14 +132,12 @@ export class NetworkingService {
 						}
 					}
 				}
-				console.log(socket.id + ' sent a message to all in session ' + session + ' with ' + roleKey + ' role.');	
-				
+
+				console.log(self.currentDate() + ': ' + socket.id + ' sent a message to all in session ' + session + ' with ' + roleKey + ' role.');
 			});
-			
 			
 			// Listen for a message to all clients in a specific app in a session.
 			socket.on(Networking.EVENTS.TO_APP, function (data: JSON) {
-				
 				// Get event name from data.
 				let eventName = data[Networking.MESSAGE.EVENT_NAME];
 				
@@ -167,13 +157,12 @@ export class NetworkingService {
 						}
 					}
 				}
+
 				console.log(socket.id + ' sent a message to all in session ' + session + ' in ' + appKey + ' app.');	
-				
 			});
 			
 			// Give ability to send to all clients with a specific role with a specific role in a specific app in a session. 	
 			socket.on(Networking.EVENTS.TO_ROLE_IN_APP, function (data: JSON) {
-				
 				// Get event name from data.
 				let eventName = data[Networking.MESSAGE.EVENT_NAME];
 				
@@ -196,14 +185,12 @@ export class NetworkingService {
 						}
 					}
 				}
+
 				console.log(socket.id + ' sent a message to all in session ' + session + ' with ' + roleKey + ' role in ' + appKey + ' app.');	
-				
 			});
-			
 			
 			// Listen for a message to a specific client.
 			socket.on(Networking.EVENTS.TO_CLIENT, function (data: JSON) {
-				
 				// Get event name from data.
 				let eventName = data[Networking.MESSAGE.EVENT_NAME];
 				
@@ -219,14 +206,13 @@ export class NetworkingService {
 			
 			// When the use is disconnected remove them from their corresponding list.
 			socket.on('disconnect', function () {
-				
 				// Check the client has been added.
 				if (addedClient) {
-					
-					// Loop through client list to find client.
 					let targetSession;
 					let targetRole;
 					let targetApp;
+
+					// Loop through client list to find client.
 					for (let sessionKey in clients) {
 						for (let roleKey in clients[sessionKey]) {
 							for (let appKey in clients[sessionKey][roleKey]) {
@@ -237,10 +223,12 @@ export class NetworkingService {
 									break;
 								}
 							}
+
 							if (targetRole != null) {
 								break;
 							}
 						}
+
 						if (targetSession != null) {
 							break;
 						}
@@ -248,10 +236,9 @@ export class NetworkingService {
 					
 					// Check that the client was found.
 					if (targetApp != null) {
-						
 						// Remove the client from the client list.
 						clients[targetSession][targetRole][targetApp].splice(clients[targetSession][targetRole][targetApp].indexOf(socket.id), 1);
-						console.log(socket.id + ' left the session ' + targetSession + '.');
+						console.log(self.currentDate() + ': ' + socket.id + ' left the session ' + targetSession + '.');
 				
 						// Delete apps/roles/sessions if they're empty.
 						if (Object.keys(clients[targetSession][targetRole][targetApp]).length == 0) {
@@ -266,7 +253,6 @@ export class NetworkingService {
 						
 						// Check there's still clients to send to in this session.
 						if (targetSession in clients) {
-						
 							// Establish data to send (i.e. client list).
 							let clientsJson = {
 								clients: clients[targetSession]
@@ -280,23 +266,22 @@ export class NetworkingService {
 									}
 								}
 							}
-							console.log('Announced clients list to all in session.');		
-							
+
+							console.log(self.currentDate() + ': Announced clients list to all in session.');
 						}
-						
 					}
 				
 					// Record that this user is no longer added to a client list.
 					addedClient = false;
-					
 				}
 			});
-			
 		});
 		
 		// Output status.
-		console.log('Server listening on port ' + port);
-
+		console.log(self.currentDate() + ': Server listening on port ' + port);
 	}
-	
+
+	private currentDate() : string {
+		return new Date().toISOString().slice(0, 19).replace('T', ' ');
+	}
 }

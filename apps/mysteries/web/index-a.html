@@ -1,0 +1,83 @@
+<html>
+	<meta http-equiv="content-type" content="text/html; charset=UTF8">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
+	
+	<head>
+		<!-- Set styles for app -->
+		<link rel="stylesheet" type="text/css" href="../../../common/web/synergymesh.css">
+		<link rel="stylesheet" type="text/css" href="../../../apps/mysteries/web/app.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap" rel="stylesheet">
+
+		<title>Mysteries</title>
+	</head>
+	<body>
+	
+		<!-- Create the element that the script will place the generated app svg into. -->
+		<div id="synergymesh-app"></div>
+		
+		<!-- Controls container. -->		
+		<div id="synergymesh_controls">
+            
+            <!--  Add mystery category -->
+			<div class="synergymesh_prompt">CATEGORY:  </div>
+            <p></p>
+			<select required class="synergymesh_select_input" id="mystery_category">
+                <option selected disabled hidden value="">-- Select Category --</option>
+                <option value="algorithms">Algorithms</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="logic">Logical Reasoning</option>
+                <option value="history">History</option>
+			</select>
+
+            <!--  Add spacer. -->
+			<div class="synergymesh_spacer"></div>
+		
+			<!--  Add mystery selector -->
+			<div class="synergymesh_prompt">MYSTERY:  </div>
+            <p></p>
+			<select required disabled=true class="synergymesh_select_input" id="mystery_selector">
+                <option selected disabled hidden value="">-- Select Category First --</option>
+			</select>
+
+			<!--  Add spacer. -->
+			<div class="synergymesh_spacer"></div>
+		
+			<!-- Add mystery mode controls  -->
+			<div class="synergymesh_prompt">MODE:  </div>
+            <p></p>
+			<select required class="synergymesh_select_input" id="mystery_mode">
+				<option value="standalone">Standalone</option>
+				<option value="networked">Networked</option>		
+			</select>
+			
+			<!--  Add spacer. -->
+			<div class="synergymesh_spacer"></div>
+		
+			<!--  Add controls for getting session ID. -->
+			<div class="synergymesh_prompt">SESSION ID: </div>
+             <p></p>
+			<input class="synergymesh_text_input" id="session_input" type="text" autofocus autocomplete="off"/>
+			
+			<!--  Add spacer. -->
+			<div class="synergymesh_spacer"></div>
+	
+			<!-- Add button to start the app-->
+			<button class="synergymesh_button" id="start_app_button">Start App</button>
+		
+		</div>
+		
+		<!-- Add script to prepare the app-->
+		<script src="../../../common/web/touch-emulator.js"></script>
+        <script src="../src/ui.js"></script>
+		<script>
+			TouchEmulator();
+			let appName='mysteries';
+		</script>		
+		<script src="/dist/app.js"></script>
+	</body>
+</html>;

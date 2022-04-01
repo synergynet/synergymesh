@@ -1,0 +1,7 @@
+{
+    "server-host": "http://synergy-server.red-robot-dev.co.uk",
+    "server-port": "8999",
+    "debug": true,
+    "dev-mode": true,
+    "ssl": false
+}
